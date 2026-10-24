@@ -21,7 +21,7 @@ const ORIGENS_PADRAO = [SITE];
 const LEADS_URL = "https://script.google.com/macros/s/AKfycbyFXq_oV5WSExN_JpeVkN_3th3Zhx40KRPiCKxyOeWTGYS_bvqxL1sHpFK6-Btrgr6r/exec";
 const MAX_MENSAGENS = 16;      // histórico enviado ao modelo
 const MAX_CARACTERES = 2000;   // por mensagem do visitante
-const MAX_TOKENS = 900;        // tamanho máximo da resposta (o Raio-X é a mais longa)
+const MAX_TOKENS = 1500;       // teto da resposta (o Raio-X é a mais longa); o tom curto vem das instruções
 const CACHE_SEG = 600;         // instruções e dados ficam 10 min em memória
 
 let memoria = { instrucoes: null, dados: null, em: 0 };
@@ -71,6 +71,7 @@ export default {
       { type: "text", text: dados || "Dados de mercado do painel: indisponíveis no momento. Indique a aba Indicadores." },
     ];
 
+    const modelo = env.MODELO || "claude-sonnet-5-5";
     let r;
     try {
       r = await fetch("https://api.anthropic.com/v1/messages", {
@@ -81,8 +82,9 @@ export default {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          model: env.MODELO || "claude-sonnet-5-5",
+          model: modelo,
           max_tokens: MAX_TOKENS,
+          ...pensamento(modelo),
           system: sistema,
           messages: mensagens,
         }),
@@ -121,6 +123,16 @@ export default {
     return json({ resposta: texto, agendar });
   },
 };
+
+/* ---------------------------------------------------------------- modelo */
+
+// Sem "pensamento" prévio: respostas mais rápidas, curtas e baratas.
+// Sonnet 5.5 só aceita desligar com "between_tools" (esforço até high); Haiku 5.5 aceita "disabled".
+function pensamento(modelo) {
+  if (/sonnet-5-5/.test(modelo)) return { thinking: { type: "between_tools" }, output_config: { effort: "medium" } };
+  if (/haiku-5-5/.test(modelo)) return { thinking: { type: "disabled" }, output_config: { effort: "medium" } };
+  return {};
+}
 
 /* ---------------------------------------------------------------- validação */
 
