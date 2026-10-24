@@ -1876,7 +1876,7 @@ function renderIndicadores(){
         ${pgauge(x.percentil, "Complacência", "Normal", "Medo alto")}
         ${chartBox(id + "-ch", {h:150, label:titulo + ", 5 anos", fy:v => nf(v,0), series:[{name:titulo.split(" (")[0], color:"var(--z-res)", data:x.hist}]})}
         <p class="ibody">${texto}</p>
-        ${foot("FRED (Federal Reserve Bank of St. Louis), índices da Cboe", dBR(x.data), "diária, com 1 dia útil de atraso", e.desatualizado)}`;
+        ${foot("Índice da Cboe" + (e.fonte && e.fonte.includes("FRED") ? ", via FRED" : ""), dBR(x.data), "diária, com 1 dia útil de atraso", e.desatualizado)}`;
       return st;
     };
     const v1 = e.vxewz, maxv = Math.max(...v1.hist.map(p => p[1]));
@@ -1900,7 +1900,7 @@ function renderIndicadores(){
           ${chartBox("jr", {h:120, label:"Juro real 10 anos EUA, 5 anos", fy:v => nf(v,1)+"%", fv:v => nf(v,2)+"%", series:[{name:"Juro real 10a", color:"var(--accent)", data:jr.hist}]})}
           <p class="isub">Juro real alto deixa os títulos mais atraentes e pesa sobre o preço das ações.</p></div>
       </div>
-      ${foot("FRED: T10Y2Y e DFII10 (Tesouro americano)", dBR(cv.data), "diária, com 1 dia útil de atraso", e.desatualizado)}`;
+      ${foot(e.fonte || "Tesouro dos EUA", dBR(cv.data), "diária, com 1 dia útil de atraso", e.desatualizado)}`;
   }
 
   /* Bitcoin */
@@ -1917,7 +1917,7 @@ function renderIndicadores(){
         zones:[{to:1, color:"color-mix(in srgb, var(--z-ade) 55%, transparent)", label:"Barato"},{to:2.4, color:"var(--cell-off)", label:"Na média"},{to:2.8, color:"color-mix(in srgb, var(--z-res) 65%, transparent)", label:"Euforia"}]})}
       ${chartBox("mayer", {h:150, label:"Múltiplo de Mayer, 8 anos", fy:v => nf(v,1), fv:v => nf(v,2), series:[{name:"Mayer", color:"var(--z-res)", data:b.hist_mayer}], hlines:[{y:1, label:"1,0"},{y:2.4, label:"2,4 euforia"}]})}
       <p class="ibody">Historicamente, acima de 2,4 marcou euforia e abaixo de 1 marcou preço deprimido. É o termômetro mais volátil do painel.</p>
-      ${foot("Preço: FRED (Coinbase, CBBTCUSD) · Fear &amp; Greed: alternative.me", dBR(b.preco.data), "diária", b.desatualizado)}`;
+      ${foot(b.fonte || "Coinbase e alternative.me", dBR(b.preco.data), "diária", b.desatualizado)}`;
   }
 
   document.getElementById("ind-summary").innerHTML = sum.map(x =>

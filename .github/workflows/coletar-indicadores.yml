@@ -30,6 +30,8 @@ jobs:
         id: coleta
         env:
           SAIDA_DADOS: dados
+          # Opcional: chave gratuita da API do FRED (Settings > Secrets > Actions)
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: |
           if python coletor/coletor_v1.py; then
             echo "falhou=0" >> "$GITHUB_OUTPUT"

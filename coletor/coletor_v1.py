@@ -39,7 +39,7 @@ def log(msg):
 
 # ---------------------------------------------------------------- utilidades
 def pdate(s):
-    for f in ("%d/%m/%Y", "%Y-%m-%d"):
+    for f in ("%d/%m/%Y", "%Y-%m-%d", "%m/%d/%Y"):
         try:
             return dt.datetime.strptime(s, f).date()
         except ValueError:
@@ -125,16 +125,104 @@ def focus(endpoint, filtro, top=1000, orderby="Data desc"):
 
 
 def fred(serie, anos=10):
-    ini = (HOJE - dt.timedelta(days=365 * anos)).isoformat()
-    txt = get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={serie}&cosd={ini}")
+    """FRED. Com FRED_API_KEY usa a API oficial; sem ela, o CSV público.
+    Duas tentativas curtas: se não responder, quem chama usa a fonte alternativa."""
+    ini = (HOJE - dt.timedelta(days=int(365.25 * anos))).isoformat()
+    chave_api = os.environ.get("FRED_API_KEY")
+    ultimo = None
+    for tentativa in range(2):
+        try:
+            if chave_api:
+                url = ("https://api.stlouisfed.org/fred/series/observations?"
+                       + urllib.parse.urlencode({"series_id": serie, "api_key": chave_api,
+                                                 "file_type": "json", "observation_start": ini}))
+                obs = json.loads(get(url, timeout=30))["observations"]
+                out = [(pdate(o["date"]), float(o["value"])) for o in obs if o["value"] not in (".", "")]
+            else:
+                txt = get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={serie}&cosd={ini}", timeout=30)
+                out = []
+                for row in csv.DictReader(io.StringIO(txt)):
+                    chave = [k for k in row if k.upper() not in ("OBSERVATION_DATE", "DATE")][0]
+                    dk = "observation_date" if "observation_date" in row else "DATE"
+                    if row[chave] not in (".", ""):
+                        out.append((pdate(row[dk]), float(row[chave])))
+            if out:
+                return out
+        except Exception as e:
+            ultimo = e
+    raise RuntimeError(f"FRED {serie} sem resposta: {ultimo}")
+
+
+def cboe(indice, anos=10):
+    """Histórico diário oficial da Cboe (VIX, VXEWZ). Usa a última coluna (fechamento)."""
+    txt = get(f"https://cdn.cboe.com/api/global/us_indices/daily_prices/{indice}_History.csv", timeout=40)
+    corte = HOJE - dt.timedelta(days=int(365.25 * anos))
     out = []
-    for row in csv.DictReader(io.StringIO(txt)):
-        chave = [k for k in row if k.upper() != "OBSERVATION_DATE" and k.upper() != "DATE"][0]
-        dk = "observation_date" if "observation_date" in row else "DATE"
-        v = row[chave]
-        if v not in (".", ""):
-            out.append((pdate(row[dk]), float(v)))
-    return out
+    for row in csv.reader(io.StringIO(txt)):
+        if not row or not row[0][:1].isdigit():
+            continue
+        try:
+            d = pdate(row[0].strip())
+            v = float(row[-1])
+        except ValueError:
+            continue
+        if d >= corte:
+            out.append((d, v))
+    if not out:
+        raise RuntimeError(f"Cboe {indice} vazio")
+    return sorted(out)
+
+
+def tesouro_eua(tipo, coluna, anos=10):
+    """Curvas diárias do Tesouro americano (home.treasury.gov), um arquivo por ano."""
+    out = {}
+    for ano in range(HOJE.year - anos, HOJE.year + 1):
+        url = ("https://home.treasury.gov/resource-center/data-chart-center/interest-rates/"
+               f"daily-treasury-rates.csv/{ano}/all?type={tipo}&field_tdr_date_value={ano}&page&_format=csv")
+        try:
+            txt = get(url, timeout=40)
+        except Exception as e:
+            log(f"aviso Tesouro EUA {ano}: {e}")
+            continue
+        leitor = csv.DictReader(io.StringIO(txt))
+        col = next((c for c in (leitor.fieldnames or []) if c.strip().upper() == coluna.upper()), None)
+        if not col:
+            continue
+        for row in leitor:
+            try:
+                out[pdate(row["Date"].strip())] = float(row[col])
+            except (ValueError, KeyError):
+                pass
+    if not out:
+        raise RuntimeError(f"Tesouro EUA {tipo} vazio")
+    return sorted(out.items())
+
+
+def coinbase_btc(anos=12):
+    """Fechamento diário do BTC-USD na Coinbase, em blocos de 300 dias."""
+    out = {}
+    fim = dt.datetime.now(dt.timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    ini_total = fim - dt.timedelta(days=int(365.25 * anos))
+    ini = ini_total
+    while ini < fim:
+        bloco_fim = min(fim, ini + dt.timedelta(days=299))
+        url = ("https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=86400"
+               f"&start={ini.strftime('%Y-%m-%dT%H:%M:%SZ')}&end={bloco_fim.strftime('%Y-%m-%dT%H:%M:%SZ')}")
+        for c in json.loads(get(url, timeout=40)):
+            out[dt.datetime.fromtimestamp(c[0], dt.timezone.utc).date()] = float(c[4])
+        ini = bloco_fim + dt.timedelta(days=1)
+    if not out:
+        raise RuntimeError("Coinbase sem dados")
+    return sorted(out.items())
+
+
+def com_alternativa(nome, principal, alternativa, rotulo_principal, rotulo_alt):
+    """Tenta a fonte principal; se falhar, usa a alternativa e registra qual foi usada."""
+    try:
+        return principal(), rotulo_principal
+    except Exception as e:
+        log(f"aviso {nome}: {rotulo_principal} falhou ({e}); usando {rotulo_alt}")
+        return alternativa(), rotulo_alt
 
 
 # ---------------------------------------------------------------- indicadores
@@ -248,10 +336,17 @@ def ind_cambio():
 
 
 def ind_eua():
-    vix = fred("VIXCLS", 10)
-    curva = fred("T10Y2Y", 10)
-    real10 = fred("DFII10", 10)
-    vxewz = fred("VXEWZCLS", 10)
+    vix, f1 = com_alternativa("VIX", lambda: fred("VIXCLS", 10), lambda: cboe("VIX", 10), "FRED", "Cboe")
+    vxewz, f2 = com_alternativa("VXEWZ", lambda: fred("VXEWZCLS", 10), lambda: cboe("VXEWZ", 10), "FRED", "Cboe")
+    def curva_tesouro():
+        n10 = dict(tesouro_eua("daily_treasury_yield_curve", "10 Yr", 10))
+        n2 = dict(tesouro_eua("daily_treasury_yield_curve", "2 Yr", 10))
+        return sorted((d, round(n10[d] - n2[d], 2)) for d in n10 if d in n2)
+    curva, f3 = com_alternativa("curva", lambda: fred("T10Y2Y", 10), curva_tesouro, "FRED", "Tesouro dos EUA")
+    real10, f4 = com_alternativa("juro real", lambda: fred("DFII10", 10),
+                                 lambda: tesouro_eua("daily_treasury_real_yield_curve", "10 YR", 10),
+                                 "FRED", "Tesouro dos EUA")
+    usadas = sorted(set([f1, f2, f3, f4]))
     def pack(s, nome, leitura_fn):
         d, v = s[-1]
         p = percentil([x for _, x in s], v)
@@ -267,13 +362,13 @@ def ind_eua():
                               lambda v, p: "Alto" if p > 0.8 else "Baixo" if p < 0.2 else "Na média"),
         "vxewz": pack(vxewz, "VXEWZ (medo na bolsa brasileira)",
                       lambda v, p: "Medo alto" if p > 0.8 else "Complacência" if p < 0.2 else "Normal"),
-        "fonte": "FRED (Federal Reserve Bank of St. Louis): VIXCLS, T10Y2Y, DFII10, VXEWZCLS",
+        "fonte": "Índices VIX e VXEWZ da Cboe; curva e juro real do Tesouro dos EUA (via " + ", ".join(usadas) + ")",
         "freq": "Diária, com 1 dia útil de atraso.",
     }
 
 
 def ind_bitcoin():
-    btc = fred("CBBTCUSD", 12)
+    btc, fb = com_alternativa("bitcoin", lambda: fred("CBBTCUSD", 12), lambda: coinbase_btc(12), "FRED", "Coinbase")
     if len(btc) < 400:
         raise RuntimeError("série de bitcoin curta demais")
     mm, mayer = [], []
@@ -298,7 +393,7 @@ def ind_bitcoin():
         "mayer": {"valor": round(mv, 2), "percentil": p, "leitura": leitura},
         "hist_mayer": amostra(ultimos_anos(mayer, 8)),
         "fear_greed": fg,
-        "fonte": "Preço: FRED (Coinbase, CBBTCUSD). Fear & Greed: alternative.me",
+        "fonte": f"Preço BTC-USD da Coinbase (via {fb}). Fear & Greed: alternative.me",
         "freq": "Diária.",
     }
 
