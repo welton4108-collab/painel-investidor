@@ -33,6 +33,7 @@
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body);display:flex;flex-direction:column}
 [hidden]{display:none!important}
+.embed #lnk-painel{display:none}
 a{color:var(--accent)}
 .wrap{width:100%;max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 
@@ -116,7 +117,7 @@ textarea{flex:1;border:0;outline:0;resize:none;background:none;color:var(--ink);
     <div class="id"><b>Alfred <span class="tag">teste</span></b><span>Conselheiro patrimonial · IA</span></div>
     <div class="acoes">
       <button class="lnk" type="button" id="nova">Nova conversa</button>
-      <a class="lnk" href="../">Painel</a>
+      <a class="lnk" id="lnk-painel" href="../">Painel</a>
     </div>
   </div>
 </header>
@@ -148,11 +149,12 @@ textarea{flex:1;border:0;outline:0;resize:none;background:none;color:var(--ink);
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </button>
     </form>
-    <p class="aviso">As conversas são registradas sem identificação para melhorar o Alfred. Não informe CPF, senhas ou dados bancários. <a href="../privacidade.html">Aviso de privacidade</a>.</p>
+    <p class="aviso">As conversas são registradas sem identificação para melhorar o Alfred. Não informe CPF, senhas ou dados bancários. <a href="../privacidade.html" target="_blank" rel="noopener">Aviso de privacidade</a>.</p>
   </div>
 </footer>
 
 <script>
+try { if (window.self !== window.top || new URLSearchParams(location.search).has("embed")) document.documentElement.classList.add("embed"); } catch (_) { document.documentElement.classList.add("embed"); }
 const ALFRED_API = "https://alfred.welton-4108.workers.dev";   // Worker no Cloudflare
 const LEADS_URL = "https://script.google.com/macros/s/AKfycbyKDNfPPI7u0yieLIwe61DyFEZy3To4ye5m2exLEKYUnBRK3lGd3Mw-t10PjWGAGcgs/exec";
 const WHATSAPP = "5544999844019";
@@ -188,9 +190,9 @@ if (MODO_TESTE && !codigo) pedirCodigo();
 /* ---------- formatação das respostas */
 function linkAbas(h) {
   return h
-    .replace(/\b(aba|página) (Simulador)\b/g, '$1 <a href="../#simulador">$2</a>')
-    .replace(/\b(aba|página) (Indicadores)\b/g, '$1 <a href="../#indicadores">$2</a>')
-    .replace(/\b(aba|página) (Investir por objetivos)\b/gi, '$1 <a href="../">$2</a>');
+    .replace(/\b(aba|página) (Simulador)\b/g, '$1 <a href="../#simulador" target="_top">$2</a>')
+    .replace(/\b(aba|página) (Indicadores)\b/g, '$1 <a href="../#indicadores" target="_top">$2</a>')
+    .replace(/\b(aba|página) (Investir por objetivos)\b/gi, '$1 <a href="../" target="_top">$2</a>');
 }
 function inline(t) {
   return linkAbas(esc(t).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/(^|[\s(])\*(?!\s)(.+?)\*(?=[\s).,;:!?]|$)/g, "$1<em>$2</em>"));
@@ -296,7 +298,7 @@ function cartaoAgenda() {
         <option>Aposentadoria</option><option>Reserva de emergência</option><option>Médio prazo</option><option>Educação dos filhos</option><option>Viagem ao exterior</option><option>Revisar a carteira toda</option></select></div>
       <div class="field"><label for="${id}-pat">Patrimônio investido</label><select id="${id}-pat" name="pat">
         <option>Até R$ 100 mil</option><option>R$ 100 mil a R$ 500 mil</option><option>R$ 500 mil a R$ 1 milhão</option><option>Acima de R$ 1 milhão</option></select></div>
-      <label class="consent full"><input type="checkbox" name="lgpd"><span>Autorizo o contato pelo WhatsApp para agendar a reunião. Meus dados serão usados só para isso, conforme a LGPD e o <a href="../privacidade.html">aviso de privacidade</a>.</span></label>
+      <label class="consent full"><input type="checkbox" name="lgpd"><span>Autorizo o contato pelo WhatsApp para agendar a reunião. Meus dados serão usados só para isso, conforme a LGPD e o <a href="../privacidade.html" target="_blank" rel="noopener">aviso de privacidade</a>.</span></label>
       <p class="ferr full" hidden></p>
       <div class="full"><button class="btn" type="submit">Enviar pedido</button></div>
     </form>`;

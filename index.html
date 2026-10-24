@@ -336,12 +336,16 @@ footer p + p{margin-top:8px}
 .ihead{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
 .ihead > *{min-width:0}
 .ihead h3{font-size:1.12rem}
+#view-alfred{display:block;background:var(--bg)}
+#view-alfred[hidden]{display:none}
+#view-alfred iframe{display:block;width:100%;height:calc(100dvh - var(--hdr, 120px));min-height:480px;border:0;background:var(--bg)}
 nav.tabs .sm{display:none}
 @media (max-width:560px){
   nav.tabs{gap:0;margin-inline:-8px}
   nav.tabs button{padding:12px 8px;font-size:.88rem}
   nav.tabs .lg{display:none} nav.tabs .sm{display:inline}
   nav.tabs button small{display:none}
+  nav.tabs .embreve{display:none}
   .ihead{grid-template-columns:1fr}
   .ihead > :not(:first-child){justify-self:start}
   .statepill{white-space:normal;max-width:100%}
@@ -483,7 +487,8 @@ nav.tabs .sm{display:none}
       <button type="button" data-view="indicadores">Indicadores</button>
       <button type="button" data-view="objetivos" aria-current="page"><span class="lg">Investir por objetivos</span><span class="sm">Objetivos</span></button>
       <button type="button" data-view="simulador">Simulador</button>
-      <button type="button" data-tip-title="Em construção" data-tip="Estudos, análises e comentários sobre o mercado.">Insights<small>em breve</small></button>
+      <button type="button" class="embreve" data-tip-title="Em construção" data-tip="Estudos, análises e comentários sobre o mercado.">Insights<small>em breve</small></button>
+      <button type="button" data-view="alfred">Alfred<small>beta</small></button>
     </nav>
   </div>
 </header>
@@ -986,6 +991,10 @@ nav.tabs .sm{display:none}
   </section>
 
   <p class="ind-foot muted">Os dados vêm de fontes oficiais e públicas. Cada fonte tem seu próprio ritmo de publicação, indicado em cada termômetro. Nesta versão, os números são atualizados quando o coletor roda; no site final, uma vez por dia. Termômetros descrevem o momento, não preveem o futuro.</p>
+</main>
+
+<main id="view-alfred" hidden>
+  <iframe id="alfred-frame" title="Alfred, assistente de planejamento financeiro" data-src="alfred/?embed=1" loading="lazy"></iframe>
 </main>
 
 <footer>
@@ -2163,13 +2172,18 @@ function renderIndicadores(){
 
 /* Navegação entre abas */
 function showView(v){
-  const views = {objetivos:"view-objetivos", indicadores:"view-indicadores", simulador:"view-simulador", insights:"view-insights"};
+  const views = {objetivos:"view-objetivos", indicadores:"view-indicadores", simulador:"view-simulador", insights:"view-insights", alfred:"view-alfred"};
   if (!views[v]) v = "objetivos";
   Object.entries(views).forEach(([k, id]) => { document.getElementById(id).hidden = k !== v; });
   document.querySelectorAll("nav.tabs [data-view]").forEach(b => { if (b.dataset.view === v) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
   if (typeof hideTip === "function") hideTip();
   if (v === "indicadores") requestAnimationFrame(drawAllCharts);
   if (v === "simulador") requestAnimationFrame(calcSim);
+  if (v === "alfred") {
+    const f = document.getElementById("alfred-frame");
+    document.documentElement.style.setProperty("--hdr", document.querySelector("header.site").offsetHeight + "px");
+    if (!f.getAttribute("src")) f.setAttribute("src", f.dataset.src);
+  }
 }
 document.querySelectorAll("nav.tabs [data-view]").forEach(b => b.addEventListener("click", () => {
   showView(b.dataset.view);
@@ -2177,7 +2191,7 @@ document.querySelectorAll("nav.tabs [data-view]").forEach(b => b.addEventListene
   window.scrollTo({top:0});
 }));
 renderIndicadores();
-{ const hv = (location.hash || "").slice(1); if (hv === "indicadores" || hv === "simulador") showView(hv); }
+{ const hv = (location.hash || "").slice(1); if (hv === "indicadores" || hv === "simulador" || hv === "alfred") showView(hv); }
 /* No site publicado, busca os dados mais recentes gravados pelo coletor diário */
 if (location.protocol.startsWith("http")){
   fetch("dados/indicadores.json?v=" + Date.now(), {cache:"no-store"})
