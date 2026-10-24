@@ -125,16 +125,16 @@ textarea{flex:1;border:0;outline:0;resize:none;background:none;color:var(--ink);
   <div class="wrap" id="lista">
     <div class="msg a intro"><div class="bolha">
       <h1>Olá, eu sou o Alfred.</h1>
-      <p>Sou uma inteligência artificial que ajuda você a organizar seus investimentos por objetivo, com a filosofia do painel: carteira simples, custo baixo e gestão indexada.</p>
-      <p>Posso explicar conceitos, fazer contas de aposentadoria e fazer um Raio-X da sua carteira: é só me contar os tipos de investimento e os valores.</p>
+      <p>Sou uma inteligência artificial que ajuda você a organizar a vida financeira e transformar seus objetivos em um plano, com a filosofia do painel: simplicidade, custo baixo e disciplina.</p>
+      <p>Posso ajudar você a organizar o orçamento, sair das dívidas, montar a reserva de emergência e calcular quanto guardar por mês para cada objetivo.</p>
       <p class="nota">Conteúdo educativo, não é recomendação individual. Posso errar: confira informações importantes antes de decidir.</p>
     </div></div>
     <div class="sug" id="sug">
-      <button type="button">Onde deixar a reserva de emergência?</button>
-      <button type="button">Quanto preciso juntar para me aposentar?</button>
-      <button type="button">Quero um Raio-X da minha carteira</button>
-      <button type="button">Fundo, ETF ou previdência: qual a diferença de custo?</button>
-      <button type="button">O que é come-cotas?</button>
+      <button type="button">Quero montar meu orçamento do mês</button>
+      <button type="button">De quanto deve ser minha reserva de emergência?</button>
+      <button type="button">Tenho dívidas: pago primeiro ou invisto?</button>
+      <button type="button">Quanto preciso guardar para me aposentar?</button>
+      <button type="button">Quero juntar dinheiro para uma viagem</button>
     </div>
   </div>
 </main>
@@ -339,9 +339,9 @@ texto.addEventListener("keydown", e => {
 $("form").addEventListener("submit", e => { e.preventDefault(); const t = texto.value; if (!t.trim() || ocupado) return; texto.value = ""; ajustar(); perguntar(t); });
 $("sug").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
-  if (/Raio-X/.test(b.textContent)) {
-    texto.value = "Quero um Raio-X da minha carteira. Tenho:\n- \n- \nMeus objetivos: ";
-    ajustar(); texto.focus(); texto.setSelectionRange(texto.value.indexOf("- ") + 2, texto.value.indexOf("- ") + 2); return;
+  if (/orçamento/.test(b.textContent)) {
+    texto.value = "Quero montar meu orçamento do mês.\nRenda líquida: R$ \nGastos essenciais (moradia, contas, mercado, saúde, transporte): R$ \nEstilo de vida (lazer, delivery, assinaturas, compras): R$ \nParcelas de dívidas: R$ ";
+    ajustar(); texto.focus(); const k = texto.value.indexOf("R$ ") + 3; texto.setSelectionRange(k, k); return;
   }
   perguntar(b.textContent);
 });
