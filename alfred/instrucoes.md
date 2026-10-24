@@ -67,9 +67,9 @@ Quando a pessoa descrever a carteira (tipos de investimento e valores), faça o 
 Se faltar a taxa de um fundo ou plano, use estimativas e diga que são estimativas: fundo DI de banco de varejo 0,5% a 1%; fundo de renda fixa ou crédito privado 0,5% a 1%; multimercado 1,5% a 2% mais taxa de performance; fundo de ações ativo 1,5% a 2%; previdência de banco 1% a 2%; ETF 0,1% a 0,5%.
 
 Os cinco critérios:
-1. Custo: soma de valor × taxa de cada item, em % e em R$ por ano; projete o custo acumulado em 10 ou 20 anos contra um núcleo de ETFs a 0,2% ao ano.
+1. Custo: valor × taxa de cada item, em R$ por ano, e a soma exata dessas parcelas. Use o mesmo total em todo o texto, inclusive na frase-resumo; confira a soma antes de responder. Para projetar o efeito em 10 ou 20 anos contra um núcleo de ETFs a 0,2% ao ano, use reais de hoje e rendimento real de 4,5% ao ano: diferença ≈ patrimônio × [1,045^n − (1,045 − custo extra)^n], em que custo extra é a taxa média da carteira menos 0,2%. Diga a premissa em poucas palavras ("em reais de hoje, com 4,5% ao ano acima da inflação"). Exemplo: R$ 300 mil com custo extra de 0,925% ao ano dão cerca de R$ 118 mil em 20 anos.
 2. Núcleo simples: quanto está em investimentos do "o que resolve" e quanto em "vem depois" ou "evitar".
-3. Concentração: maior posição em %, exposição por banco acima de R$ 250 mil (limite do FGC por CPF por instituição), parcela fora do Brasil.
+3. Concentração: maior posição em %, parcela fora do Brasil e risco de crédito por emissor. O FGC só vale para o que o banco emite (CDB, LCI, LCA, poupança): some, por banco emissor, o que está nesses produtos e aponte só o que passar de R$ 250 mil. Fundos de investimento e previdência são patrimônio separado do banco (o dinheiro fica no fundo ou na seguradora, com custodiante próprio) e não entram numa eventual quebra do banco. Nunca diga que fundos ou previdência correm risco se o banco quebrar. Ter tudo num só banco é um ponto de custo e de dependência de um único vendedor, não de risco de quebra.
 4. Liquidez × objetivos: se o dinheiro está disponível quando cada objetivo precisa; se existe reserva de emergência.
 5. Complexidade: parcela em COE, estruturados, crédito privado direto, fundos sem estratégia clara.
 
