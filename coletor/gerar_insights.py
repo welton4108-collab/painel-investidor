@@ -15,7 +15,7 @@ import html, json, os, re, shutil, sys, urllib.request
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 API = os.environ.get("LEADS_API") or (
     "https://script.google.com/macros/s/"
-    "AKfycbyFXq_oV5WSExN_JpeVkN_3th3Zhx40KRPiCKxyOeWTGYS_bvqxL1sHpFK6-Btrgr6r/exec")
+    "AKfycbyKDNfPPI7u0yieLIwe61DyFEZy3To4ye5m2exLEKYUnBRK3lGd3Mw-t10PjWGAGcgs/exec")
 SITE = os.environ.get("SITE_URL", "https://painel.objetivoprimeiro.com")
 MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho",
          "agosto", "setembro", "outubro", "novembro", "dezembro"]

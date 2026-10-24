@@ -18,7 +18,7 @@
 
 const SITE = "https://painel.objetivoprimeiro.com";
 const ORIGENS_PADRAO = [SITE];
-const LEADS_URL = "https://script.google.com/macros/s/AKfycbyFXq_oV5WSExN_JpeVkN_3th3Zhx40KRPiCKxyOeWTGYS_bvqxL1sHpFK6-Btrgr6r/exec";
+const LEADS_URL = "https://script.google.com/macros/s/AKfycbyKDNfPPI7u0yieLIwe61DyFEZy3To4ye5m2exLEKYUnBRK3lGd3Mw-t10PjWGAGcgs/exec";
 const MAX_MENSAGENS = 16;      // histórico enviado ao modelo
 const MAX_CARACTERES = 2000;   // por mensagem do visitante
 const MAX_TOKENS = 1500;       // teto da resposta (o Raio-X é a mais longa); o tom curto vem das instruções
