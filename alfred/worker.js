@@ -61,7 +61,7 @@ export default {
     try { corpo = await request.json(); } catch { return json({ erro: "pedido inválido" }, 400); }
 
     // Código de acesso da versão de teste
-    if (env.ACCESS_CODE && String(corpo.codigo || "") !== env.ACCESS_CODE) {
+    if (env.ACCESS_CODE && String(corpo.codigo || "").trim().toLowerCase() !== env.ACCESS_CODE.trim().toLowerCase()) {
       return json({ erro: "codigo", mensagem: "Código de acesso inválido." }, 401);
     }
 
@@ -83,7 +83,7 @@ export default {
 
     const modelo = env.MODELO || "claude-sonnet-5-5";
     const conversa = mensagens.slice();
-    const textos = [];
+    const blocos = [];
     const uso = { entrada: 0, saida: 0, cache: 0, buscas: 0 };
     let resp = {};
     // A busca na web pode pausar a resposta (stop_reason "pause_turn"); nesse caso, continua até 2 vezes.
@@ -122,12 +122,15 @@ export default {
       uso.saida += u.output_tokens || 0;
       uso.cache += u.cache_read_input_tokens || 0;
       uso.buscas += (u.server_tool_use && u.server_tool_use.web_search_requests) || 0;
-      for (const b of resp.content || []) if (b.type === "text") textos.push(b.text);
+      blocos.push(...(resp.content || []));
       if (resp.stop_reason !== "pause_turn") break;
       conversa.push({ role: "assistant", content: resp.content });
     }
 
-    let texto = textos.join("").trim();
+    // Quando houve busca, descarta o texto escrito antes do último resultado ("vou consultar...").
+    let inicio = 0;
+    blocos.forEach((b, i) => { if (b.type === "web_search_tool_result") inicio = i + 1; });
+    let texto = blocos.slice(inicio).filter(b => b.type === "text").map(b => b.text).join("").trim();
     const agendar = /\[AGENDAR\]/.test(texto);
     texto = texto.replace(/\s*\[AGENDAR\]\s*/g, "\n").trim();
     if (!texto) texto = "Não consegui formular uma resposta. Pode reformular a pergunta?";

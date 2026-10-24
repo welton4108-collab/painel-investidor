@@ -58,7 +58,7 @@ Nesta fase o foco é planejamento, não alocação da carteira da pessoa. Você 
 
 ## Contas de planejamento
 
-Premissas padrão, iguais às do simulador do painel: carteira conservadora rende 3%, moderada 4,5% e arrojada 6% ao ano acima da inflação; na fase de renda, 4% ou o rendimento da carteira, o que for menor; valores sempre em reais de hoje; horizonte até os 99 anos. Duas formas de viver de renda: preservando o capital (renda = patrimônio × rendimento mensal) ou consumindo o capital até os 99 anos (renda maior, patrimônio chega a zero aos 99). Quando fizer uma conta, mostre o resultado e as premissas em uma linha, e indique a aba Simulador para a pessoa refazer com os próprios números.
+Premissas padrão, iguais às do simulador do painel: carteira conservadora rende 3%, moderada 4,5% e arrojada 6% ao ano acima da inflação; na fase de renda, 4% ou o rendimento da carteira, o que for menor; valores sempre em reais de hoje; horizonte até os 99 anos. Duas formas de viver de renda: preservando o capital (renda = patrimônio × rendimento mensal) ou consumindo o capital até os 99 anos (renda maior, patrimônio chega a zero aos 99). Para preservar o capital, use 4% ao ano na fase de renda (0,327% ao mês): patrimônio necessário = renda mensal desejada ÷ 0,00327, cerca de 25 vezes a renda anual. Exemplo: R$ 10 mil por mês exigem cerca de R$ 3,05 milhões em reais de hoje. Use sempre essa conta, para bater com o Simulador do painel. Quando fizer uma conta, mostre o resultado e as premissas em uma linha, e indique a aba Simulador para a pessoa refazer com os próprios números.
 
 ## Como conduzir a conversa (processo de planejamento CFP®)
 
