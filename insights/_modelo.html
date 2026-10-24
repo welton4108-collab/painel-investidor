@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{TITULO}} · Welton Garcia</title>
+<meta name="description" content="{{DESCRICAO}}">
+<link rel="canonical" href="{{URL}}">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Welton Garcia · Especialista em Investimentos · CFP®">
+<meta property="og:title" content="{{TITULO}}">
+<meta property="og:description" content="{{DESCRICAO}}">
+<meta property="og:url" content="{{URL}}">
+<meta property="og:image" content="{{IMAGEM}}">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: artigo em coluna única de leitura, com caixas de ação (PDF, compartilhar, comentários) */
+:root{
+  --bg:#F3F6F5; --surface:#FFFFFF; --ink:#13231F; --muted:#5A6A65; --line:#DAE2DF;
+  --accent:#0E6B5B; --accent-soft:#DCEDE8; --ok:#1F8A4D; --warn:#C2483A;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --f-data:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0D1513; --surface:#141F1C; --ink:#E4EDEA; --muted:#93A39E; --line:#25332F;
+  --accent:#4FC2A8; --accent-soft:#163A32; --ok:#4CC77F; --warn:#E8705F; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 var(--f-body)}
+[hidden]{display:none!important}
+a{color:var(--accent)}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.site{background:var(--surface);border-bottom:1px solid var(--line)}
+header .top{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:14px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px))}
+.brand{text-decoration:none;color:inherit;display:flex;flex-direction:column}
+.brand b{font-family:var(--f-display);font-size:1.1rem}
+.brand span{font-size:.75rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap}
+nav.tabs a{font-weight:600;font-size:.9rem;color:var(--muted);text-decoration:none;padding:8px 10px;border-bottom:3px solid transparent}
+nav.tabs a.on{color:var(--ink);border-bottom-color:var(--accent)}
+article{padding-block:30px 10px}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--f-display);font-size:clamp(1.9rem,5vw,2.8rem);line-height:1.12;letter-spacing:-.02em;margin:8px 0 10px;text-wrap:balance}
+.meta{font-size:.9rem;color:var(--muted);font-family:var(--f-data)}
+.lede{font-size:1.15rem;margin:16px 0 22px;color:var(--ink)}
+.corpo h2{font-family:var(--f-display);font-size:1.35rem;margin:30px 0 8px;text-wrap:balance}
+.corpo p,.corpo li{max-width:68ch}
+.corpo ul{padding-left:22px}
+.capa{width:100%;border-radius:14px;margin:6px 0 18px;border:1px solid var(--line)}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-block:18px}
+.box h2{font-family:var(--f-display);font-size:1.15rem;margin:0 0 6px}
+.box p{margin:0 0 12px;font-size:.95rem;color:var(--muted)}
+.pdfbox{border:2px solid var(--accent)}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form .full{grid-column:1/-1}
+label{font-size:.85rem;font-weight:600;display:block;margin-bottom:4px}
+input,textarea{font:inherit;font-size:1rem;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+textarea{min-height:96px;resize:vertical}
+.consent{display:flex;gap:8px;font-size:.84rem;font-weight:400;align-items:flex-start}
+.consent input{width:auto;margin-top:4px}
+.btn{font:700 1rem var(--f-body);background:var(--accent);color:var(--surface);border:0;border-radius:10px;padding:12px 18px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn[disabled]{opacity:.6;cursor:wait}
+.btn:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.share{display:flex;flex-wrap:wrap;gap:8px}
+.err{font-size:.86rem;font-weight:600;color:var(--warn);margin:0}
+.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.coms{display:grid;gap:12px;margin-bottom:16px}
+.com{border-top:1px solid var(--line);padding-top:12px}
+.com b{font-family:var(--f-display)}
+.com small{color:var(--muted);font-family:var(--f-data);font-size:.75rem;margin-left:8px}
+.com p{margin:4px 0 0;color:var(--ink);font-size:.98rem;white-space:pre-wrap;overflow-wrap:anywhere}
+.cta{background:var(--accent);color:var(--surface);border-radius:16px;padding:22px;margin-block:24px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.cta b{font-family:var(--f-display);font-size:1.15rem}
+.cta .btn{background:var(--surface);color:var(--ink)}
+footer{border-top:1px solid var(--line);padding-block:22px 40px;font-size:.84rem;color:var(--muted);margin-top:20px}
+@media (max-width:560px){.form{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="top">
+    <a class="brand" href="/"><b>Welton Garcia</b><span>Especialista em Investimentos · CFP®</span></a>
+    <nav class="tabs" aria-label="Seções do painel">
+      <a href="/#indicadores">Indicadores</a>
+      <a href="/#reserva">Investir por objetivos</a>
+      <a href="/#simulador">Simulador</a>
+      <a href="/#insights" class="on" aria-current="page">Insights</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <article>
+    <div class="eyebrow">Insights</div>
+    <h1>{{TITULO}}</h1>
+    <div class="meta"><time datetime="{{DATA_ISO}}">{{DATA_BR}}</time></div>
+    <p class="lede">{{RESUMO}}</p>
+    {{CAPA}}
+    <div class="corpo">{{CORPO}}</div>
+  </article>
+
+  {{PDF_BOX}}
+
+  <section class="box" aria-labelledby="sh-t">
+    <h2 id="sh-t">Compartilhe</h2>
+    <div class="share">
+      <button class="btn" type="button" id="sh-nativo" hidden>Compartilhar</button>
+      <a class="btn alt" id="sh-wa" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn alt" id="sh-li" target="_blank" rel="noopener">LinkedIn</a>
+      <button class="btn alt" type="button" id="sh-copy">Copiar link</button>
+    </div>
+  </section>
+
+  <section class="box" aria-labelledby="cm-t">
+    <h2 id="cm-t">Comentários</h2>
+    <p>Os comentários são públicos. Não compartilhe dados pessoais nem da sua carteira. Respostas aqui são gerais e não constituem recomendação individual.</p>
+    <div class="coms" id="coms"><p id="coms-vazio">Carregando comentários...</p></div>
+    <form class="form" id="cm-form" novalidate>
+      <div class="full"><label for="cm-nome">Nome</label><input id="cm-nome" maxlength="60" autocomplete="name"></div>
+      <div class="full"><label for="cm-texto">Comentário</label><textarea id="cm-texto" maxlength="1000"></textarea></div>
+      <div class="hp" aria-hidden="true"><label for="cm-url">Não preencha</label><input id="cm-url" tabindex="-1" autocomplete="off"></div>
+      <div class="full"><button class="btn" type="submit">Publicar comentário</button></div>
+      <p class="err full" id="cm-err" hidden></p>
+    </form>
+  </section>
+
+  <div class="cta">
+    <b>Quer aplicar isso na sua carteira?</b>
+    <a class="btn" href="/#simulador">Agendar revisão do planejamento</a>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>Conteúdo educativo.</b> Este material não constitui recomendação individual de compra ou venda, que depende do seu perfil, objetivos e situação financeira. Rentabilidade passada não garante resultado futuro.</p>
+    <p>Welton Garcia · Especialista em Investimentos · CFP® · <a href="/privacidade.html">Aviso de privacidade</a></p>
+  </div>
+</footer>
+
+<script type="application/json" id="cfg">{{CFG}}</script>
+<script>
+const CFG = JSON.parse(document.getElementById("cfg").textContent);
+const $ = id => document.getElementById(id);
+const URL_POST = location.origin.startsWith("http") ? location.origin + location.pathname : CFG.url;
+
+/* Compartilhar */
+const textoShare = CFG.titulo + " — " + URL_POST;
+$("sh-wa").href = "https://wa.me/?text=" + encodeURIComponent(textoShare);
+$("sh-li").href = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(URL_POST);
+if (navigator.share){
+  $("sh-nativo").hidden = false;
+  $("sh-nativo").addEventListener("click", () => navigator.share({title: CFG.titulo, text: CFG.resumo, url: URL_POST}).catch(() => {}));
+}
+$("sh-copy").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText(URL_POST); $("sh-copy").textContent = "Link copiado"; }
+  catch(_) { $("sh-copy").textContent = URL_POST; }
+  setTimeout(() => { $("sh-copy").textContent = "Copiar link"; }, 2500);
+});
+
+/* PDF em troca do e-mail */
+const pdfForm = $("pdf-form");
+if (pdfForm){
+  pdfForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    const err = $("pdf-err"), nome = $("pdf-nome").value.trim(), email = $("pdf-email").value.trim();
+    if (!nome){ err.hidden = false; err.textContent = "Informe seu nome."; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.hidden = false; err.textContent = "Informe um e-mail válido."; return; }
+    if (!$("pdf-lgpd").checked){ err.hidden = false; err.textContent = "Marque a autorização para continuar."; return; }
+    err.hidden = true;
+    const btn = pdfForm.querySelector("button"); btn.disabled = true; btn.textContent = "Liberando...";
+    try {
+      await fetch(CFG.api, {method:"POST", mode:"no-cors", body:new URLSearchParams({
+        tipo:"pdf", post:CFG.slug, nome, email, consentimento:"sim", site_url:$("pdf-url").value})});
+    } catch(_) {}
+    $("pdf-body").innerHTML = "";
+    const p = document.createElement("p"); p.textContent = "Pronto, " + nome.split(" ")[0] + ". Seu PDF está liberado:";
+    const a = document.createElement("a"); a.className = "btn"; a.href = CFG.pdf; a.target = "_blank"; a.rel = "noopener"; a.textContent = "Baixar o PDF";
+    $("pdf-body").append(p, a);
+  });
+}
+
+/* Comentários */
+function dataCurta(s){ return String(s).slice(0, 10); }
+function mostrarComentarios(lista){
+  const box = $("coms"); box.innerHTML = "";
+  if (!lista.length){ const p = document.createElement("p"); p.textContent = "Seja o primeiro a comentar."; box.append(p); return; }
+  lista.forEach(c => {
+    const d = document.createElement("div"); d.className = "com";
+    const b = document.createElement("b"); b.textContent = c.nome;
+    const sm = document.createElement("small"); sm.textContent = dataCurta(c.data);
+    const p = document.createElement("p"); p.textContent = c.texto;
+    d.append(b, sm, p); box.append(d);
+  });
+}
+let comentarios = [];
+fetch(CFG.api + "?action=comentarios&post=" + encodeURIComponent(CFG.slug))
+  .then(r => r.json()).then(j => { comentarios = j.comentarios || []; mostrarComentarios(comentarios); })
+  .catch(() => { $("coms").innerHTML = "<p>Não foi possível carregar os comentários agora.</p>"; });
+const abertoEm = Date.now();
+$("cm-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const err = $("cm-err"), nome = $("cm-nome").value.trim(), texto = $("cm-texto").value.trim();
+  if (!nome){ err.hidden = false; err.textContent = "Informe seu nome."; return; }
+  if (texto.length < 2){ err.hidden = false; err.textContent = "Escreva seu comentário."; return; }
+  if (Date.now() - abertoEm < 3000){ err.hidden = false; err.textContent = "Aguarde um instante e tente de novo."; return; }
+  err.hidden = true;
+  const btn = e.target.querySelector("button"); btn.disabled = true; btn.textContent = "Publicando...";
+  try {
+    await fetch(CFG.api, {method:"POST", mode:"no-cors", body:new URLSearchParams({
+      tipo:"comentario", post:CFG.slug, nome, comentario:texto, site_url:$("cm-url").value})});
+    const agora = new Date();
+    comentarios.push({nome, texto, data: agora.toLocaleDateString("pt-BR")});
+    mostrarComentarios(comentarios);
+    $("cm-texto").value = "";
+  } catch(_) { err.hidden = false; err.textContent = "Não foi possível publicar agora. Tente de novo em instantes."; }
+  btn.disabled = false; btn.textContent = "Publicar comentário";
+});
+</script>
+</body>
+</html>

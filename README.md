@@ -36,3 +36,22 @@ Instalação (uma vez):
 5. Colocar essa URL em `LEADS_URL` no `index.html`.
 
 Enquanto `LEADS_URL` estiver vazio, o formulário leva o visitante direto ao WhatsApp.
+
+## Insights (estudos)
+
+Os estudos ficam na aba **Estudos** da planilha de leads. Cada linha é um post:
+
+| Coluna | O que preencher |
+|---|---|
+| Publicar | `Sim` para aparecer no site; qualquer outra coisa esconde |
+| Data | data do estudo |
+| Título | título do post |
+| Resumo | 1 ou 2 frases; aparece na lista e na prévia do WhatsApp/LinkedIn |
+| Texto | o conteúdo. Linha em branco separa parágrafos; `## ` cria subtítulo; `- ` cria lista; `**negrito**`; `[texto](https://link)` |
+| Link do PDF | link do Google Drive, compartilhado como "qualquer pessoa com o link" (opcional) |
+| Imagem | link do Google Drive de uma imagem de capa (opcional) |
+| Endereço | preenchido automaticamente na primeira publicação; não altere depois |
+
+O workflow **Publicar insights** roda a cada hora (7h às 23h) e gera uma página por estudo em `insights/<endereço>/`. Para publicar na hora: **Actions → Publicar insights → Run workflow**.
+
+Comentários vão para a aba **Comentarios** e aparecem na hora; para esconder um, mude **Visível** para `Não`. Quem baixa um PDF fica registrado na aba **Downloads**.
