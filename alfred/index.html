@@ -114,7 +114,7 @@ textarea{flex:1;border:0;outline:0;resize:none;background:none;color:var(--ink);
 <header>
   <div class="wrap top">
     <div class="selo" aria-hidden="true">A</div>
-    <div class="id"><b>Alfred <span class="tag">teste</span></b><span>Conselheiro patrimonial · IA</span></div>
+    <div class="id"><b>Alfred <span class="tag">beta</span></b><span>Conselheiro patrimonial · IA</span></div>
     <div class="acoes">
       <button class="lnk" type="button" id="nova">Nova conversa</button>
       <a class="lnk" id="lnk-painel" href="../">Painel</a>
@@ -158,7 +158,7 @@ try { if (window.self !== window.top || new URLSearchParams(location.search).has
 const ALFRED_API = "https://alfred.welton-4108.workers.dev";   // Worker no Cloudflare
 const LEADS_URL = "https://script.google.com/macros/s/AKfycbyKDNfPPI7u0yieLIwe61DyFEZy3To4ye5m2exLEKYUnBRK3lGd3Mw-t10PjWGAGcgs/exec";
 const WHATSAPP = "5544999844019";
-const MODO_TESTE = true; // pede o código de acesso
+const MODO_TESTE = false; // true pede o código de acesso (ligar junto com ACCESS_CODE no Cloudflare)
 const MAX_PERGUNTAS = 30;
 
 const $ = id => document.getElementById(id);
