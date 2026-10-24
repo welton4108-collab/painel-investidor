@@ -1665,7 +1665,7 @@ document.addEventListener("click", e => {
 window.addEventListener("scroll", () => { if (!tip.hidden) hideTip(); }, {passive:true});
 
 /* Formulário de lead: grava na planilha Google e oferece o WhatsApp */
-const LEADS_URL = "";            // URL do Apps Script (Implantar > App da Web)
+const LEADS_URL = "https://script.google.com/macros/s/AKfycbxg4QpcohIEV_jBwokl7DagbbOVTpBXzk_BnaC9wJXRNBqIWHV9qJ6DQ0ob3aD2YDtC/exec"; // Apps Script (Implantar > App da Web)
 const WHATSAPP = "5544999844019";
 const OBJ_NOMES = {"reserva":"Montar a reserva","medio-prazo":"Médio prazo","aposentadoria":"Aposentadoria","educacao":"Educação dos filhos","viagem":"Viagem ao exterior"};
 document.getElementById("lead").addEventListener("submit", async e => {
