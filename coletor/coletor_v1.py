@@ -38,8 +38,18 @@ def log(msg):
 
 
 # ---------------------------------------------------------------- utilidades
+def pdate_us(s):
+    """Datas no formato americano mês/dia/ano (Cboe, Tesouro dos EUA)."""
+    for f in ("%m/%d/%Y", "%Y-%m-%d"):
+        try:
+            return dt.datetime.strptime(s, f).date()
+        except ValueError:
+            pass
+    raise ValueError(s)
+
+
 def pdate(s):
-    for f in ("%d/%m/%Y", "%Y-%m-%d", "%m/%d/%Y"):
+    for f in ("%d/%m/%Y", "%Y-%m-%d"):
         try:
             return dt.datetime.strptime(s, f).date()
         except ValueError:
@@ -83,7 +93,7 @@ def sgs(codigo, anos=10):
     fim_total = HOJE
     ini_total = HOJE - dt.timedelta(days=int(365.25 * anos))
     out, ini, falhas = {}, ini_total, []
-    while ini <= fim_total:
+    while ini < fim_total:
         fim = min(fim_total, ini + dt.timedelta(days=365 * 5))
         url = (f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo}/dados?formato=json"
                f"&dataInicial={urllib.parse.quote(ini.strftime('%d/%m/%Y'))}"
@@ -162,11 +172,11 @@ def cboe(indice, anos=10):
         if not row or not row[0][:1].isdigit():
             continue
         try:
-            d = pdate(row[0].strip())
+            d = pdate_us(row[0].strip())
             v = float(row[-1])
         except ValueError:
             continue
-        if d >= corte:
+        if corte <= d <= HOJE:
             out.append((d, v))
     if not out:
         raise RuntimeError(f"Cboe {indice} vazio")
@@ -190,7 +200,9 @@ def tesouro_eua(tipo, coluna, anos=10):
             continue
         for row in leitor:
             try:
-                out[pdate(row["Date"].strip())] = float(row[col])
+                d = pdate_us(row["Date"].strip())
+                if d <= HOJE:
+                    out[d] = float(row[col])
             except (ValueError, KeyError):
                 pass
     if not out:
