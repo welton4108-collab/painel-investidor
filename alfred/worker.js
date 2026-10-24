@@ -11,7 +11,7 @@
  *     LIMITES            namespace KV usado para os limites de uso
  *   Variáveis opcionais (tipo Text):
  *     MODELO             padrão claude-sonnet-5-5
- *     LIMITE_IP_HORA     mensagens por visitante por hora, padrão 20
+ *     LIMITE_IP_HORA     mensagens por visitante por hora, padrão 40
  *     LIMITE_DIA         mensagens no total por dia, padrão 300
  *     ORIGENS            sites autorizados, separados por vírgula
  */
@@ -19,12 +19,22 @@
 const SITE = "https://painel.objetivoprimeiro.com";
 const ORIGENS_PADRAO = [SITE];
 const LEADS_URL = "https://script.google.com/macros/s/AKfycbyKDNfPPI7u0yieLIwe61DyFEZy3To4ye5m2exLEKYUnBRK3lGd3Mw-t10PjWGAGcgs/exec";
-const MAX_MENSAGENS = 16;      // histórico enviado ao modelo
+const MAX_MENSAGENS = 24;      // histórico enviado ao modelo (a coleta de informações usa várias trocas)
 const MAX_CARACTERES = 2000;   // por mensagem do visitante
 const MAX_TOKENS = 1500;       // teto da resposta (o Raio-X é a mais longa); o tom curto vem das instruções
 const CACHE_SEG = 600;         // instruções e dados ficam 10 min em memória
 
 let memoria = { instrucoes: null, dados: null, em: 0 };
+
+// Busca na web restrita a fontes oficiais, no máximo 2 buscas por resposta (US$ 10 a cada 1.000 buscas).
+const BUSCA = {
+  type: "web_search_20250305",
+  name: "web_search",
+  max_uses: 2,
+  allowed_domains: ["gov.br", "bcb.gov.br", "tesourodireto.com.br", "b3.com.br", "anbima.com.br",
+                    "fgc.org.br", "planejar.org.br", "ibge.gov.br", "cvm.gov.br"],
+  user_location: { type: "approximate", country: "BR", timezone: "America/Sao_Paulo" },
+};
 
 export default {
   async fetch(request, env, ctx) {
@@ -72,52 +82,67 @@ export default {
     ];
 
     const modelo = env.MODELO || "claude-sonnet-5-5";
-    let r;
-    try {
-      r = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "x-api-key": env.ANTHROPIC_API_KEY,
-          "anthropic-version": "2023-06-01",
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          model: modelo,
-          max_tokens: MAX_TOKENS,
-          ...pensamento(modelo),
-          system: sistema,
-          messages: mensagens,
-        }),
-      });
-    } catch (e) {
-      return json({ erro: "O Alfred não conseguiu responder agora. Tente de novo." }, 502);
+    const conversa = mensagens.slice();
+    const textos = [];
+    const uso = { entrada: 0, saida: 0, cache: 0, buscas: 0 };
+    let resp = {};
+    // A busca na web pode pausar a resposta (stop_reason "pause_turn"); nesse caso, continua até 2 vezes.
+    for (let rodada = 0; rodada < 3; rodada++) {
+      let r;
+      try {
+        r = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "x-api-key": env.ANTHROPIC_API_KEY,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            model: modelo,
+            max_tokens: MAX_TOKENS,
+            ...pensamento(modelo),
+            system: sistema,
+            tools: [BUSCA],
+            messages: conversa,
+          }),
+        });
+      } catch (e) {
+        return json({ erro: "O Alfred não conseguiu responder agora. Tente de novo." }, 502);
+      }
+      resp = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        console.error("Anthropic", r.status, JSON.stringify(resp).slice(0, 500));
+        const sobrecarga = r.status === 429 || r.status === 529;
+        return json({ erro: sobrecarga
+          ? "Muita gente conversando com o Alfred agora. Tente de novo em instantes."
+          : "O Alfred não conseguiu responder agora. Tente de novo." }, 502);
+      }
+      const u = resp.usage || {};
+      uso.entrada += (u.input_tokens || 0) + (u.cache_read_input_tokens || 0) + (u.cache_creation_input_tokens || 0);
+      uso.saida += u.output_tokens || 0;
+      uso.cache += u.cache_read_input_tokens || 0;
+      uso.buscas += (u.server_tool_use && u.server_tool_use.web_search_requests) || 0;
+      for (const b of resp.content || []) if (b.type === "text") textos.push(b.text);
+      if (resp.stop_reason !== "pause_turn") break;
+      conversa.push({ role: "assistant", content: resp.content });
     }
 
-    const resp = await r.json().catch(() => ({}));
-    if (!r.ok) {
-      console.error("Anthropic", r.status, JSON.stringify(resp).slice(0, 500));
-      const sobrecarga = r.status === 429 || r.status === 529;
-      return json({ erro: sobrecarga
-        ? "Muita gente conversando com o Alfred agora. Tente de novo em instantes."
-        : "O Alfred não conseguiu responder agora. Tente de novo." }, 502);
-    }
-
-    let texto = (resp.content || []).filter(b => b.type === "text").map(b => b.text).join("").trim();
+    let texto = textos.join("").trim();
     const agendar = /\[AGENDAR\]/.test(texto);
     texto = texto.replace(/\s*\[AGENDAR\]\s*/g, "\n").trim();
     if (!texto) texto = "Não consegui formular uma resposta. Pode reformular a pergunta?";
     if (resp.stop_reason === "max_tokens") texto += "\n\n(Resposta interrompida por tamanho. Peça para eu continuar.)";
 
     // Registro da conversa na planilha, sem atrasar a resposta
-    const u = resp.usage || {};
     ctx.waitUntil(registrar({
       sessao: String(corpo.sessao || "").slice(0, 40),
       pergunta: mensagens[mensagens.length - 1].content,
       resposta: texto,
       agendar: agendar ? "sim" : "",
-      tokens_entrada: (u.input_tokens || 0) + (u.cache_read_input_tokens || 0) + (u.cache_creation_input_tokens || 0),
-      tokens_saida: u.output_tokens || 0,
-      tokens_cache: u.cache_read_input_tokens || 0,
+      tokens_entrada: uso.entrada,
+      tokens_saida: uso.saida,
+      tokens_cache: uso.cache,
+      buscas: uso.buscas,
     }));
 
     return json({ resposta: texto, agendar });
@@ -160,7 +185,7 @@ async function verificarLimites(env, ip) {
   const agora = new Date();
   const dia = agora.toISOString().slice(0, 10);
   const hora = agora.toISOString().slice(0, 13);
-  const porIp = Number(env.LIMITE_IP_HORA || 20);
+  const porIp = Number(env.LIMITE_IP_HORA || 40);
   const porDia = Number(env.LIMITE_DIA || 300);
   const kIp = `ip:${ip}:${hora}`, kDia = `dia:${dia}`;
   const [nIp, nDia] = await Promise.all([env.LIMITES.get(kIp), env.LIMITES.get(kDia)]).then(v => v.map(x => Number(x || 0)));
