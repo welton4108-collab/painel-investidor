@@ -336,6 +336,16 @@ footer p + p{margin-top:8px}
 .ihead{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
 .ihead > *{min-width:0}
 .ihead h3{font-size:1.12rem}
+nav.tabs .sm{display:none}
+@media (max-width:560px){
+  nav.tabs{gap:0;margin-inline:-8px}
+  nav.tabs button{padding:12px 8px;font-size:.88rem}
+  nav.tabs .lg{display:none} nav.tabs .sm{display:inline}
+  nav.tabs button small{display:none}
+  .ihead{grid-template-columns:1fr}
+  .ihead > :not(:first-child){justify-self:start}
+  .statepill{white-space:normal;max-width:100%}
+}
 .isub{font-size:.86rem;color:var(--muted);margin-top:2px}
 .spill-soon{font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:999px;border:1.5px solid var(--z-res);color:var(--z-res);white-space:nowrap}
 .kpis{display:flex;flex-wrap:wrap;gap:10px 26px}
@@ -471,7 +481,7 @@ footer p + p{margin-top:8px}
     <div class="brand"><b>Welton Garcia</b><span>Especialista em Investimentos · CFP®</span></div>
     <nav class="tabs" aria-label="Seções do painel">
       <button type="button" data-view="indicadores">Indicadores</button>
-      <button type="button" data-view="objetivos" aria-current="page">Investir por objetivos</button>
+      <button type="button" data-view="objetivos" aria-current="page"><span class="lg">Investir por objetivos</span><span class="sm">Objetivos</span></button>
       <button type="button" data-view="simulador">Simulador</button>
       <button type="button" data-tip-title="Em construção" data-tip="Estudos, análises e comentários sobre o mercado.">Insights<small>em breve</small></button>
     </nav>
@@ -2226,7 +2236,7 @@ function drawSim(el, A, B, iret){
   if (B === A || !B) {}
   g += `<line x1="${X(iret)}" x2="${X(iret)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4"/><text x="${X(iret)+5}" y="${m.t-6}" style="fill:var(--ink)">início da renda, ${iret} anos</text>`;
   const passo = (i1 - i0) > 45 ? 10 : 5;
-  for (let a = Math.ceil(i0/passo)*passo; a <= i1; a += passo){ if (X(a) - m.l < 12) continue; g += `<line class="axis" x1="${X(a)}" x2="${X(a)}" y1="${H-m.b}" y2="${H-m.b+4}"/><text x="${X(a)}" y="${H-7}" text-anchor="middle">${a}</text>`; }
+  for (let a = Math.ceil(i0/passo)*passo; a <= i1; a += passo){ if (X(a) - m.l < 12 || (W - m.r) - X(a) < 48) continue; g += `<line class="axis" x1="${X(a)}" x2="${X(a)}" y1="${H-m.b}" y2="${H-m.b+4}"/><text x="${X(a)}" y="${H-7}" text-anchor="middle">${a}</text>`; }
   g += `<text x="${W-m.r}" y="${H-7}" text-anchor="end">99 anos</text>`;
   g += `<line class="axis" x1="${m.l}" x2="${W-m.r}" y1="${H-m.b}" y2="${H-m.b}"/>`;
   g += `<line class="xh" id="sim-xh" x1="0" x2="0" y1="${m.t}" y2="${H-m.b}" visibility="hidden"/>`;
