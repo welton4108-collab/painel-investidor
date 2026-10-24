@@ -820,7 +820,7 @@ footer p + p{margin-top:8px}
       <div class="field"><label for="s-r" tabindex="0" data-tip-title="Rendimento real líquido" data-tip="Quanto a carteira rende acima da inflação, depois de imposto e taxas, na fase de acumulação. É uma estimativa de longo prazo, não uma promessa.">Rendimento real até a renda (% a.a.) ⓘ</label><input id="s-r" type="number" step="0.5" min="0" max="12" value="4.5"></div>
       <details class="premissas">
         <summary>Premissas</summary>
-        <div class="field"><label for="s-rret" tabindex="0" data-tip-title="Rendimento na fase de renda" data-tip="Quando a renda começa, a carteira costuma ficar mais conservadora para oscilar menos. Por isso o padrão é menor que o da acumulação.">Rendimento real na fase de renda (% a.a.) ⓘ</label><input id="s-rret" type="number" step="0.5" min="0" max="10" value="4"></div>
+        <div class="field"><label for="s-rret" tabindex="0" data-tip-title="Rendimento na fase de renda" data-tip="Quando a renda começa, a carteira costuma ficar mais conservadora para oscilar menos. O simulador usa este valor ou o rendimento da carteira escolhida, o que for menor.">Rendimento real máximo na fase de renda (% a.a.) ⓘ</label><input id="s-rret" type="number" step="0.5" min="0" max="10" value="4"></div>
         <div class="row2">
           <div class="field"><label for="s-taxa" tabindex="0" data-tip-title="Custo a mais" data-tip="Diferença de taxa entre uma carteira simples de baixo custo e uma carteira cara, como fundos ativos ou previdência com taxa alta.">Taxa a mais (% a.a.) ⓘ</label><input id="s-taxa" type="number" step="0.25" min="0" max="5" value="1"></div>
           <div class="field"><label for="s-poup" tabindex="0" data-tip-title="Poupança" data-tip="Rendimento real aproximado da poupança no longo prazo. Em vários anos ela perdeu para a inflação.">Poupança real (% a.a.) ⓘ</label><input id="s-poup" type="number" step="0.25" min="-3" max="5" value="0.5"></div>
@@ -2237,7 +2237,7 @@ function calcSim(){
   const num = id => { const v = parseFloat(String(document.getElementById(id).value).replace(",", ".")); return isNaN(v) ? 0 : v; };
   const idade = Math.round(num("s-idade")), iret = Math.round(num("s-iret"));
   const ini = parseBRL(document.getElementById("s-ini").value);
-  const r = num("s-r"), rr = num("s-rret"), taxa = Math.max(0, num("s-taxa")), poup = num("s-poup");
+  const r = num("s-r"), rr = Math.min(num("s-rret"), r), taxa = Math.max(0, num("s-taxa")), poup = num("s-poup");
   const err = document.getElementById("s-err");
   if (idade < 18 || idade > 90 || iret <= idade || iret >= 99){
     err.hidden = false; err.textContent = "Confira as idades: a renda precisa começar depois da idade de hoje e antes dos 99 anos.";
