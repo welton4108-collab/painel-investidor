@@ -4,10 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Indicadores de mercado e guia de investimento por objetivos, com critérios técnicos e fontes oficiais. Por Welton Garcia, CFP®.">
-<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
-.btn.wa{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:#1F8A4D;color:#fff;margin-top:14px}
-.btn[disabled]{opacity:.6;cursor:wait}
-</style>
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Investir por Objetivos</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -398,6 +395,39 @@ footer p + p{margin-top:8px}
   .termo-list{grid-template-columns:1fr}
 }
 @media (max-width:480px){ .minis{grid-template-columns:1fr} .kpi b{font-size:1.4rem} }
+/* ===== Simulador ===== */
+.simgrid{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:20px;align-items:start;padding-bottom:30px}
+.simgrid > *{min-width:0}
+.simform{position:sticky;top:12px}
+.simform input[type=range]{width:100%;accent-color:var(--accent);padding:0;border:0;background:none}
+.seg4{grid-template-columns:repeat(2,1fr)}
+.premissas{border-top:1px dashed var(--line);padding-top:10px}
+.premissas summary{cursor:pointer;font-weight:600;font-size:.9rem;margin-bottom:10px}
+.premissas .field + .field, .premissas .row2 + .field{margin-top:10px}
+.simout{display:grid;gap:14px}
+.simkpis{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:12px}
+.simk{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:4px;align-content:start;min-width:0}
+.simk.main{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.simk.main small,.simk.main em{color:inherit;opacity:.85}
+.simk small{font-size:.78rem;color:var(--muted);font-weight:600}
+.simk b{font-family:var(--f-data);font-size:1.55rem;font-weight:700;letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.simk.main b{font-size:2rem}
+.simk em{font-style:normal;font-size:.8rem;color:var(--muted)}
+.splitbar{display:flex;height:34px;border-radius:10px;overflow:hidden;font-size:.82rem;font-weight:700}
+.splitbar span{display:flex;align-items:center;padding:0 10px;white-space:nowrap;overflow:hidden;min-width:0}
+.splitbar span + span{border-left:2px solid var(--surface)}
+.cmp{display:grid;gap:12px}
+.cmprow{display:grid;grid-template-columns:minmax(0,190px) 1fr auto;gap:12px;align-items:center}
+.cmprow > span{font-size:.9rem;line-height:1.25}
+.cmprow > span small{display:block;color:var(--muted);font-size:.78rem}
+.cmpbar{height:16px;background:var(--cell-off);border-radius:999px;overflow:hidden}
+.cmpbar i{display:block;height:100%;border-radius:999px}
+.cmprow b{font-family:var(--f-data);font-size:.98rem;text-align:right;min-width:110px;font-variant-numeric:tabular-nums}
+@media (max-width:900px){ .simgrid{grid-template-columns:1fr} .simform{position:static} }
+@media (max-width:560px){ .simkpis{grid-template-columns:1fr} .cmprow{grid-template-columns:1fr auto} .cmprow .cmpbar{grid-column:1/-1;order:3} }
+.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.btn.wa{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:#1F8A4D;color:#fff;margin-top:14px}
+.btn[disabled]{opacity:.6;cursor:wait}
 </style>
 </head>
 <body>
@@ -409,7 +439,7 @@ footer p + p{margin-top:8px}
     <nav class="tabs" aria-label="Seções do painel">
       <button type="button" data-view="indicadores">Indicadores</button>
       <button type="button" data-view="objetivos" aria-current="page">Investir por objetivos</button>
-      <button type="button" data-tip-title="Em construção" data-tip="Simule quanto você acumula com aportes mensais ao longo do tempo.">Simulador<small>em breve</small></button>
+      <button type="button" data-view="simulador">Simulador</button>
       <button type="button" data-tip-title="Em construção" data-tip="Leituras de mercado e ideias de alocação.">Insights<small>em breve</small></button>
     </nav>
   </div>
@@ -734,6 +764,74 @@ footer p + p{margin-top:8px}
       </form>
     </div>
   </section>
+</main>
+
+<main class="wrap" id="view-simulador" hidden>
+  <section class="ind-hero">
+    <div>
+      <div class="eyebrow">Simulador</div>
+      <h1>Quanto o seu dinheiro pode virar</h1>
+      <p class="lede">Simule o patrimônio que você acumula com aportes mensais, veja quanto vem do seu esforço e quanto vem dos juros, e quanto as taxas custam no longo prazo. Todos os valores estão em reais de hoje.</p>
+    </div>
+  </section>
+
+  <div class="simgrid">
+    <aside class="calc simform" aria-labelledby="sim-in-t">
+      <h2 id="sim-in-t">Seus números</h2>
+      <div class="row2">
+        <div class="field"><label for="s-ini">Já tenho investido</label><input id="s-ini" type="text" inputmode="numeric" value="R$ 20.000"></div>
+        <div class="field"><label for="s-apt">Aporte mensal</label><input id="s-apt" type="text" inputmode="numeric" value="R$ 1.500"></div>
+      </div>
+      <div class="field">
+        <label for="s-anos">Prazo: <b id="s-anos-v" class="mono">25 anos</b></label>
+        <input id="s-anos" type="range" min="1" max="40" value="25">
+      </div>
+      <div class="field">
+        <label id="s-perf-l">Carteira</label>
+        <div class="seg seg4" role="group" aria-labelledby="s-perf-l" id="s-perf">
+          <button type="button" data-r="4" aria-pressed="false" data-tip-title="Conservadora · 4% ao ano acima da inflação" data-tip="Renda fixa simples: títulos públicos, CDB e LCI/LCA. Oscila pouco.">Conservadora</button>
+          <button type="button" data-r="5" aria-pressed="true" data-tip-title="Moderada · 5% ao ano acima da inflação" data-tip="Cerca de 70% em renda fixa e 30% em ETFs de ações do Brasil e do mundo.">Moderada</button>
+          <button type="button" data-r="6" aria-pressed="false" data-tip-title="Arrojada · 6% ao ano acima da inflação" data-tip="Cerca de 40% em renda fixa e 60% em ETFs de ações. Oscila bastante no caminho.">Arrojada</button>
+          <button type="button" data-r="custom" aria-pressed="false" data-tip-title="Personalizada" data-tip="Defina você o rendimento acima da inflação.">Personalizada</button>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="s-r" tabindex="0" data-tip-title="Rendimento real líquido" data-tip="Quanto a carteira rende acima da inflação, depois de imposto e taxas. É uma estimativa de longo prazo, não uma promessa.">Rendimento real (% a.a.) ⓘ</label><input id="s-r" type="number" step="0.5" min="0" max="12" value="5"></div>
+        <div class="field"><label for="s-meta">Meta (opcional)</label><input id="s-meta" type="text" inputmode="numeric" placeholder="R$ 1.000.000"></div>
+      </div>
+      <details class="premissas">
+        <summary>Premissas da comparação</summary>
+        <div class="row2">
+          <div class="field"><label for="s-taxa" tabindex="0" data-tip-title="Custo a mais" data-tip="Diferença de taxa entre uma carteira simples de baixo custo e uma carteira cara, como fundos ativos ou previdência com taxa alta.">Taxa a mais (% a.a.) ⓘ</label><input id="s-taxa" type="number" step="0.25" min="0" max="5" value="1"></div>
+          <div class="field"><label for="s-poup" tabindex="0" data-tip-title="Poupança" data-tip="Rendimento real aproximado da poupança no longo prazo. Em vários anos ela perdeu para a inflação.">Poupança real (% a.a.) ⓘ</label><input id="s-poup" type="number" step="0.25" min="-3" max="5" value="0.5"></div>
+        </div>
+        <div class="field"><label for="s-ret" tabindex="0" data-tip-title="Taxa de retirada" data-tip="Quanto do patrimônio você retira por ano para viver de renda. 4% é uma referência conservadora.">Taxa de retirada para renda (% a.a.) ⓘ</label><input id="s-ret" type="number" step="0.5" min="2" max="8" value="4"></div>
+      </details>
+    </aside>
+
+    <section class="simout" aria-live="polite">
+      <div class="simkpis">
+        <div class="simk main"><small>Patrimônio ao final</small><b id="o-fim">—</b><em id="o-fim-s"></em></div>
+        <div class="simk"><small>Renda mensal possível</small><b id="o-renda">—</b><em id="o-renda-s"></em></div>
+        <div class="simk"><small>Ponto de virada</small><b id="o-virada">—</b><em id="o-virada-s"></em></div>
+      </div>
+
+      <div class="icard">
+        <div class="ihead"><div><h3>Seu esforço × o trabalho dos juros</h3><p class="isub" id="o-split-t"></p></div></div>
+        <div class="splitbar" id="o-split"></div>
+        <div class="chart" id="simchart" style="min-height:260px"></div>
+        <div class="clegend"><span><i class="band" style="background:var(--muted);opacity:.35"></i>Quanto você investiu</span><span><i class="band" style="background:var(--accent);opacity:.75"></i>Juros sobre juros</span><span id="o-meta-leg" hidden><i class="dash" style="color:var(--z-res)"></i>Meta</span></div>
+      </div>
+
+      <div class="icard">
+        <div class="ihead"><div><h3>O mesmo esforço, em lugares diferentes</h3><p class="isub">Mesmos aportes e mesmo prazo. Muda só onde o dinheiro fica e quanto ele paga de taxa.</p></div></div>
+        <div class="cmp" id="o-cmp"></div>
+        <p class="ibody" id="o-cmp-t"></p>
+      </div>
+
+      <p class="ind-foot muted">Simulação educativa com rendimentos constantes acima da inflação. Na vida real, os retornos variam ano a ano e não são garantidos. Os valores estão em reais de hoje: o aporte cresce com a inflação, e o resultado já desconta a inflação do período.</p>
+    </section>
+  </div>
 </main>
 
 <main class="wrap" id="view-indicadores" hidden>
@@ -1816,7 +1914,7 @@ function chartLeave(el){
 document.addEventListener("pointermove", e => { const el = e.target.closest && e.target.closest(".chart"); if (el) chartHover(el, e.clientX); });
 document.addEventListener("pointerout", e => { const el = e.target.closest && e.target.closest(".chart"); if (el && !el.contains(e.relatedTarget)) chartLeave(el); });
 function drawAllCharts(){ document.querySelectorAll("#view-indicadores .chart").forEach(drawChart); }
-let _rz; window.addEventListener("resize", () => { clearTimeout(_rz); _rz = setTimeout(() => { if (!document.getElementById("view-indicadores").hidden) drawAllCharts(); }, 150); });
+let _rz; window.addEventListener("resize", () => { clearTimeout(_rz); _rz = setTimeout(() => { if (!document.getElementById("view-indicadores").hidden) drawAllCharts(); if (!document.getElementById("view-simulador").hidden) calcSim(); }, 150); });
 
 const legend = items => `<div class="clegend">${items.map(i => `<span><i class="${i.cls||""}" style="background:${i.color};color:${i.color}"></i>${i.t}</span>`).join("")}</div>`;
 const COPOM_MES = [[1,28],[3,18],[5,6],[6,17],[7,29],[9,16],[11,4],[12,9]];
@@ -1963,20 +2061,21 @@ function renderIndicadores(){
 
 /* Navegação entre abas */
 function showView(v){
-  const ind = v === "indicadores";
-  document.getElementById("view-indicadores").hidden = !ind;
-  document.getElementById("view-objetivos").hidden = ind;
+  const views = {objetivos:"view-objetivos", indicadores:"view-indicadores", simulador:"view-simulador"};
+  if (!views[v]) v = "objetivos";
+  Object.entries(views).forEach(([k, id]) => { document.getElementById(id).hidden = k !== v; });
   document.querySelectorAll("nav.tabs [data-view]").forEach(b => { if (b.dataset.view === v) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
   if (typeof hideTip === "function") hideTip();
-  if (ind) requestAnimationFrame(drawAllCharts);
+  if (v === "indicadores") requestAnimationFrame(drawAllCharts);
+  if (v === "simulador") requestAnimationFrame(calcSim);
 }
 document.querySelectorAll("nav.tabs [data-view]").forEach(b => b.addEventListener("click", () => {
   showView(b.dataset.view);
-  try { history.replaceState(null, "", "#" + (b.dataset.view === "indicadores" ? "indicadores" : current)); } catch(e){}
+  try { history.replaceState(null, "", "#" + (b.dataset.view === "objetivos" ? current : b.dataset.view)); } catch(e){}
   window.scrollTo({top:0});
 }));
 renderIndicadores();
-if ((location.hash || "").slice(1) === "indicadores") showView("indicadores");
+{ const hv = (location.hash || "").slice(1); if (hv === "indicadores" || hv === "simulador") showView(hv); }
 /* No site publicado, busca os dados mais recentes gravados pelo coletor diário */
 if (location.protocol.startsWith("http")){
   fetch("dados/indicadores.json?v=" + Date.now(), {cache:"no-store"})
@@ -1984,6 +2083,138 @@ if (location.protocol.startsWith("http")){
     .then(d => { IND = d; renderIndicadores(); if (!document.getElementById("view-indicadores").hidden) drawAllCharts(); })
     .catch(() => {});
 }
+/* ===================== SIMULADOR ===================== */
+const brlK = v => {
+  const a = Math.abs(v);
+  if (a >= 1e6) return "R$ " + nf(v/1e6, a >= 1e7 ? 1 : 2) + " mi";
+  if (a >= 1e4) return "R$ " + nf(v/1e3, 0) + " mil";
+  return brl(Math.round(v));
+};
+function simular(ini, apt, anos, rAno){
+  const i = Math.pow(1 + rAno/100, 1/12) - 1;
+  let p = ini, ap = ini, virada = null;
+  const pts = [{a:0, p, ap}];
+  for (let m = 1; m <= anos*12; m++){
+    if (virada === null && apt > 0 && p * i >= apt) virada = m;
+    p = p * (1 + i) + apt; ap += apt;
+    if (m % 12 === 0) pts.push({a:m/12, p, ap});
+  }
+  return {pts, fim:p, aportado:ap, virada, i};
+}
+function drawSim(el, pts, meta){
+  if (!el || !el.clientWidth) return;
+  const W = Math.max(260, el.clientWidth), H = 260, m = {l:62, r:14, t:14, b:26};
+  const maxY = Math.max(...pts.map(p => p.p), meta || 0) * 1.05 || 1;
+  const ticks = niceTicks(0, maxY, 4);
+  const top = Math.max(maxY, ticks[ticks.length-1]);
+  const n = pts[pts.length-1].a || 1;
+  const X = a => m.l + a / n * (W - m.l - m.r);
+  const Y = v => m.t + (1 - v / top) * (H - m.t - m.b);
+  let g = "";
+  ticks.forEach(t => { g += `<line class="grid" x1="${m.l}" x2="${W-m.r}" y1="${Y(t)}" y2="${Y(t)}"/><text x="${m.l-8}" y="${Y(t)+4}" text-anchor="end">${brlK(t)}</text>`; });
+  const base = `L${X(n)} ${Y(0)} L${X(0)} ${Y(0)} Z`;
+  const linha = k => pts.map((p,j) => `${j ? "L" : "M"}${X(p.a).toFixed(1)} ${Y(p[k]).toFixed(1)}`).join(" ");
+  const voltaAp = pts.slice().reverse().map(p => `L${X(p.a).toFixed(1)} ${Y(p.ap).toFixed(1)}`).join(" ");
+  g += `<path d="${linha("ap")} ${base}" fill="var(--muted)" opacity=".35"/>`;
+  g += `<path d="${linha("p")} ${voltaAp} Z" fill="var(--accent)" opacity=".75"/>`;
+  g += `<path d="${linha("p")}" fill="none" stroke="var(--accent)" stroke-width="2"/>`;
+  if (meta){ g += `<line x1="${m.l}" x2="${W-m.r}" y1="${Y(meta)}" y2="${Y(meta)}" stroke="var(--z-res)" stroke-width="1.5" stroke-dasharray="6 5"/><text x="${m.l+6}" y="${Y(meta)-6}" style="fill:var(--ink)">meta ${brlK(meta)}</text>`; }
+  const passo = n > 24 ? 5 : n > 10 ? 2 : 1;
+  for (let a = 0; a <= n; a += passo){ g += `<line class="axis" x1="${X(a)}" x2="${X(a)}" y1="${H-m.b}" y2="${H-m.b+4}"/><text x="${X(a)}" y="${H-7}" text-anchor="middle">${a} ${a === 1 ? "ano" : "anos"}</text>`; }
+  g += `<line class="axis" x1="${m.l}" x2="${W-m.r}" y1="${H-m.b}" y2="${H-m.b}"/>`;
+  g += `<line class="xh" id="sim-xh" x1="0" x2="0" y1="${m.t}" y2="${H-m.b}" visibility="hidden"/><circle id="sim-dot" r="4.5" fill="var(--accent)" stroke="var(--surface)" stroke-width="2" visibility="hidden"/>`;
+  g += `<rect x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/>`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Evolução do patrimônio ano a ano">${g}</svg><div class="ctip" hidden></div>`;
+  el.style.minHeight = "";
+  el._sim = {X, Y, W, H, m, n, pts};
+}
+function simHover(el, clientX){
+  const s = el._sim; if (!s) return;
+  const r = el.querySelector("svg").getBoundingClientRect();
+  const px = (clientX - r.left) / r.width * s.W;
+  const a = Math.max(0, Math.min(s.n, Math.round((px - s.m.l) / (s.W - s.m.l - s.m.r) * s.n)));
+  const p = s.pts.find(q => q.a === a); if (!p) return;
+  const x = s.X(a), y = s.Y(p.p);
+  const xh = el.querySelector("#sim-xh"), dot = el.querySelector("#sim-dot"), tip = el.querySelector(".ctip");
+  xh.setAttribute("x1", x); xh.setAttribute("x2", x); xh.setAttribute("visibility","visible");
+  dot.setAttribute("cx", x); dot.setAttribute("cy", y); dot.setAttribute("visibility","visible");
+  tip.innerHTML = `<div><b>Ano ${a}</b></div><div>Patrimônio: <b>${brl(Math.round(p.p))}</b></div><div>Investido: <b>${brl(Math.round(p.ap))}</b></div><div>Juros: <b>${brl(Math.round(p.p - p.ap))}</b></div>`;
+  tip.hidden = false;
+  tip.style.left = Math.max(14, Math.min(86, x / s.W * 100)) + "%";
+  tip.style.top = Math.max(0, y / s.H * r.height - 10) + "px";
+}
+(function(){
+  const el = document.getElementById("simchart");
+  el.addEventListener("pointermove", e => simHover(el, e.clientX));
+  el.addEventListener("pointerleave", () => { const t = el.querySelector(".ctip"); if (t) t.hidden = true; el.querySelectorAll("#sim-xh,#sim-dot").forEach(n => n.setAttribute("visibility","hidden")); });
+})();
+
+function calcSim(){
+  const ini = parseBRL(document.getElementById("s-ini").value);
+  const apt = parseBRL(document.getElementById("s-apt").value);
+  const anos = +document.getElementById("s-anos").value;
+  const num = id => { const v = parseFloat(String(document.getElementById(id).value).replace(",", ".")); return isNaN(v) ? 0 : v; };
+  const r = num("s-r"), taxa = Math.max(0, num("s-taxa")), poup = num("s-poup"), ret = Math.max(0.5, num("s-ret"));
+  const meta = parseBRL(document.getElementById("s-meta").value);
+  document.getElementById("s-anos-v").textContent = anos + (anos === 1 ? " ano" : " anos");
+
+  const s = simular(ini, apt, anos, r);
+  const juros = s.fim - s.aportado;
+  document.getElementById("o-fim").textContent = brlK(s.fim);
+  document.getElementById("o-fim-s").textContent = `em ${anos} ${anos === 1 ? "ano" : "anos"}, em reais de hoje`;
+  document.getElementById("o-renda").textContent = brl(Math.round(s.fim * ret / 100 / 12));
+  document.getElementById("o-renda-s").textContent = `por mês, retirando ${nf(ret,1)}% ao ano`;
+  if (s.virada){
+    const a = Math.ceil(s.virada / 12);
+    document.getElementById("o-virada").textContent = `Ano ${a}`;
+    document.getElementById("o-virada-s").textContent = "a partir daqui, os juros de cada mês passam o seu aporte";
+  } else {
+    document.getElementById("o-virada").textContent = "—";
+    document.getElementById("o-virada-s").textContent = apt > 0 ? "os juros ainda não passam o aporte neste prazo" : "sem aporte mensal";
+  }
+
+  const pj = s.fim > 0 ? Math.max(0, juros) / s.fim : 0;
+  document.getElementById("o-split-t").textContent = `Dos ${brlK(s.fim)} ao final, ${brlK(s.aportado)} saíram do seu bolso e ${brlK(Math.max(0, juros))} vieram dos juros.`;
+  document.getElementById("o-split").innerHTML =
+    `<span style="flex:${1-pj};background:color-mix(in srgb, var(--muted) 45%, transparent);color:var(--ink)">${Math.round((1-pj)*100)}% esforço</span>` +
+    `<span style="flex:${pj};background:var(--accent);color:var(--surface)">${Math.round(pj*100)}% juros</span>`;
+
+  document.getElementById("o-meta-leg").hidden = !meta;
+  drawSim(document.getElementById("simchart"), s.pts, meta);
+
+  const cara = simular(ini, apt, anos, r - taxa).fim;
+  const pou = simular(ini, apt, anos, poup).fim;
+  const linhas = [
+    {t:"Carteira simples", sub:`${nf(r,1)}% ao ano acima da inflação`, v:s.fim, c:"var(--accent)"},
+    {t:"A mesma carteira, mais cara", sub:`${Number.isInteger(taxa) ? nf(taxa,0) : nf(taxa,2)} p.p. a mais de taxa por ano`, v:cara, c:"var(--z-res)"},
+    {t:"Poupança", sub:`${nf(poup,1)}% ao ano acima da inflação`, v:pou, c:"var(--muted)"}
+  ];
+  const mx = Math.max(...linhas.map(l => l.v), 1);
+  document.getElementById("o-cmp").innerHTML = linhas.map(l =>
+    `<div class="cmprow"><span>${l.t}<small>${l.sub}</small></span><div class="cmpbar"><i style="width:${Math.max(0, l.v)/mx*100}%;background:${l.c}"></i></div><b>${brl(Math.round(l.v))}</b></div>`).join("");
+  const perdaTaxa = s.fim - cara, perdaPoup = s.fim - pou;
+  const fTaxa = Number.isInteger(taxa) ? nf(taxa,0) : nf(taxa,2);
+  document.getElementById("o-cmp-t").innerHTML = taxa > 0
+    ? `Uma taxa de <b>${fTaxa} ponto${taxa === 1 ? "" : "s"} percentua${taxa === 1 ? "l" : "is"} a mais por ano</b> parece pouco, mas em ${anos} anos custa <b>${brl(Math.round(perdaTaxa))}</b>, ou ${Math.round(perdaTaxa / s.fim * 100)}% do patrimônio final. Deixar na poupança custaria <b>${brl(Math.round(perdaPoup))}</b>.`
+    : `Deixar na poupança custaria <b>${brl(Math.round(perdaPoup))}</b> em ${anos} anos.`;
+
+  if (meta){
+    const atinge = s.pts.find(p => p.p >= meta);
+    document.getElementById("o-fim-s").textContent += atinge ? ` · meta atingida no ano ${atinge.a}` : " · meta não atingida no prazo";
+  }
+}
+["s-ini","s-apt","s-meta"].forEach(id => moneyInput(document.getElementById(id), calcSim));
+["s-anos","s-taxa","s-poup","s-ret"].forEach(id => document.getElementById(id).addEventListener("input", calcSim));
+document.getElementById("s-r").addEventListener("input", () => {
+  document.querySelectorAll("#s-perf button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.r === "custom")));
+  calcSim();
+});
+document.querySelectorAll("#s-perf button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("#s-perf button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  if (b.dataset.r !== "custom") document.getElementById("s-r").value = b.dataset.r;
+  else document.getElementById("s-r").focus();
+  calcSim();
+}));
 </script>
 
 </body>
