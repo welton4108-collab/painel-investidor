@@ -36,6 +36,103 @@ const BUSCA = {
   user_location: { type: "approximate", country: "BR", timezone: "America/Sao_Paulo" },
 };
 
+// Calculadoras com as mesmas fórmulas do Simulador do painel (valores em reais de hoje, juros reais).
+const PERFIS = { conservadora: 3, moderada: 4.5, arrojada: 6 };
+const CALCULADORAS = [
+  {
+    name: "calcular_aposentadoria",
+    description: "Contas de aposentadoria com as premissas do Simulador do painel: rendimento real da carteira (conservadora 3%, moderada 4,5%, arrojada 6% ao ano acima da inflação) até a idade da renda; na fase de renda, 4% ao ano ou o rendimento da carteira, o que for menor; renda até os 99 anos. Informe renda_mensal para saber o patrimônio e o aporte necessários; informe aporte_mensal para saber o patrimônio projetado e a renda possível. Valores em reais de hoje.",
+    input_schema: {
+      type: "object",
+      properties: {
+        idade_atual: { type: "number" },
+        idade_renda: { type: "number", description: "Idade em que a renda começa." },
+        perfil: { type: "string", enum: ["conservadora", "moderada", "arrojada"], description: "Padrão: moderada." },
+        patrimonio_atual: { type: "number", description: "Já investido para este objetivo, em reais. Padrão 0." },
+        renda_mensal: { type: "number", description: "Renda mensal desejada, em reais de hoje." },
+        aporte_mensal: { type: "number", description: "Quanto consegue investir por mês, em reais." },
+      },
+      required: ["idade_atual", "idade_renda"],
+    },
+  },
+  {
+    name: "calcular_meta",
+    description: "Juros compostos mensais com rendimento real (padrão 4,5% ao ano acima da inflação; use 0 para dinheiro parado). Informe dois entre meta, aporte_mensal e meses para obter o terceiro, ou só aporte_mensal e meses para o valor acumulado. Serve para reserva de emergência, metas de médio prazo, viagem, educação e efeito de cortar gastos.",
+    input_schema: {
+      type: "object",
+      properties: {
+        meta: { type: "number", description: "Valor a juntar, em reais de hoje." },
+        aporte_mensal: { type: "number" },
+        meses: { type: "number" },
+        inicial: { type: "number", description: "Valor já guardado. Padrão 0." },
+        rendimento_real_anual: { type: "number", description: "Em %, padrão 4,5." },
+      },
+    },
+  },
+];
+
+const taxaMes = r => Math.pow(1 + r / 100, 1 / 12) - 1;
+const fv = (ini, pmt, n, i) => n <= 0 ? ini : (i === 0 ? ini + pmt * n : ini * Math.pow(1 + i, n) + pmt * (Math.pow(1 + i, n) - 1) / i);
+const aporteParaMeta = (alvo, ini, n, i) => n <= 0 ? 0 : Math.max(0, (alvo - ini * Math.pow(1 + i, n)) * (i === 0 ? 1 / n : i / (Math.pow(1 + i, n) - 1)));
+const rendaAte99 = (P, i, m) => m <= 0 ? 0 : (i === 0 ? P / m : P * i / (1 - Math.pow(1 + i, -m)));
+const capitalAte99 = (Y, i, m) => i === 0 ? Y * m : Y * (1 - Math.pow(1 + i, -m)) / i;
+const reais = v => Math.round(v);
+
+function calcular(nome, x) {
+  x = x || {};
+  if (nome === "calcular_aposentadoria") {
+    const idade = Number(x.idade_atual), iret = Number(x.idade_renda);
+    if (!(idade >= 18 && iret > idade && iret < 99)) return { erro: "Idades inválidas: a renda precisa começar depois da idade atual e antes dos 99 anos." };
+    const perfil = PERFIS[x.perfil] ? x.perfil : "moderada";
+    const r = PERFIS[perfil], rr = Math.min(4, r);
+    const ia = taxaMes(r), ir = taxaMes(rr), n = (iret - idade) * 12, m = (99 - iret) * 12;
+    const ini = Number(x.patrimonio_atual) || 0;
+    const out = { premissas: `carteira ${perfil}: ${String(r).replace(".", ",")}% ao ano acima da inflação até os ${iret} anos; ${String(rr).replace(".", ",")}% ao ano na fase de renda; valores em reais de hoje; renda até os 99 anos`,
+                  anos_ate_renda: iret - idade, patrimonio_atual_projetado: reais(fv(ini, 0, n, ia)) };
+    if (x.renda_mensal) {
+      const Y = Number(x.renda_mensal);
+      const pPres = Y / ir, pCons = capitalAte99(Y, ir, m);
+      Object.assign(out, {
+        renda_mensal: reais(Y),
+        patrimonio_necessario_preservando_capital: reais(pPres),
+        patrimonio_necessario_consumindo_ate_99: reais(pCons),
+        aporte_mensal_necessario_preservando: reais(aporteParaMeta(pPres, ini, n, ia)),
+        aporte_mensal_necessario_consumindo: reais(aporteParaMeta(pCons, ini, n, ia)),
+      });
+    }
+    if (x.aporte_mensal) {
+      const P = fv(ini, Number(x.aporte_mensal), n, ia);
+      Object.assign(out, {
+        aporte_mensal: reais(Number(x.aporte_mensal)),
+        patrimonio_projetado: reais(P),
+        renda_mensal_preservando_capital: reais(P * ir),
+        renda_mensal_consumindo_ate_99: reais(rendaAte99(P, ir, m)),
+      });
+    }
+    return out;
+  }
+  if (nome === "calcular_meta") {
+    const taxa = x.rendimento_real_anual == null ? 4.5 : Number(x.rendimento_real_anual);
+    const i = taxaMes(taxa), ini = Number(x.inicial) || 0;
+    const meta = x.meta == null ? null : Number(x.meta), pmt = x.aporte_mensal == null ? null : Number(x.aporte_mensal), n = x.meses == null ? null : Math.round(Number(x.meses));
+    const base = { premissas: `${String(taxa).replace(".", ",")}% ao ano acima da inflação, juros compostos mensais, valores em reais de hoje`, inicial: reais(ini) };
+    if (meta != null && n != null) return { ...base, meta: reais(meta), meses: n, aporte_mensal_necessario: reais(aporteParaMeta(meta, ini, n, i)) };
+    if (pmt != null && n != null) {
+      const total = fv(ini, pmt, n, i);
+      return { ...base, aporte_mensal: reais(pmt), meses: n, valor_acumulado: reais(total), total_guardado: reais(ini + pmt * n), rendimento: reais(total - ini - pmt * n) };
+    }
+    if (meta != null && pmt != null) {
+      if (ini >= meta) return { ...base, meta: reais(meta), meses_necessarios: 0 };
+      if (pmt <= 0) return { erro: "Informe um aporte mensal maior que zero." };
+      let k = 0, v = ini;
+      while (v < meta && k < 1200) { v = v * (1 + i) + pmt; k++; }
+      return { ...base, meta: reais(meta), aporte_mensal: reais(pmt), meses_necessarios: k, anos_e_meses: `${Math.floor(k / 12)} anos e ${k % 12} meses` };
+    }
+    return { erro: "Informe dois entre meta, aporte_mensal e meses." };
+  }
+  return { erro: "Ferramenta desconhecida." };
+}
+
 export default {
   async fetch(request, env, ctx) {
     const origem = request.headers.get("Origin") || "";
@@ -86,8 +183,8 @@ export default {
     const blocos = [];
     const uso = { entrada: 0, saida: 0, cache: 0, buscas: 0 };
     let resp = {};
-    // A busca na web pode pausar a resposta (stop_reason "pause_turn"); nesse caso, continua até 2 vezes.
-    for (let rodada = 0; rodada < 3; rodada++) {
+    // Até 5 rodadas: a busca na web pode pausar ("pause_turn") e as calculadoras pedem resposta ("tool_use").
+    for (let rodada = 0; rodada < 5; rodada++) {
       let r;
       try {
         r = await fetch("https://api.anthropic.com/v1/messages", {
@@ -102,7 +199,7 @@ export default {
             max_tokens: MAX_TOKENS,
             ...pensamento(modelo),
             system: sistema,
-            tools: [BUSCA],
+            tools: [BUSCA, ...CALCULADORAS],
             messages: conversa,
           }),
         });
@@ -123,13 +220,18 @@ export default {
       uso.cache += u.cache_read_input_tokens || 0;
       uso.buscas += (u.server_tool_use && u.server_tool_use.web_search_requests) || 0;
       blocos.push(...(resp.content || []));
-      if (resp.stop_reason !== "pause_turn") break;
+      if (resp.stop_reason === "pause_turn") { conversa.push({ role: "assistant", content: resp.content }); continue; }
+      if (resp.stop_reason !== "tool_use") break;
+      const pedidos = (resp.content || []).filter(b => b.type === "tool_use");
       conversa.push({ role: "assistant", content: resp.content });
+      conversa.push({ role: "user", content: pedidos.map(b => ({
+        type: "tool_result", tool_use_id: b.id, content: JSON.stringify(calcular(b.name, b.input)),
+      })) });
     }
 
-    // Quando houve busca, descarta o texto escrito antes do último resultado ("vou consultar...").
+    // Descarta o texto escrito antes da última busca ou cálculo ("vou consultar...", "vou calcular...").
     let inicio = 0;
-    blocos.forEach((b, i) => { if (b.type === "web_search_tool_result") inicio = i + 1; });
+    blocos.forEach((b, i) => { if (["web_search_tool_result", "server_tool_use", "tool_use"].includes(b.type)) inicio = i + 1; });
     let texto = blocos.slice(inicio).filter(b => b.type === "text").map(b => b.text).join("").trim();
     const agendar = /\[AGENDAR\]/.test(texto);
     texto = texto.replace(/\s*\[AGENDAR\]\s*/g, "\n").trim();
