@@ -396,23 +396,39 @@ footer p + p{margin-top:8px}
 }
 @media (max-width:480px){ .minis{grid-template-columns:1fr} .kpi b{font-size:1.4rem} }
 /* ===== Simulador ===== */
+.modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.modes button{display:grid;gap:3px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;color:inherit;font:inherit}
+.modes button b{font-family:var(--f-display);font-size:1.02rem}
+.modes button span{font-size:.84rem;color:var(--muted)}
+.modes button[aria-pressed="true"]{border:2px solid var(--accent);background:var(--accent-soft);padding:13px 15px}
+.modes button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .simgrid{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:20px;align-items:start;padding-bottom:30px}
 .simgrid > *{min-width:0}
 .simform{position:sticky;top:12px}
-.simform input[type=range]{width:100%;accent-color:var(--accent);padding:0;border:0;background:none}
 .seg4{grid-template-columns:repeat(2,1fr)}
 .premissas{border-top:1px dashed var(--line);padding-top:10px}
 .premissas summary{cursor:pointer;font-weight:600;font-size:.9rem;margin-bottom:10px}
-.premissas .field + .field, .premissas .row2 + .field{margin-top:10px}
+.premissas > .field + .row2{margin-top:10px}
+.ferr{font-size:.86rem;font-weight:600;color:var(--z-nao)}
 .simout{display:grid;gap:14px}
-.simkpis{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:12px}
+.simkpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .simk{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:4px;align-content:start;min-width:0}
 .simk.main{background:var(--accent);border-color:var(--accent);color:var(--surface)}
-.simk.main small,.simk.main em{color:inherit;opacity:.85}
+.simk.main small,.simk.main em{color:inherit;opacity:.88}
 .simk small{font-size:.78rem;color:var(--muted);font-weight:600}
-.simk b{font-family:var(--f-data);font-size:1.55rem;font-weight:700;letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.simk.main b{font-size:2rem}
+.simk b{font-family:var(--f-data);font-size:1.5rem;font-weight:700;letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.simk.main b{font-size:1.85rem}
 .simk em{font-style:normal;font-size:.8rem;color:var(--muted)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.duo .icard{border-top-width:4px}
+.duo .icard:first-child{border-top-color:var(--accent)}
+.duo .icard:last-child{border-top-color:var(--z-res)}
+.dl{display:grid;gap:10px;margin:0}
+.dl div{display:flex;justify-content:space-between;gap:12px;align-items:baseline;border-bottom:1px dashed var(--line);padding-bottom:8px}
+.dl div:last-child{border-bottom:0;padding-bottom:0}
+.dl dt{font-size:.88rem;color:var(--muted)}
+.dl dd{margin:0;font-family:var(--f-data);font-weight:700;font-size:1.05rem;text-align:right;font-variant-numeric:tabular-nums}
+.dl dd.big{font-size:1.4rem}
 .splitbar{display:flex;height:34px;border-radius:10px;overflow:hidden;font-size:.82rem;font-weight:700}
 .splitbar span{display:flex;align-items:center;padding:0 10px;white-space:nowrap;overflow:hidden;min-width:0}
 .splitbar span + span{border-left:2px solid var(--surface)}
@@ -423,8 +439,8 @@ footer p + p{margin-top:8px}
 .cmpbar{height:16px;background:var(--cell-off);border-radius:999px;overflow:hidden}
 .cmpbar i{display:block;height:100%;border-radius:999px}
 .cmprow b{font-family:var(--f-data);font-size:.98rem;text-align:right;min-width:110px;font-variant-numeric:tabular-nums}
-@media (max-width:900px){ .simgrid{grid-template-columns:1fr} .simform{position:static} }
-@media (max-width:560px){ .simkpis{grid-template-columns:1fr} .cmprow{grid-template-columns:1fr auto} .cmprow .cmpbar{grid-column:1/-1;order:3} }
+@media (max-width:900px){ .simgrid{grid-template-columns:1fr} .simform{position:static} .modes{grid-template-columns:1fr} }
+@media (max-width:640px){ .simkpis,.duo{grid-template-columns:1fr} .cmprow{grid-template-columns:1fr auto} .cmprow .cmpbar{grid-column:1/-1;order:3} }
 .hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
 .btn.wa{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:#1F8A4D;color:#fff;margin-top:14px}
 .btn[disabled]{opacity:.6;cursor:wait}
@@ -770,24 +786,30 @@ footer p + p{margin-top:8px}
   <section class="ind-hero">
     <div>
       <div class="eyebrow">Simulador</div>
-      <h1>Quanto o seu dinheiro pode virar</h1>
-      <p class="lede">Simule o patrimônio que você acumula com aportes mensais, veja quanto vem do seu esforço e quanto vem dos juros, e quanto as taxas custam no longo prazo. Todos os valores estão em reais de hoje.</p>
+      <h1>Do primeiro aporte até os 99 anos</h1>
+      <p class="lede">Descubra quanto investir para chegar a um patrimônio ou a uma renda, ou quanto o seu aporte pode virar. A simulação vai até os 99 anos e compara duas formas de viver de renda: preservando o capital ou consumindo o capital aos poucos. Valores em reais de hoje.</p>
     </div>
   </section>
+
+  <div class="modes" role="group" aria-label="O que você quer simular" id="s-modo">
+    <button type="button" data-m="meta" aria-pressed="false"><b>Quero chegar a um patrimônio</b><span>Quanto preciso aportar por mês?</span></button>
+    <button type="button" data-m="renda" aria-pressed="false"><b>Quero uma renda mensal</b><span>Quanto preciso juntar e aportar?</span></button>
+    <button type="button" data-m="aporte" aria-pressed="true"><b>Sei quanto consigo aportar</b><span>Quanto vou acumular e ter de renda?</span></button>
+  </div>
 
   <div class="simgrid">
     <aside class="calc simform" aria-labelledby="sim-in-t">
       <h2 id="sim-in-t">Seus números</h2>
       <div class="row2">
-        <div class="field"><label for="s-ini">Já tenho investido</label><input id="s-ini" type="text" inputmode="numeric" value="R$ 20.000"></div>
-        <div class="field"><label for="s-apt">Aporte mensal</label><input id="s-apt" type="text" inputmode="numeric" value="R$ 1.500"></div>
+        <div class="field"><label for="s-idade">Idade hoje</label><input id="s-idade" type="number" min="18" max="90" value="35"></div>
+        <div class="field"><label for="s-iret" tabindex="0" data-tip-title="Início da renda" data-tip="Idade em que você para de aportar e passa a viver da renda do patrimônio.">Idade da renda ⓘ</label><input id="s-iret" type="number" min="19" max="95" value="60"></div>
       </div>
+      <div class="field"><label for="s-ini">Já tenho investido</label><input id="s-ini" type="text" inputmode="numeric" value="R$ 20.000"></div>
+      <div class="field" data-modo="meta" hidden><label for="s-meta">Patrimônio que quero ter</label><input id="s-meta" type="text" inputmode="numeric" value="R$ 1.000.000"></div>
+      <div class="field" data-modo="renda" hidden><label for="s-renda">Renda mensal que quero ter</label><input id="s-renda" type="text" inputmode="numeric" value="R$ 10.000"></div>
+      <div class="field" data-modo="aporte"><label for="s-apt">Consigo aportar por mês</label><input id="s-apt" type="text" inputmode="numeric" value="R$ 1.500"></div>
       <div class="field">
-        <label for="s-anos">Prazo: <b id="s-anos-v" class="mono">25 anos</b></label>
-        <input id="s-anos" type="range" min="1" max="40" value="25">
-      </div>
-      <div class="field">
-        <label id="s-perf-l">Carteira</label>
+        <label id="s-perf-l">Carteira até começar a renda</label>
         <div class="seg seg4" role="group" aria-labelledby="s-perf-l" id="s-perf">
           <button type="button" data-r="4" aria-pressed="false" data-tip-title="Conservadora · 4% ao ano acima da inflação" data-tip="Renda fixa simples: títulos públicos, CDB e LCI/LCA. Oscila pouco.">Conservadora</button>
           <button type="button" data-r="5" aria-pressed="true" data-tip-title="Moderada · 5% ao ano acima da inflação" data-tip="Cerca de 70% em renda fixa e 30% em ETFs de ações do Brasil e do mundo.">Moderada</button>
@@ -795,41 +817,54 @@ footer p + p{margin-top:8px}
           <button type="button" data-r="custom" aria-pressed="false" data-tip-title="Personalizada" data-tip="Defina você o rendimento acima da inflação.">Personalizada</button>
         </div>
       </div>
-      <div class="row2">
-        <div class="field"><label for="s-r" tabindex="0" data-tip-title="Rendimento real líquido" data-tip="Quanto a carteira rende acima da inflação, depois de imposto e taxas. É uma estimativa de longo prazo, não uma promessa.">Rendimento real (% a.a.) ⓘ</label><input id="s-r" type="number" step="0.5" min="0" max="12" value="5"></div>
-        <div class="field"><label for="s-meta">Meta (opcional)</label><input id="s-meta" type="text" inputmode="numeric" placeholder="R$ 1.000.000"></div>
-      </div>
+      <div class="field"><label for="s-r" tabindex="0" data-tip-title="Rendimento real líquido" data-tip="Quanto a carteira rende acima da inflação, depois de imposto e taxas, na fase de acumulação. É uma estimativa de longo prazo, não uma promessa.">Rendimento real até a renda (% a.a.) ⓘ</label><input id="s-r" type="number" step="0.5" min="0" max="12" value="5"></div>
       <details class="premissas">
-        <summary>Premissas da comparação</summary>
+        <summary>Premissas</summary>
+        <div class="field"><label for="s-rret" tabindex="0" data-tip-title="Rendimento na fase de renda" data-tip="Quando a renda começa, a carteira costuma ficar mais conservadora para oscilar menos. Por isso o padrão é menor que o da acumulação.">Rendimento real na fase de renda (% a.a.) ⓘ</label><input id="s-rret" type="number" step="0.5" min="0" max="10" value="4"></div>
         <div class="row2">
           <div class="field"><label for="s-taxa" tabindex="0" data-tip-title="Custo a mais" data-tip="Diferença de taxa entre uma carteira simples de baixo custo e uma carteira cara, como fundos ativos ou previdência com taxa alta.">Taxa a mais (% a.a.) ⓘ</label><input id="s-taxa" type="number" step="0.25" min="0" max="5" value="1"></div>
           <div class="field"><label for="s-poup" tabindex="0" data-tip-title="Poupança" data-tip="Rendimento real aproximado da poupança no longo prazo. Em vários anos ela perdeu para a inflação.">Poupança real (% a.a.) ⓘ</label><input id="s-poup" type="number" step="0.25" min="-3" max="5" value="0.5"></div>
         </div>
-        <div class="field"><label for="s-ret" tabindex="0" data-tip-title="Taxa de retirada" data-tip="Quanto do patrimônio você retira por ano para viver de renda. 4% é uma referência conservadora.">Taxa de retirada para renda (% a.a.) ⓘ</label><input id="s-ret" type="number" step="0.5" min="2" max="8" value="4"></div>
       </details>
+      <p class="ferr" id="s-err" hidden></p>
     </aside>
 
     <section class="simout" aria-live="polite">
-      <div class="simkpis">
-        <div class="simk main"><small>Patrimônio ao final</small><b id="o-fim">—</b><em id="o-fim-s"></em></div>
-        <div class="simk"><small>Renda mensal possível</small><b id="o-renda">—</b><em id="o-renda-s"></em></div>
-        <div class="simk"><small>Ponto de virada</small><b id="o-virada">—</b><em id="o-virada-s"></em></div>
+      <div class="simkpis" id="o-kpis"></div>
+
+      <div class="icard">
+        <div class="ihead"><div><h3>Seu patrimônio até os 99 anos</h3><p class="isub" id="o-vida-t"></p></div></div>
+        <div class="chart" id="simchart" style="min-height:300px"></div>
+        <div class="clegend">
+          <span><i style="background:var(--accent)"></i>Preservando o capital: vive só dos rendimentos</span>
+          <span><i style="background:var(--z-res)"></i>Consumindo o capital até os 99</span>
+          <span><i class="band" style="background:var(--muted);opacity:.35"></i>Quanto você investiu</span>
+        </div>
+      </div>
+
+      <div class="duo">
+        <div class="icard">
+          <div class="ihead"><div><h3>Preservando o capital</h3><p class="isub">Você vive só dos rendimentos. O patrimônio fica intacto, para sempre ou como herança.</p></div></div>
+          <div id="o-pres"></div>
+        </div>
+        <div class="icard">
+          <div class="ihead"><div><h3>Consumindo até os 99</h3><p class="isub">Você usa rendimentos e capital, e o patrimônio chega a zero aos 99 anos. A renda é maior.</p></div></div>
+          <div id="o-cons"></div>
+        </div>
       </div>
 
       <div class="icard">
         <div class="ihead"><div><h3>Seu esforço × o trabalho dos juros</h3><p class="isub" id="o-split-t"></p></div></div>
         <div class="splitbar" id="o-split"></div>
-        <div class="chart" id="simchart" style="min-height:260px"></div>
-        <div class="clegend"><span><i class="band" style="background:var(--muted);opacity:.35"></i>Quanto você investiu</span><span><i class="band" style="background:var(--accent);opacity:.75"></i>Juros sobre juros</span><span id="o-meta-leg" hidden><i class="dash" style="color:var(--z-res)"></i>Meta</span></div>
       </div>
 
       <div class="icard">
-        <div class="ihead"><div><h3>O mesmo esforço, em lugares diferentes</h3><p class="isub">Mesmos aportes e mesmo prazo. Muda só onde o dinheiro fica e quanto ele paga de taxa.</p></div></div>
+        <div class="ihead"><div><h3>O mesmo esforço, em lugares diferentes</h3><p class="isub" id="o-cmp-s">Mesmos aportes e mesmo prazo. Muda só onde o dinheiro fica e quanto ele paga de taxa.</p></div></div>
         <div class="cmp" id="o-cmp"></div>
         <p class="ibody" id="o-cmp-t"></p>
       </div>
 
-      <p class="ind-foot muted">Simulação educativa com rendimentos constantes acima da inflação. Na vida real, os retornos variam ano a ano e não são garantidos. Os valores estão em reais de hoje: o aporte cresce com a inflação, e o resultado já desconta a inflação do período.</p>
+      <p class="ind-foot muted">Simulação educativa com rendimentos constantes acima da inflação. Na vida real, os retornos variam ano a ano e não são garantidos. Os valores estão em reais de hoje: o aporte e a renda crescem com a inflação, e o resultado já desconta a inflação do período. Não considera INSS nem outras rendas.</p>
     </section>
   </div>
 </main>
@@ -2086,125 +2121,199 @@ if (location.protocol.startsWith("http")){
 /* ===================== SIMULADOR ===================== */
 const brlK = v => {
   const a = Math.abs(v);
+  if (!isFinite(v)) return "—";
   if (a >= 1e6) return "R$ " + nf(v/1e6, a >= 1e7 ? 1 : 2) + " mi";
   if (a >= 1e4) return "R$ " + nf(v/1e3, 0) + " mil";
   return brl(Math.round(v));
 };
-function simular(ini, apt, anos, rAno){
-  const i = Math.pow(1 + rAno/100, 1/12) - 1;
-  let p = ini, ap = ini, virada = null;
-  const pts = [{a:0, p, ap}];
-  for (let m = 1; m <= anos*12; m++){
-    if (virada === null && apt > 0 && p * i >= apt) virada = m;
-    p = p * (1 + i) + apt; ap += apt;
-    if (m % 12 === 0) pts.push({a:m/12, p, ap});
+const brlR = v => isFinite(v) ? brl(Math.round(v)) : "—";
+const taxaMes = r => Math.pow(1 + r/100, 1/12) - 1;
+const fv = (ini, pmt, n, i) => n <= 0 ? ini : (i === 0 ? ini + pmt*n : ini*Math.pow(1+i,n) + pmt*(Math.pow(1+i,n)-1)/i);
+const aporteParaMeta = (alvo, ini, n, i) => n <= 0 ? 0 : Math.max(0, (alvo - ini*Math.pow(1+i,n)) * (i === 0 ? 1/n : i/(Math.pow(1+i,n)-1)));
+const rendaPerpetua = (P, ir) => P * ir;
+const rendaAte99 = (P, ir, m) => m <= 0 ? 0 : (ir === 0 ? P/m : P*ir/(1 - Math.pow(1+ir,-m)));
+const capitalPerpetuo = (Y, ir) => ir > 0 ? Y/ir : Infinity;
+const capitalAte99 = (Y, ir, m) => ir === 0 ? Y*m : Y*(1 - Math.pow(1+ir,-m))/ir;
+
+/* Trajetória ano a ano, da idade atual até os 99 */
+function trajetoria(idade, iret, ini, pmt, ia, ir, saque){
+  let p = ini, ap = ini;
+  const pts = [{idade, p, ap}];
+  for (let id = idade; id < 99; id++){
+    for (let k = 0; k < 12; k++){
+      if (id < iret){ p = p*(1+ia) + pmt; ap += pmt; }
+      else { p = Math.max(0, p*(1+ir) - saque); }
+    }
+    pts.push({idade:id+1, p, ap});
   }
-  return {pts, fim:p, aportado:ap, virada, i};
+  return pts;
 }
-function drawSim(el, pts, meta){
+
+function drawSim(el, A, B, iret){
   if (!el || !el.clientWidth) return;
-  const W = Math.max(260, el.clientWidth), H = 260, m = {l:62, r:14, t:14, b:26};
-  const maxY = Math.max(...pts.map(p => p.p), meta || 0) * 1.05 || 1;
-  const ticks = niceTicks(0, maxY, 4);
-  const top = Math.max(maxY, ticks[ticks.length-1]);
-  const n = pts[pts.length-1].a || 1;
-  const X = a => m.l + a / n * (W - m.l - m.r);
+  const W = Math.max(260, el.clientWidth), H = 300, m = {l:64, r:14, t:22, b:26};
+  const i0 = A[0].idade, i1 = 99;
+  const finitos = A.concat(B).map(p => p.p).filter(isFinite);
+  const maxY = Math.max(...finitos, 1) * 1.06;
+  const ticks = niceTicks(0, maxY, 4); const top = Math.max(maxY, ticks[ticks.length-1]);
+  const X = a => m.l + (a - i0) / (i1 - i0) * (W - m.l - m.r);
   const Y = v => m.t + (1 - v / top) * (H - m.t - m.b);
   let g = "";
   ticks.forEach(t => { g += `<line class="grid" x1="${m.l}" x2="${W-m.r}" y1="${Y(t)}" y2="${Y(t)}"/><text x="${m.l-8}" y="${Y(t)+4}" text-anchor="end">${brlK(t)}</text>`; });
-  const base = `L${X(n)} ${Y(0)} L${X(0)} ${Y(0)} Z`;
-  const linha = k => pts.map((p,j) => `${j ? "L" : "M"}${X(p.a).toFixed(1)} ${Y(p[k]).toFixed(1)}`).join(" ");
-  const voltaAp = pts.slice().reverse().map(p => `L${X(p.a).toFixed(1)} ${Y(p.ap).toFixed(1)}`).join(" ");
-  g += `<path d="${linha("ap")} ${base}" fill="var(--muted)" opacity=".35"/>`;
-  g += `<path d="${linha("p")} ${voltaAp} Z" fill="var(--accent)" opacity=".75"/>`;
-  g += `<path d="${linha("p")}" fill="none" stroke="var(--accent)" stroke-width="2"/>`;
-  if (meta){ g += `<line x1="${m.l}" x2="${W-m.r}" y1="${Y(meta)}" y2="${Y(meta)}" stroke="var(--z-res)" stroke-width="1.5" stroke-dasharray="6 5"/><text x="${m.l+6}" y="${Y(meta)-6}" style="fill:var(--ink)">meta ${brlK(meta)}</text>`; }
-  const passo = n > 24 ? 5 : n > 10 ? 2 : 1;
-  for (let a = 0; a <= n; a += passo){ g += `<line class="axis" x1="${X(a)}" x2="${X(a)}" y1="${H-m.b}" y2="${H-m.b+4}"/><text x="${X(a)}" y="${H-7}" text-anchor="middle">${a} ${a === 1 ? "ano" : "anos"}</text>`; }
+  g += `<rect x="${X(iret)}" y="${m.t}" width="${X(99)-X(iret)}" height="${H-m.t-m.b}" fill="var(--z-res)" opacity=".06"/>`;
+  const acc = A.filter(p => p.idade <= iret);
+  if (acc.length > 1) g += `<path d="${acc.map((p,j) => `${j?"L":"M"}${X(p.idade).toFixed(1)} ${Y(p.ap).toFixed(1)}`).join(" ")} L${X(acc[acc.length-1].idade)} ${Y(0)} L${X(acc[0].idade)} ${Y(0)} Z" fill="var(--muted)" opacity=".3"/>`;
+  const linha = (pts, cor) => `<path d="${pts.map((p,j) => `${j?"L":"M"}${X(p.idade).toFixed(1)} ${Y(p.p).toFixed(1)}`).join(" ")}" fill="none" stroke="${cor}" stroke-width="2.5" stroke-linejoin="round"/>`;
+  if (B && B !== A) g += linha(B, "var(--z-res)");
+  g += linha(A, "var(--accent)");
+  if (B === A || !B) {}
+  g += `<line x1="${X(iret)}" x2="${X(iret)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4"/><text x="${X(iret)+5}" y="${m.t-6}" style="fill:var(--ink)">início da renda, ${iret} anos</text>`;
+  const passo = (i1 - i0) > 45 ? 10 : 5;
+  for (let a = Math.ceil(i0/passo)*passo; a <= i1; a += passo){ if (X(a) - m.l < 12) continue; g += `<line class="axis" x1="${X(a)}" x2="${X(a)}" y1="${H-m.b}" y2="${H-m.b+4}"/><text x="${X(a)}" y="${H-7}" text-anchor="middle">${a}</text>`; }
+  g += `<text x="${W-m.r}" y="${H-7}" text-anchor="end">99 anos</text>`;
   g += `<line class="axis" x1="${m.l}" x2="${W-m.r}" y1="${H-m.b}" y2="${H-m.b}"/>`;
-  g += `<line class="xh" id="sim-xh" x1="0" x2="0" y1="${m.t}" y2="${H-m.b}" visibility="hidden"/><circle id="sim-dot" r="4.5" fill="var(--accent)" stroke="var(--surface)" stroke-width="2" visibility="hidden"/>`;
+  g += `<line class="xh" id="sim-xh" x1="0" x2="0" y1="${m.t}" y2="${H-m.b}" visibility="hidden"/>`;
+  g += `<circle id="sim-da" r="4.5" fill="var(--accent)" stroke="var(--surface)" stroke-width="2" visibility="hidden"/><circle id="sim-db" r="4.5" fill="var(--z-res)" stroke="var(--surface)" stroke-width="2" visibility="hidden"/>`;
   g += `<rect x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/>`;
-  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Evolução do patrimônio ano a ano">${g}</svg><div class="ctip" hidden></div>`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Patrimônio por idade até os 99 anos nas duas estratégias">${g}</svg><div class="ctip" hidden></div>`;
   el.style.minHeight = "";
-  el._sim = {X, Y, W, H, m, n, pts};
+  el._sim = {X, Y, W, H, m, i0, A, B};
 }
 function simHover(el, clientX){
   const s = el._sim; if (!s) return;
   const r = el.querySelector("svg").getBoundingClientRect();
   const px = (clientX - r.left) / r.width * s.W;
-  const a = Math.max(0, Math.min(s.n, Math.round((px - s.m.l) / (s.W - s.m.l - s.m.r) * s.n)));
-  const p = s.pts.find(q => q.a === a); if (!p) return;
-  const x = s.X(a), y = s.Y(p.p);
-  const xh = el.querySelector("#sim-xh"), dot = el.querySelector("#sim-dot"), tip = el.querySelector(".ctip");
+  const idade = Math.max(s.i0, Math.min(99, Math.round(s.i0 + (px - s.m.l) / (s.W - s.m.l - s.m.r) * (99 - s.i0))));
+  const a = s.A.find(p => p.idade === idade), b = s.B.find(p => p.idade === idade);
+  if (!a) return;
+  const x = s.X(idade);
+  const xh = el.querySelector("#sim-xh"), da = el.querySelector("#sim-da"), db = el.querySelector("#sim-db"), tip = el.querySelector(".ctip");
   xh.setAttribute("x1", x); xh.setAttribute("x2", x); xh.setAttribute("visibility","visible");
-  dot.setAttribute("cx", x); dot.setAttribute("cy", y); dot.setAttribute("visibility","visible");
-  tip.innerHTML = `<div><b>Ano ${a}</b></div><div>Patrimônio: <b>${brl(Math.round(p.p))}</b></div><div>Investido: <b>${brl(Math.round(p.ap))}</b></div><div>Juros: <b>${brl(Math.round(p.p - p.ap))}</b></div>`;
+  da.setAttribute("cx", x); da.setAttribute("cy", s.Y(a.p)); da.setAttribute("visibility","visible");
+  if (b){ db.setAttribute("cx", x); db.setAttribute("cy", s.Y(b.p)); db.setAttribute("visibility","visible"); }
+  tip.innerHTML = `<div><b>${idade} anos</b></div><div><i style="background:var(--accent)"></i>Preservando: <b>${brlR(a.p)}</b></div>${b ? `<div><i style="background:var(--z-res)"></i>Consumindo: <b>${brlR(b.p)}</b></div>` : ""}`;
   tip.hidden = false;
   tip.style.left = Math.max(14, Math.min(86, x / s.W * 100)) + "%";
-  tip.style.top = Math.max(0, y / s.H * r.height - 10) + "px";
+  tip.style.top = Math.max(0, Math.min(s.Y(a.p), b ? s.Y(b.p) : Infinity) / s.H * r.height - 10) + "px";
 }
 (function(){
   const el = document.getElementById("simchart");
   el.addEventListener("pointermove", e => simHover(el, e.clientX));
-  el.addEventListener("pointerleave", () => { const t = el.querySelector(".ctip"); if (t) t.hidden = true; el.querySelectorAll("#sim-xh,#sim-dot").forEach(n => n.setAttribute("visibility","hidden")); });
+  el.addEventListener("pointerleave", () => { const t = el.querySelector(".ctip"); if (t) t.hidden = true; el.querySelectorAll("#sim-xh,#sim-da,#sim-db").forEach(n => n.setAttribute("visibility","hidden")); });
 })();
 
-function calcSim(){
-  const ini = parseBRL(document.getElementById("s-ini").value);
-  const apt = parseBRL(document.getElementById("s-apt").value);
-  const anos = +document.getElementById("s-anos").value;
-  const num = id => { const v = parseFloat(String(document.getElementById(id).value).replace(",", ".")); return isNaN(v) ? 0 : v; };
-  const r = num("s-r"), taxa = Math.max(0, num("s-taxa")), poup = num("s-poup"), ret = Math.max(0.5, num("s-ret"));
-  const meta = parseBRL(document.getElementById("s-meta").value);
-  document.getElementById("s-anos-v").textContent = anos + (anos === 1 ? " ano" : " anos");
+let simModo = "aporte";
+const kpi = (rot, val, sub, main) => `<div class="simk${main ? " main" : ""}"><small>${rot}</small><b>${val}</b><em>${sub}</em></div>`;
+const dl = linhas => `<dl class="dl">${linhas.map(([t,v,big]) => `<div><dt>${t}</dt><dd${big ? ' class="big"' : ""}>${v}</dd></div>`).join("")}</dl>`;
 
-  const s = simular(ini, apt, anos, r);
-  const juros = s.fim - s.aportado;
-  document.getElementById("o-fim").textContent = brlK(s.fim);
-  document.getElementById("o-fim-s").textContent = `em ${anos} ${anos === 1 ? "ano" : "anos"}, em reais de hoje`;
-  document.getElementById("o-renda").textContent = brl(Math.round(s.fim * ret / 100 / 12));
-  document.getElementById("o-renda-s").textContent = `por mês, retirando ${nf(ret,1)}% ao ano`;
-  if (s.virada){
-    const a = Math.ceil(s.virada / 12);
-    document.getElementById("o-virada").textContent = `Ano ${a}`;
-    document.getElementById("o-virada-s").textContent = "a partir daqui, os juros de cada mês passam o seu aporte";
+function calcSim(){
+  const num = id => { const v = parseFloat(String(document.getElementById(id).value).replace(",", ".")); return isNaN(v) ? 0 : v; };
+  const idade = Math.round(num("s-idade")), iret = Math.round(num("s-iret"));
+  const ini = parseBRL(document.getElementById("s-ini").value);
+  const r = num("s-r"), rr = num("s-rret"), taxa = Math.max(0, num("s-taxa")), poup = num("s-poup");
+  const err = document.getElementById("s-err");
+  if (idade < 18 || idade > 90 || iret <= idade || iret >= 99){
+    err.hidden = false; err.textContent = "Confira as idades: a renda precisa começar depois da idade de hoje e antes dos 99 anos.";
+    return;
+  }
+  err.hidden = true;
+  const ia = taxaMes(r), ir = taxaMes(rr), n = (iret - idade)*12, mRet = (99 - iret)*12;
+  const anosAcc = iret - idade, anosRenda = 99 - iret;
+
+  let pmtA, pmtB, PA, PB, YA, YB;
+  if (simModo === "aporte"){
+    pmtA = pmtB = parseBRL(document.getElementById("s-apt").value);
+    PA = PB = fv(ini, pmtA, n, ia);
+    YA = rendaPerpetua(PA, ir); YB = rendaAte99(PB, ir, mRet);
+  } else if (simModo === "meta"){
+    const meta = parseBRL(document.getElementById("s-meta").value);
+    pmtA = pmtB = aporteParaMeta(meta, ini, n, ia);
+    PA = PB = Math.max(meta, fv(ini, 0, n, ia));
+    YA = rendaPerpetua(PA, ir); YB = rendaAte99(PB, ir, mRet);
   } else {
-    document.getElementById("o-virada").textContent = "—";
-    document.getElementById("o-virada-s").textContent = apt > 0 ? "os juros ainda não passam o aporte neste prazo" : "sem aporte mensal";
+    const Y = parseBRL(document.getElementById("s-renda").value);
+    YA = YB = Y;
+    PA = capitalPerpetuo(Y, ir); PB = capitalAte99(Y, ir, mRet);
+    pmtA = isFinite(PA) ? aporteParaMeta(PA, ini, n, ia) : Infinity;
+    pmtB = aporteParaMeta(PB, ini, n, ia);
+    PA = isFinite(PA) ? Math.max(PA, fv(ini, 0, n, ia)) : PA;
+    PB = Math.max(PB, fv(ini, 0, n, ia));
   }
 
-  const pj = s.fim > 0 ? Math.max(0, juros) / s.fim : 0;
-  document.getElementById("o-split-t").textContent = `Dos ${brlK(s.fim)} ao final, ${brlK(s.aportado)} saíram do seu bolso e ${brlK(Math.max(0, juros))} vieram dos juros.`;
+  const A = isFinite(pmtA) ? trajetoria(idade, iret, ini, pmtA, ia, ir, YA) : null;
+  const B = trajetoria(idade, iret, ini, pmtB, ia, ir, YB);
+  const aos99A = A ? A[A.length-1].p : NaN;
+  const sufA = pmtA === 0 ? "o que você já tem é suficiente" : "por mês, até os " + iret;
+  const sufB = pmtB === 0 ? "o que você já tem é suficiente" : "por mês, até os " + iret;
+
+  let k = "";
+  if (simModo === "aporte"){
+    k = kpi(`Patrimônio aos ${iret} anos`, brlK(PA), `aportando ${brlR(pmtA)} por mês`, true)
+      + kpi("Renda preservando o capital", brlR(YA), "por mês, para sempre")
+      + kpi("Renda consumindo até os 99", brlR(YB), "por mês, dos " + iret + " aos 99");
+  } else if (simModo === "meta"){
+    k = kpi("Aporte mensal necessário", brlR(pmtA), pmtA === 0 ? "o que você já tem é suficiente" : `por ${anosAcc} anos, para ter ${brlK(PA)} aos ${iret}`, true)
+      + kpi("Renda preservando o capital", brlR(YA), "por mês, para sempre")
+      + kpi("Renda consumindo até os 99", brlR(YB), "por mês, dos " + iret + " aos 99");
+  } else {
+    k = kpi("Aporte para viver de renda", isFinite(pmtA) ? brlR(pmtA) : "—", isFinite(pmtA) ? `${sufA} · preservando o capital` : "precisa de rendimento acima de 0% na fase de renda", true)
+      + kpi("Aporte consumindo até os 99", brlR(pmtB), sufB)
+      + kpi("Anos de renda", `${anosRenda} anos`, `dos ${iret} aos 99`);
+  }
+  document.getElementById("o-kpis").innerHTML = k;
+
+  document.getElementById("o-vida-t").textContent = `Acumulação dos ${idade} aos ${iret} anos (${anosAcc} anos), com carteira a ${nf(r,1)}% ao ano acima da inflação. Renda dos ${iret} aos 99 (${anosRenda} anos), com a carteira a ${nf(rr,1)}%.`;
+  drawSim(document.getElementById("simchart"), A || B, B, iret);
+
+  document.getElementById("o-pres").innerHTML = A ? dl([
+    [`Patrimônio aos ${iret}`, brlR(PA)],
+    ["Aporte mensal", pmtA === 0 ? "R$ 0" : brlR(pmtA)],
+    ["Renda mensal", brlR(YA), true],
+    ["Patrimônio aos 99 (herança)", brlR(aos99A)]
+  ]) : `<p class="ibody">Com rendimento de 0% na fase de renda, não é possível viver só dos rendimentos.</p>`;
+  document.getElementById("o-cons").innerHTML = dl([
+    [`Patrimônio aos ${iret}`, brlR(PB)],
+    ["Aporte mensal", pmtB === 0 ? "R$ 0" : brlR(pmtB)],
+    ["Renda mensal", brlR(YB), true],
+    ["Patrimônio aos 99", "R$ 0"]
+  ]);
+
+  /* Esforço × juros, na estratégia que preserva o capital (ou na única disponível) */
+  const base = A || B, pmtBase = A ? pmtA : pmtB;
+  const ret = base.find(p => p.idade === iret);
+  const juros = Math.max(0, ret.p - ret.ap), pj = ret.p > 0 ? juros / ret.p : 0;
+  document.getElementById("o-split-t").textContent = `Dos ${brlK(ret.p)} acumulados até os ${iret} anos, ${brlK(ret.ap)} saíram do seu bolso e ${brlK(juros)} vieram dos juros.`;
   document.getElementById("o-split").innerHTML =
     `<span style="flex:${1-pj};background:color-mix(in srgb, var(--muted) 45%, transparent);color:var(--ink)">${Math.round((1-pj)*100)}% esforço</span>` +
     `<span style="flex:${pj};background:var(--accent);color:var(--surface)">${Math.round(pj*100)}% juros</span>`;
 
-  document.getElementById("o-meta-leg").hidden = !meta;
-  drawSim(document.getElementById("simchart"), s.pts, meta);
-
-  const cara = simular(ini, apt, anos, r - taxa).fim;
-  const pou = simular(ini, apt, anos, poup).fim;
+  /* Comparação de custo */
+  const pBom = fv(ini, pmtBase, n, ia), pCaro = fv(ini, pmtBase, n, taxaMes(r - taxa)), pPou = fv(ini, pmtBase, n, taxaMes(poup));
+  document.getElementById("o-cmp-s").textContent = `Aportando ${brlR(pmtBase)} por mês dos ${idade} aos ${iret} anos. Muda só onde o dinheiro fica e quanto ele paga de taxa.`;
+  const fT = Number.isInteger(taxa) ? nf(taxa,0) : nf(taxa,2);
   const linhas = [
-    {t:"Carteira simples", sub:`${nf(r,1)}% ao ano acima da inflação`, v:s.fim, c:"var(--accent)"},
-    {t:"A mesma carteira, mais cara", sub:`${Number.isInteger(taxa) ? nf(taxa,0) : nf(taxa,2)} p.p. a mais de taxa por ano`, v:cara, c:"var(--z-res)"},
-    {t:"Poupança", sub:`${nf(poup,1)}% ao ano acima da inflação`, v:pou, c:"var(--muted)"}
+    {t:"Carteira simples", sub:`${nf(r,1)}% ao ano acima da inflação`, v:pBom, c:"var(--accent)"},
+    {t:"A mesma carteira, mais cara", sub:`${fT} p.p. a mais de taxa por ano`, v:pCaro, c:"var(--z-res)"},
+    {t:"Poupança", sub:`${nf(poup,1)}% ao ano acima da inflação`, v:pPou, c:"var(--muted)"}
   ];
   const mx = Math.max(...linhas.map(l => l.v), 1);
   document.getElementById("o-cmp").innerHTML = linhas.map(l =>
-    `<div class="cmprow"><span>${l.t}<small>${l.sub}</small></span><div class="cmpbar"><i style="width:${Math.max(0, l.v)/mx*100}%;background:${l.c}"></i></div><b>${brl(Math.round(l.v))}</b></div>`).join("");
-  const perdaTaxa = s.fim - cara, perdaPoup = s.fim - pou;
-  const fTaxa = Number.isInteger(taxa) ? nf(taxa,0) : nf(taxa,2);
-  document.getElementById("o-cmp-t").innerHTML = taxa > 0
-    ? `Uma taxa de <b>${fTaxa} ponto${taxa === 1 ? "" : "s"} percentua${taxa === 1 ? "l" : "is"} a mais por ano</b> parece pouco, mas em ${anos} anos custa <b>${brl(Math.round(perdaTaxa))}</b>, ou ${Math.round(perdaTaxa / s.fim * 100)}% do patrimônio final. Deixar na poupança custaria <b>${brl(Math.round(perdaPoup))}</b>.`
-    : `Deixar na poupança custaria <b>${brl(Math.round(perdaPoup))}</b> em ${anos} anos.`;
-
-  if (meta){
-    const atinge = s.pts.find(p => p.p >= meta);
-    document.getElementById("o-fim-s").textContent += atinge ? ` · meta atingida no ano ${atinge.a}` : " · meta não atingida no prazo";
-  }
+    `<div class="cmprow"><span>${l.t}<small>${l.sub}</small></span><div class="cmpbar"><i style="width:${Math.max(0, l.v)/mx*100}%;background:${l.c}"></i></div><b>${brlR(l.v)}</b></div>`).join("");
+  const perda = pBom - pCaro, perdaRenda = rendaPerpetua(perda, ir);
+  document.getElementById("o-cmp-t").innerHTML = taxa > 0 && pBom > 0
+    ? `Uma taxa de <b>${fT} ponto${taxa === 1 ? "" : "s"} percentua${taxa === 1 ? "l" : "is"} a mais por ano</b> custa <b>${brlR(perda)}</b> aos ${iret} anos, ou ${Math.round(perda / pBom * 100)}% do patrimônio. Isso equivale a <b>${brlR(perdaRenda)} a menos de renda por mês</b>, para sempre.`
+    : "";
 }
-["s-ini","s-apt","s-meta"].forEach(id => moneyInput(document.getElementById(id), calcSim));
-["s-anos","s-taxa","s-poup","s-ret"].forEach(id => document.getElementById(id).addEventListener("input", calcSim));
+
+function setModo(m){
+  simModo = m;
+  document.querySelectorAll("#s-modo button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.m === m)));
+  document.querySelectorAll("#view-simulador [data-modo]").forEach(f => { f.hidden = f.dataset.modo !== m; });
+  calcSim();
+}
+document.querySelectorAll("#s-modo button").forEach(b => b.addEventListener("click", () => setModo(b.dataset.m)));
+["s-ini","s-apt","s-meta","s-renda"].forEach(id => moneyInput(document.getElementById(id), calcSim));
+["s-idade","s-iret","s-rret","s-taxa","s-poup"].forEach(id => document.getElementById(id).addEventListener("input", calcSim));
 document.getElementById("s-r").addEventListener("input", () => {
   document.querySelectorAll("#s-perf button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.r === "custom")));
   calcSim();
