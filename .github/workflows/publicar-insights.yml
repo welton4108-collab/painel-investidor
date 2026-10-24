@@ -1,9 +1,10 @@
 name: Publicar insights
 
 on:
-  schedule:
-    # A cada hora, das 7h às 23h de Brasília (10h às 2h UTC)
-    - cron: "5 10-23,0-2 * * *"
+  # Agendamento desligado enquanto a aba Insights está "em breve".
+  # Para religar, volte as duas linhas abaixo:
+  # schedule:
+  #   - cron: "5 10-23,0-2 * * *"
   workflow_dispatch: {}
 
 permissions:

@@ -473,7 +473,7 @@ footer p + p{margin-top:8px}
       <button type="button" data-view="indicadores">Indicadores</button>
       <button type="button" data-view="objetivos" aria-current="page">Investir por objetivos</button>
       <button type="button" data-view="simulador">Simulador</button>
-      <button type="button" data-view="insights">Insights</button>
+      <button type="button" data-tip-title="Em construção" data-tip="Estudos, análises e comentários sobre o mercado.">Insights<small>em breve</small></button>
     </nav>
   </div>
 </header>
@@ -2167,7 +2167,7 @@ document.querySelectorAll("nav.tabs [data-view]").forEach(b => b.addEventListene
   window.scrollTo({top:0});
 }));
 renderIndicadores();
-{ const hv = (location.hash || "").slice(1); if (hv === "indicadores" || hv === "simulador" || hv === "insights") showView(hv); }
+{ const hv = (location.hash || "").slice(1); if (hv === "indicadores" || hv === "simulador") showView(hv); }
 /* No site publicado, busca os dados mais recentes gravados pelo coletor diário */
 if (location.protocol.startsWith("http")){
   fetch("dados/indicadores.json?v=" + Date.now(), {cache:"no-store"})
