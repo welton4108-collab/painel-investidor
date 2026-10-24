@@ -4,7 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Indicadores de mercado e guia de investimento por objetivos, com critérios técnicos e fontes oficiais. Por Welton Garcia, CFP®.">
-<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.btn.wa{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:#1F8A4D;color:#fff;margin-top:14px}
+.btn[disabled]{opacity:.6;cursor:wait}
+</style>
 <title>Investir por Objetivos</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -719,11 +722,13 @@ footer p + p{margin-top:8px}
       <form id="lead" novalidate>
         <div class="field"><label for="nome">Nome</label><input id="nome" required autocomplete="name"></div>
         <div class="field"><label for="zap">WhatsApp</label><input id="zap" required inputmode="tel" autocomplete="tel" placeholder="(44) 99999-9999"></div>
+        <div class="field full"><label for="email">E-mail <span style="font-weight:400;opacity:.8">(opcional)</span></label><input id="email" type="email" autocomplete="email" placeholder="voce@exemplo.com"></div>
+        <div class="hp" aria-hidden="true"><label for="site_url">Não preencha este campo</label><input id="site_url" name="site_url" tabindex="-1" autocomplete="off"></div>
         <div class="field"><label for="obj">Objetivo principal</label>
           <select id="obj"><option value="reserva">Montar a reserva</option><option value="medio-prazo">Médio prazo</option><option value="aposentadoria">Aposentadoria</option><option value="educacao">Educação dos filhos</option><option value="viagem">Viagem ao exterior</option></select></div>
         <div class="field"><label for="pat">Patrimônio investido</label>
           <select id="pat"><option>Até R$ 100 mil</option><option>R$ 100 mil a R$ 500 mil</option><option>R$ 500 mil a R$ 1 milhão</option><option>Acima de R$ 1 milhão</option></select></div>
-        <label class="consent full"><input id="lgpd" type="checkbox" required><span>Autorizo o contato pelo WhatsApp para agendar a reunião. Meus dados serão usados só para isso, conforme a LGPD.</span></label>
+        <label class="consent full"><input id="lgpd" type="checkbox" required><span>Autorizo o contato pelo WhatsApp para agendar a reunião. Meus dados serão usados só para isso, conforme a LGPD e o <a href="privacidade.html" style="color:inherit;text-decoration:underline">aviso de privacidade</a>.</span></label>
         <button class="btn full" type="submit">Quero agendar minha revisão</button>
         <p class="full" id="err" hidden style="font-size:.86rem;font-weight:600"></p>
       </form>
@@ -1659,16 +1664,45 @@ document.addEventListener("click", e => {
 });
 window.addEventListener("scroll", () => { if (!tip.hidden) hideTip(); }, {passive:true});
 
-/* Formulário de lead (protótipo) */
-document.getElementById("lead").addEventListener("submit", e => {
+/* Formulário de lead: grava na planilha Google e oferece o WhatsApp */
+const LEADS_URL = "";            // URL do Apps Script (Implantar > App da Web)
+const WHATSAPP = "5544999844019";
+const OBJ_NOMES = {"reserva":"Montar a reserva","medio-prazo":"Médio prazo","aposentadoria":"Aposentadoria","educacao":"Educação dos filhos","viagem":"Viagem ao exterior"};
+document.getElementById("lead").addEventListener("submit", async e => {
   e.preventDefault();
   const err = document.getElementById("err");
+  const btn = e.target.querySelector('button[type="submit"]');
   const nome = document.getElementById("nome").value.trim();
   const zap = document.getElementById("zap").value.replace(/\D/g,"");
+  const email = document.getElementById("email").value.trim();
   if (!nome){ err.hidden=false; err.textContent="Informe seu nome."; return; }
-  if (zap.length < 10){ err.hidden=false; err.textContent="Informe um WhatsApp com DDD, por exemplo (44) 99999-9999."; return; }
+  if (zap.length < 10 || zap.length > 13){ err.hidden=false; err.textContent="Informe um WhatsApp com DDD, por exemplo (44) 99999-9999."; return; }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.hidden=false; err.textContent="Confira o e-mail ou deixe o campo em branco."; return; }
   if (!document.getElementById("lgpd").checked){ err.hidden=false; err.textContent="Marque a autorização de contato para continuar."; return; }
-  document.getElementById("cta-body").innerHTML = `<div class="ok"><b>Pedido recebido, ${esc(nome.split(" ")[0])}.</b><p style="margin-top:6px">Você vai receber uma mensagem no WhatsApp para combinar o melhor horário.</p><p style="margin-top:10px;font-size:.82rem" class="muted">Protótipo: no site final, este pedido chega direto na agenda do Welton.</p></div>`;
+  err.hidden = true;
+  const objetivo = OBJ_NOMES[document.getElementById("obj").value] || document.getElementById("obj").value;
+  const dados = new URLSearchParams({
+    nome, whatsapp: zap, email, objetivo,
+    patrimonio: document.getElementById("pat").value,
+    origem: "Investir por objetivos · " + (OBJ[current] ? OBJ[current].title : current),
+    consentimento: "sim",
+    site_url: document.getElementById("site_url").value
+  });
+  let enviado = false;
+  if (LEADS_URL){
+    btn.disabled = true; btn.textContent = "Enviando...";
+    try { await fetch(LEADS_URL, {method:"POST", mode:"no-cors", body:dados}); enviado = true; }
+    catch(_) { enviado = false; }
+  }
+  const primeiro = esc(nome.split(" ")[0]);
+  const msg = `Olá, Welton! Sou ${nome}. Pedi uma revisão do meu planejamento pelo painel. Meu objetivo principal: ${objetivo}.`;
+  const link = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  document.getElementById("cta-body").innerHTML = `<div class="ok">
+    <b>${enviado ? `Pedido recebido, ${primeiro}.` : `Falta só um passo, ${primeiro}.`}</b>
+    <p style="margin-top:6px">${enviado ? "Vou entrar em contato pelo WhatsApp para combinar o melhor horário. Se preferir adiantar, fale comigo agora:" : "Toque no botão abaixo para me enviar o pedido pelo WhatsApp:"}</p>
+    <a class="btn wa" href="${link}" target="_blank" rel="noopener">Falar agora no WhatsApp</a>
+    <p style="margin-top:12px;font-size:.84rem" class="muted">WhatsApp: (44) 99984-4019</p>
+  </div>`;
 });
 
 /* Abre o objetivo do link (#reserva ou #medio-prazo) */

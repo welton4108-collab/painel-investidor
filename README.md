@@ -22,3 +22,17 @@ Para rodar a coleta na hora: aba **Actions** → **Coletar indicadores** → **R
 Banco Central do Brasil (SGS e Boletim Focus), IBGE, FRED (Federal Reserve Bank of St. Louis) e alternative.me.
 
 Conteúdo educativo. Não constitui recomendação individual de investimento.
+
+## Formulário de leads
+
+O formulário "Quero agendar minha revisão" envia os dados para uma planilha Google do Welton e manda um aviso por e-mail. O código fica em `apps-script/Code.gs`.
+
+Instalação (uma vez):
+
+1. Criar uma planilha Google em branco.
+2. Na planilha: **Extensões → Apps Script**, apagar o conteúdo e colar `apps-script/Code.gs`. Salvar.
+3. No editor, escolher a função `autorizar` e clicar em **Executar**; aceitar as permissões.
+4. **Implantar → Nova implantação → App da Web**. Executar como: **Eu**. Quem pode acessar: **Qualquer pessoa**. Implantar e copiar a URL.
+5. Colocar essa URL em `LEADS_URL` no `index.html`.
+
+Enquanto `LEADS_URL` estiver vazio, o formulário leva o visitante direto ao WhatsApp.
