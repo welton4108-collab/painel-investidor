@@ -6,6 +6,7 @@
  *   Estudos      posts da aba Insights (você preenche)
  *   Comentarios  comentários dos visitantes nos estudos
  *   Downloads    quem baixou o PDF de um estudo
+ *   Alfred       perguntas e respostas do assistente Alfred
  *
  * Depois de alterar este código: Implantar > Gerenciar implantações >
  * lápis > Versão: Nova versão > Implantar. O endereço continua o mesmo.
@@ -22,6 +23,9 @@ const ABA_COMENT = "Comentarios";
 const COL_COMENT = ["Data e hora", "Estudo", "Nome", "Comentário", "Visível"];
 const ABA_DOWN = "Downloads";
 const COL_DOWN = ["Data e hora", "Estudo", "Nome", "E-mail", "Consentimento LGPD"];
+const ABA_ALFRED = "Alfred";
+const COL_ALFRED = ["Data e hora", "Conversa", "Pergunta", "Resposta", "Convidou para reunião",
+                    "Tokens de entrada", "Tokens de saída", "Tokens do cache"];
 
 /* ------------------------------------------------------------ entrada */
 
@@ -38,6 +42,7 @@ function doPost(e) {
   const tipo = p.tipo || "lead";
   if (tipo === "comentario") return salvarComentario(p);
   if (tipo === "pdf") return salvarDownload(p);
+  if (tipo === "alfred") return salvarAlfred(p);
   return salvarLead(p);
 }
 
@@ -169,6 +174,21 @@ function salvarDownload(p) {
   return resposta({ ok: true });
 }
 
+/* ------------------------------------------------------------ alfred */
+
+// Registro das conversas, enviado pelo intermediário do Alfred (sem e-mail de aviso).
+function salvarAlfred(p) {
+  const texto = (v, max) => String(v || "").replace(/\r/g, "").trim().slice(0, max);
+  const num = v => Number(String(v || "0").replace(/\D/g, "")) || 0;
+  const pergunta = texto(p.pergunta, 2000);
+  if (!pergunta) return resposta({ ok: false });
+  gravar(ABA_ALFRED, COL_ALFRED, [
+    agoraBR(), seguro(limpar(p.sessao, 40)), seguro(pergunta), seguro(texto(p.resposta, 5000)),
+    p.agendar === "sim" ? "Sim" : "", num(p.tokens_entrada), num(p.tokens_saida), num(p.tokens_cache)
+  ]);
+  return resposta({ ok: true });
+}
+
 /* ------------------------------------------------------------ utilidades */
 
 function gravar(nomeAba, colunas, linha) {
@@ -219,6 +239,7 @@ function criarAbas() {
   obterAba(ABA_LEADS, COL_LEADS);
   obterAba(ABA_COMENT, COL_COMENT);
   obterAba(ABA_DOWN, COL_DOWN);
+  obterAba(ABA_ALFRED, COL_ALFRED);
   const est = obterAba(ABA_ESTUDOS, COL_ESTUDOS);
   if (est.getLastRow() === 1) {
     est.appendRow(["Não", new Date(), "Exemplo: como ler o Boletim Focus",

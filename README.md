@@ -55,3 +55,10 @@ Os estudos ficam na aba **Estudos** da planilha de leads. Cada linha é um post:
 O workflow **Publicar insights** roda a cada hora (7h às 23h) e gera uma página por estudo em `insights/<endereço>/`. Para publicar na hora: **Actions → Publicar insights → Run workflow**.
 
 Comentários vão para a aba **Comentarios** e aparecem na hora; para esconder um, mude **Visível** para `Não`. Quem baixa um PDF fica registrado na aba **Downloads**.
+
+## Alfred (assistente de IA, em teste)
+
+- `alfred/index.html`: página do chat (endereço oculto, `noindex`, com código de acesso enquanto `MODO_TESTE = true`).
+- `alfred/instrucoes.md`: instruções do Alfred, geradas a partir do Manual do Alfred. Editar este arquivo muda o comportamento em até 10 minutos, sem mexer no Worker.
+- `alfred/worker.js`: intermediário no Cloudflare Workers. Guarda a chave da API (segredo `ANTHROPIC_API_KEY`), confere o código de acesso (`ACCESS_CODE`), aplica limites de uso (KV `LIMITES`), junta as instruções e os dados de `dados/indicadores.json` e registra cada pergunta e resposta na aba Alfred da planilha.
+- O convite para reunião vem do modelo com a marca `[AGENDAR]`; a página troca a marca pelo formulário, com origem "Alfred".

@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Alfred · Conselheiro Patrimonial</title>
+<meta name="description" content="Assistente de planejamento patrimonial: investir por objetivos, custos baixos e gestão indexada.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+:root{
+  --bg:#F3F6F5; --surface:#FFFFFF; --ink:#13231F; --muted:#5A6A65; --line:#DAE2DF;
+  --accent:#0E6B5B; --accent-soft:#DCEDE8; --user:#13231F; --user-fg:#F3F6F5; --warn:#C2483A;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1513; --surface:#141F1C; --ink:#E4EDEA; --muted:#93A39E; --line:#25332F;
+    --accent:#4FC2A8; --accent-soft:#163A32; --user:#E4EDEA; --user-fg:#0D1513; --warn:#E8705F;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1513; --surface:#141F1C; --ink:#E4EDEA; --muted:#93A39E; --line:#25332F;
+  --accent:#4FC2A8; --accent-soft:#163A32; --user:#E4EDEA; --user-fg:#0D1513; --warn:#E8705F;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body);display:flex;flex-direction:column}
+[hidden]{display:none!important}
+a{color:var(--accent)}
+.wrap{width:100%;max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+header{background:var(--surface);border-bottom:1px solid var(--line);flex:none}
+.top{display:flex;align-items:center;gap:12px;padding-block:12px}
+.selo{width:40px;height:40px;border-radius:12px;background:var(--accent);color:var(--surface);display:grid;place-items:center;font:700 1.25rem var(--f-display);flex:none}
+.id{flex:1;min-width:0}
+.id b{display:block;font:700 1.08rem var(--f-display);letter-spacing:-.01em}
+.id > span{display:block;font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--accent-soft);color:var(--accent);padding:3px 8px;border-radius:99px;margin-left:6px;vertical-align:2px}
+.acoes{display:flex;gap:6px}
+.lnk{font:600 .88rem var(--f-body);background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 10px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.lnk:hover{border-color:var(--accent)}
+@media (max-width:480px){.top{gap:10px}.selo{width:36px;height:36px}.lnk{padding:7px 8px;font-size:.84rem}}
+
+#chat{flex:1;overflow-y:auto;padding-block:20px 8px}
+.msg{display:flex;margin:0 0 14px}
+.msg.u{justify-content:flex-end}
+.bolha{max-width:min(620px,88%);padding:11px 15px;border-radius:16px;overflow-wrap:anywhere}
+.msg.a .bolha{background:var(--surface);border:1px solid var(--line);border-top-left-radius:4px}
+.msg.u .bolha{background:var(--user);color:var(--user-fg);border-top-right-radius:4px;white-space:pre-wrap}
+.bolha p{margin:0 0 .6em}.bolha p:last-child{margin-bottom:0}
+.bolha ul,.bolha ol{margin:.2em 0 .6em;padding-left:1.25em}.bolha li{margin:.15em 0}
+.bolha .nota{font-size:.84rem;color:var(--muted)}
+.msg.erro .bolha{border-color:var(--warn);color:var(--warn)}
+.intro h1{font:700 1.5rem/1.2 var(--f-display);margin:0 0 6px;text-wrap:balance}
+.sug{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 18px}
+.sug button{font:600 .9rem var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:8px 14px;cursor:pointer;text-align:left}
+.sug button:hover{border-color:var(--accent);color:var(--accent)}
+.digitando span{display:inline-block;width:7px;height:7px;margin:0 2px;border-radius:50%;background:var(--muted);animation:pisca 1.2s infinite ease-in-out}
+.digitando span:nth-child(2){animation-delay:.15s}.digitando span:nth-child(3){animation-delay:.3s}
+@keyframes pisca{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+@media (prefers-reduced-motion: reduce){.digitando span{animation:none;opacity:.6}}
+
+.agenda{margin:-4px 0 16px;max-width:min(620px,88%);background:var(--accent-soft);border-radius:14px;padding:14px 16px}
+.agenda b{font-family:var(--f-display)}
+.btn{font:700 .98rem var(--f-body);background:var(--ink);color:var(--bg);border:0;border-radius:10px;padding:11px 16px;cursor:pointer}
+.btn:disabled{opacity:.6;cursor:default}
+.btn.wa{display:inline-flex;text-decoration:none;background:#1F8A4D;color:#fff;margin-top:10px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.form .full{grid-column:1/-1}
+.field{display:grid;gap:4px}
+.field label{font-size:.82rem;font-weight:600}
+.field input,.field select{font:500 1rem var(--f-body);padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);width:100%}
+.consent{display:flex;gap:8px;font-size:.82rem;align-items:flex-start}
+.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.ferr{font-size:.86rem;font-weight:600;color:var(--warn);margin:0}
+@media (max-width:520px){.form{grid-template-columns:1fr}}
+
+footer{flex:none;background:var(--bg);border-top:1px solid var(--line);padding-block:10px calc(10px + env(safe-area-inset-bottom,0px))}
+.caixa{display:flex;gap:8px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px 6px 6px 12px}
+.caixa:focus-within{border-color:var(--accent)}
+textarea{flex:1;border:0;outline:0;resize:none;background:none;color:var(--ink);font:16px/1.45 var(--f-body);padding:7px 0;max-height:160px}
+.enviar{width:40px;height:40px;border-radius:10px;border:0;background:var(--accent);color:var(--surface);cursor:pointer;display:grid;place-items:center;flex:none}
+.enviar:disabled{opacity:.45;cursor:default}
+.aviso{font-size:.76rem;color:var(--muted);margin:7px 2px 0}
+
+#porta{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;padding:16px;z-index:5}
+#porta .card{max-width:400px;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px}
+#porta h2{font:700 1.3rem var(--f-display);margin:12px 0 6px}
+#porta input{font:600 1.05rem var(--f-body);width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);margin:14px 0 10px}
+</style>
+</head>
+<body>
+
+<div id="porta" hidden>
+  <form class="card" id="porta-form">
+    <div class="selo" aria-hidden="true">A</div>
+    <h2>Alfred em fase de testes</h2>
+    <p style="margin:0;color:var(--muted)">Informe o código de acesso para conversar.</p>
+    <label for="codigo" class="hp">Código de acesso</label>
+    <input id="codigo" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Código de acesso">
+    <p class="ferr" id="porta-err" hidden></p>
+    <button class="btn" type="submit" style="width:100%;margin-top:6px">Entrar</button>
+  </form>
+</div>
+
+<header>
+  <div class="wrap top">
+    <div class="selo" aria-hidden="true">A</div>
+    <div class="id"><b>Alfred <span class="tag">teste</span></b><span>Conselheiro patrimonial · IA</span></div>
+    <div class="acoes">
+      <button class="lnk" type="button" id="nova">Nova conversa</button>
+      <a class="lnk" href="../">Painel</a>
+    </div>
+  </div>
+</header>
+
+<main id="chat" aria-live="polite">
+  <div class="wrap" id="lista">
+    <div class="msg a intro"><div class="bolha">
+      <h1>Olá, eu sou o Alfred.</h1>
+      <p>Sou uma inteligência artificial que ajuda você a organizar seus investimentos por objetivo, com a filosofia do painel: carteira simples, custo baixo e gestão indexada.</p>
+      <p>Posso explicar conceitos, fazer contas de aposentadoria e fazer um Raio-X da sua carteira: é só me contar os tipos de investimento e os valores.</p>
+      <p class="nota">Conteúdo educativo, não é recomendação individual. Posso errar: confira informações importantes antes de decidir.</p>
+    </div></div>
+    <div class="sug" id="sug">
+      <button type="button">Onde deixar a reserva de emergência?</button>
+      <button type="button">Quanto preciso juntar para me aposentar?</button>
+      <button type="button">Quero um Raio-X da minha carteira</button>
+      <button type="button">Fundo, ETF ou previdência: qual a diferença de custo?</button>
+      <button type="button">O que é come-cotas?</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <form class="caixa" id="form">
+      <label for="texto" class="hp">Sua pergunta</label>
+      <textarea id="texto" rows="1" maxlength="2000" placeholder="Escreva sua pergunta…" enterkeyhint="send"></textarea>
+      <button class="enviar" id="enviar" type="submit" aria-label="Enviar" disabled>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+    <p class="aviso">As conversas são registradas sem identificação para melhorar o Alfred. Não informe CPF, senhas ou dados bancários. <a href="../privacidade.html">Aviso de privacidade</a>.</p>
+  </div>
+</footer>
+
+<script>
+const ALFRED_API = "";   // endereço do Worker no Cloudflare, ex.: https://alfred.seu-usuario.workers.dev
+const LEADS_URL = "https://script.google.com/macros/s/AKfycbyFXq_oV5WSExN_JpeVkN_3th3Zhx40KRPiCKxyOeWTGYS_bvqxL1sHpFK6-Btrgr6r/exec";
+const WHATSAPP = "5544999844019";
+const MODO_TESTE = true; // pede o código de acesso
+const MAX_PERGUNTAS = 20;
+
+const $ = id => document.getElementById(id);
+const lista = $("lista"), chat = $("chat"), texto = $("texto"), enviar = $("enviar");
+const guardar = (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (_) {} };
+const ler = k => { try { return localStorage.getItem(k); } catch (_) { return null; } };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const novaSessao = () => new Date().toISOString().slice(0, 10) + "-" + Math.random().toString(36).slice(2, 8);
+
+let historico = [], ocupado = false, sessao = novaSessao(), codigo = ler("alfred-codigo") || "", leadEnviado = false;
+
+/* ---------- código de acesso */
+function pedirCodigo(msg) {
+  $("porta").hidden = false;
+  $("porta-err").hidden = !msg; $("porta-err").textContent = msg || "";
+  $("codigo").value = ""; setTimeout(() => $("codigo").focus(), 50);
+}
+$("porta-form").addEventListener("submit", e => {
+  e.preventDefault();
+  const c = $("codigo").value.trim();
+  if (!c) return;
+  codigo = c; guardar("alfred-codigo", c);
+  $("porta").hidden = true; texto.focus();
+  if (pendente) { const t = pendente; pendente = null; perguntar(t, true); }
+});
+let pendente = null;
+if (MODO_TESTE && !codigo) pedirCodigo();
+
+/* ---------- formatação das respostas */
+function linkAbas(h) {
+  return h
+    .replace(/\b(aba|página) (Simulador)\b/g, '$1 <a href="../#simulador">$2</a>')
+    .replace(/\b(aba|página) (Indicadores)\b/g, '$1 <a href="../#indicadores">$2</a>')
+    .replace(/\b(aba|página) (Investir por objetivos)\b/gi, '$1 <a href="../">$2</a>');
+}
+function inline(t) {
+  return linkAbas(esc(t).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/(^|[\s(])\*(?!\s)(.+?)\*(?=[\s).,;:!?]|$)/g, "$1<em>$2</em>"));
+}
+function formatar(txt) {
+  const out = []; let lista = null, tipo = null;
+  const fecha = () => { if (lista) { out.push(`<${tipo}>${lista.map(i => `<li>${inline(i)}</li>`).join("")}</${tipo}>`); lista = null; } };
+  for (const bloco of txt.replace(/\r/g, "").split(/\n\s*\n/)) {
+    let par = [];
+    const fechaPar = () => { if (par.length) { out.push(`<p>${par.map(inline).join("<br>")}</p>`); par = []; } };
+    for (const l of bloco.split("\n")) {
+      const s = l.trim(); if (!s) continue;
+      const mU = /^[-•*]\s+(.*)/.exec(s), mO = /^\d+[.)]\s+(.*)/.exec(s);
+      if (mU || mO) {
+        fechaPar(); const t = mU ? "ul" : "ol";
+        if (lista && tipo !== t) fecha();
+        if (!lista) { lista = []; tipo = t; }
+        lista.push((mU || mO)[1]);
+      } else {
+        fecha();
+        const h = /^#{1,4}\s+(.*)/.exec(s);
+        if (h) { fechaPar(); out.push(`<p><strong>${inline(h[1])}</strong></p>`); }
+        else if (/^conteúdo educativo, não é recomendação individual\.?$/i.test(s)) { fechaPar(); out.push(`<p class="nota">${esc(s)}</p>`); }
+        else par.push(s);
+      }
+    }
+    fechaPar(); fecha();
+  }
+  return out.join("");
+}
+
+/* ---------- mensagens na tela */
+function rolar() { chat.scrollTop = chat.scrollHeight; }
+function bolha(papel, html, extra) {
+  const d = document.createElement("div");
+  d.className = "msg " + papel + (extra ? " " + extra : "");
+  d.innerHTML = `<div class="bolha">${html}</div>`;
+  lista.appendChild(d); rolar(); return d;
+}
+function digitando() { return bolha("a", '<span class="digitando" aria-label="Alfred está escrevendo"><span></span><span></span><span></span></span>'); }
+
+/* ---------- conversa */
+async function perguntar(t, repetida) {
+  t = t.trim();
+  if (!t || ocupado) return;
+  if (!ALFRED_API) { bolha("a", "<p>O Alfred ainda está sendo configurado. Volte em breve.</p>", "erro"); return; }
+  if (MODO_TESTE && !codigo) { $("sug").hidden = true; if (!repetida) bolha("u", esc(t)); pendente = t; pedirCodigo(); return; }
+  if (historico.filter(m => m.role === "user").length >= MAX_PERGUNTAS) {
+    bolha("a", '<p>Esta conversa ficou longa. Para continuar com respostas precisas, comece uma nova conversa.</p>'); return;
+  }
+  $("sug").hidden = true;
+  if (!repetida) bolha("u", esc(t));
+  historico.push({ role: "user", content: t });
+  ocupado = true; atualizarBotao();
+  const espera = digitando();
+  try {
+    const r = await fetch(ALFRED_API, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mensagens: historico, sessao, codigo })
+    });
+    const j = await r.json().catch(() => ({}));
+    espera.remove();
+    if (r.status === 401 && j.erro === "codigo") {
+      historico.pop(); codigo = ""; guardar("alfred-codigo", null); pendente = t;
+      pedirCodigo("Código inválido. Confira e tente de novo."); return;
+    }
+    if (!r.ok || !j.resposta) {
+      historico.pop();
+      bolha("a", `<p>${esc(j.mensagem || j.erro || "Não consegui responder agora. Tente de novo.")}</p>`, "erro");
+      texto.value = t; ajustar(); return;
+    }
+    historico.push({ role: "assistant", content: j.resposta + (j.agendar ? "\n[AGENDAR]" : "") });
+    bolha("a", formatar(j.resposta));
+    if (j.agendar) cartaoAgenda();
+  } catch (e) {
+    espera.remove(); historico.pop();
+    bolha("a", "<p>Sem conexão com o Alfred. Confira sua internet e tente de novo.</p>", "erro");
+    texto.value = t; ajustar();
+  } finally {
+    ocupado = false; atualizarBotao(); rolar();
+  }
+}
+
+/* ---------- agendamento */
+function cartaoAgenda() {
+  const c = document.createElement("div");
+  c.className = "agenda";
+  if (leadEnviado) {
+    c.innerHTML = `<b>Seu pedido de revisão já foi enviado.</b><p style="margin:4px 0 0">Se quiser adiantar, fale pelo WhatsApp.</p>
+      <a class="btn wa" href="https://wa.me/${WHATSAPP}" target="_blank" rel="noopener">Falar no WhatsApp</a>`;
+    lista.appendChild(c); rolar(); return;
+  }
+  const id = "f" + Math.random().toString(36).slice(2, 7);
+  c.innerHTML = `<b>Revisão do planejamento financeiro</b>
+    <p style="margin:4px 0 0">Uma conversa com o Welton Garcia, CFP®, para transformar isso em um plano para o seu caso.</p>
+    <button class="btn" type="button" style="margin-top:10px">Quero agendar</button>
+    <form class="form" novalidate hidden>
+      <div class="field"><label for="${id}-nome">Nome</label><input id="${id}-nome" name="nome" autocomplete="name"></div>
+      <div class="field"><label for="${id}-zap">WhatsApp</label><input id="${id}-zap" name="zap" inputmode="tel" autocomplete="tel" placeholder="(44) 99999-9999"></div>
+      <div class="field full"><label for="${id}-email">E-mail <span style="font-weight:400">(opcional)</span></label><input id="${id}-email" name="email" type="email" autocomplete="email"></div>
+      <div class="hp" aria-hidden="true"><label for="${id}-url">Não preencha</label><input id="${id}-url" name="site_url" tabindex="-1" autocomplete="off"></div>
+      <div class="field"><label for="${id}-obj">Objetivo principal</label><select id="${id}-obj" name="obj">
+        <option>Aposentadoria</option><option>Reserva de emergência</option><option>Médio prazo</option><option>Educação dos filhos</option><option>Viagem ao exterior</option><option>Revisar a carteira toda</option></select></div>
+      <div class="field"><label for="${id}-pat">Patrimônio investido</label><select id="${id}-pat" name="pat">
+        <option>Até R$ 100 mil</option><option>R$ 100 mil a R$ 500 mil</option><option>R$ 500 mil a R$ 1 milhão</option><option>Acima de R$ 1 milhão</option></select></div>
+      <label class="consent full"><input type="checkbox" name="lgpd"><span>Autorizo o contato pelo WhatsApp para agendar a reunião. Meus dados serão usados só para isso, conforme a LGPD e o <a href="../privacidade.html">aviso de privacidade</a>.</span></label>
+      <p class="ferr full" hidden></p>
+      <div class="full"><button class="btn" type="submit">Enviar pedido</button></div>
+    </form>`;
+  lista.appendChild(c); rolar();
+  const abrir = c.querySelector("button"), f = c.querySelector("form"), err = f.querySelector(".ferr");
+  abrir.addEventListener("click", () => { abrir.hidden = true; f.hidden = false; f.nome.focus(); rolar(); });
+  f.addEventListener("submit", async e => {
+    e.preventDefault();
+    const nome = f.nome.value.trim(), zap = f.zap.value.replace(/\D/g, ""), email = f.email.value.trim();
+    const falha = m => { err.hidden = false; err.textContent = m; };
+    if (!nome) return falha("Informe seu nome.");
+    if (zap.length < 10 || zap.length > 13) return falha("Informe um WhatsApp com DDD, por exemplo (44) 99999-9999.");
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return falha("Confira o e-mail ou deixe em branco.");
+    if (!f.lgpd.checked) return falha("Marque a autorização de contato para continuar.");
+    err.hidden = true;
+    const btn = f.querySelector('button[type="submit"]'); btn.disabled = true; btn.textContent = "Enviando…";
+    let ok = false;
+    try {
+      await fetch(LEADS_URL, { method: "POST", mode: "no-cors", body: new URLSearchParams({
+        nome, whatsapp: zap, email, objetivo: f.obj.value, patrimonio: f.pat.value,
+        origem: "Alfred", consentimento: "sim", site_url: f.site_url.value }) });
+      ok = true;
+    } catch (_) {}
+    leadEnviado = ok;
+    const primeiro = esc(nome.split(" ")[0]);
+    const msg = `Olá, Welton! Sou ${nome}. Conversei com o Alfred e quero agendar a revisão do meu planejamento. Objetivo principal: ${f.obj.value}.`;
+    c.innerHTML = `<b>${ok ? `Pedido recebido, ${primeiro}.` : `Falta só um passo, ${primeiro}.`}</b>
+      <p style="margin:4px 0 0">${ok ? "O Welton vai entrar em contato pelo WhatsApp para combinar o horário. Se preferir adiantar:" : "Toque no botão para enviar o pedido pelo WhatsApp:"}</p>
+      <a class="btn wa" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Falar agora no WhatsApp</a>`;
+  });
+}
+
+/* ---------- entrada de texto */
+function ajustar() { texto.style.height = "auto"; texto.style.height = Math.min(texto.scrollHeight, 160) + "px"; atualizarBotao(); }
+function atualizarBotao() { enviar.disabled = ocupado || !texto.value.trim(); }
+texto.addEventListener("input", ajustar);
+texto.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey && !e.isComposing && window.matchMedia("(hover: hover)").matches) { e.preventDefault(); $("form").requestSubmit(); }
+});
+$("form").addEventListener("submit", e => { e.preventDefault(); const t = texto.value; if (!t.trim() || ocupado) return; texto.value = ""; ajustar(); perguntar(t); });
+$("sug").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (/Raio-X/.test(b.textContent)) {
+    texto.value = "Quero um Raio-X da minha carteira. Tenho:\n- \n- \nMeus objetivos: ";
+    ajustar(); texto.focus(); texto.setSelectionRange(texto.value.indexOf("- ") + 2, texto.value.indexOf("- ") + 2); return;
+  }
+  perguntar(b.textContent);
+});
+$("nova").addEventListener("click", () => {
+  if (ocupado) return;
+  historico = []; sessao = novaSessao();
+  lista.querySelectorAll(".msg:not(.intro), .agenda").forEach(n => n.remove());
+  $("sug").hidden = false; texto.value = ""; ajustar(); texto.focus();
+});
+</script>
+</body>
+</html>
