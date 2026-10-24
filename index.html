@@ -811,13 +811,13 @@ footer p + p{margin-top:8px}
       <div class="field">
         <label id="s-perf-l">Carteira até começar a renda</label>
         <div class="seg seg4" role="group" aria-labelledby="s-perf-l" id="s-perf">
-          <button type="button" data-r="4" aria-pressed="false" data-tip-title="Conservadora · 4% ao ano acima da inflação" data-tip="Renda fixa simples: títulos públicos, CDB e LCI/LCA. Oscila pouco.">Conservadora</button>
-          <button type="button" data-r="5" aria-pressed="true" data-tip-title="Moderada · 5% ao ano acima da inflação" data-tip="Cerca de 70% em renda fixa e 30% em ETFs de ações do Brasil e do mundo.">Moderada</button>
+          <button type="button" data-r="3" aria-pressed="false" data-tip-title="Conservadora · 3% ao ano acima da inflação" data-tip="Renda fixa simples: títulos públicos, CDB e LCI/LCA. Oscila pouco.">Conservadora</button>
+          <button type="button" data-r="4.5" aria-pressed="true" data-tip-title="Moderada · 4,5% ao ano acima da inflação" data-tip="Cerca de 70% em renda fixa e 30% em ETFs de ações do Brasil e do mundo.">Moderada</button>
           <button type="button" data-r="6" aria-pressed="false" data-tip-title="Arrojada · 6% ao ano acima da inflação" data-tip="Cerca de 40% em renda fixa e 60% em ETFs de ações. Oscila bastante no caminho.">Arrojada</button>
           <button type="button" data-r="custom" aria-pressed="false" data-tip-title="Personalizada" data-tip="Defina você o rendimento acima da inflação.">Personalizada</button>
         </div>
       </div>
-      <div class="field"><label for="s-r" tabindex="0" data-tip-title="Rendimento real líquido" data-tip="Quanto a carteira rende acima da inflação, depois de imposto e taxas, na fase de acumulação. É uma estimativa de longo prazo, não uma promessa.">Rendimento real até a renda (% a.a.) ⓘ</label><input id="s-r" type="number" step="0.5" min="0" max="12" value="5"></div>
+      <div class="field"><label for="s-r" tabindex="0" data-tip-title="Rendimento real líquido" data-tip="Quanto a carteira rende acima da inflação, depois de imposto e taxas, na fase de acumulação. É uma estimativa de longo prazo, não uma promessa.">Rendimento real até a renda (% a.a.) ⓘ</label><input id="s-r" type="number" step="0.5" min="0" max="12" value="4.5"></div>
       <details class="premissas">
         <summary>Premissas</summary>
         <div class="field"><label for="s-rret" tabindex="0" data-tip-title="Rendimento na fase de renda" data-tip="Quando a renda começa, a carteira costuma ficar mais conservadora para oscilar menos. Por isso o padrão é menor que o da acumulação.">Rendimento real na fase de renda (% a.a.) ⓘ</label><input id="s-rret" type="number" step="0.5" min="0" max="10" value="4"></div>
@@ -864,9 +864,32 @@ footer p + p{margin-top:8px}
         <p class="ibody" id="o-cmp-t"></p>
       </div>
 
+
       <p class="ind-foot muted">Simulação educativa com rendimentos constantes acima da inflação. Na vida real, os retornos variam ano a ano e não são garantidos. Os valores estão em reais de hoje: o aporte e a renda crescem com a inflação, e o resultado já desconta a inflação do período. Não considera INSS nem outras rendas.</p>
     </section>
   </div>
+
+  <section class="cta" aria-labelledby="sl-cta-t" style="margin-block:0 34px">
+    <div>
+      <h2 id="sl-cta-t">Quer transformar essa simulação em um plano?</h2>
+      <p>Em uma reunião de revisão do planejamento financeiro, olhamos seus números de verdade: quanto aportar, onde investir e como chegar à renda que você quer, com segurança.</p>
+    </div>
+    <div id="sl-cta-body">
+      <form id="sl-lead" novalidate>
+        <div class="field"><label for="sl-nome">Nome</label><input id="sl-nome" required autocomplete="name"></div>
+        <div class="field"><label for="sl-zap">WhatsApp</label><input id="sl-zap" required inputmode="tel" autocomplete="tel" placeholder="(44) 99999-9999"></div>
+        <div class="field full"><label for="sl-email">E-mail <span style="font-weight:400;opacity:.8">(opcional)</span></label><input id="sl-email" type="email" autocomplete="email" placeholder="voce@exemplo.com"></div>
+        <div class="hp" aria-hidden="true"><label for="sl-site_url">Não preencha este campo</label><input id="sl-site_url" tabindex="-1" autocomplete="off"></div>
+        <div class="field"><label for="sl-obj">Objetivo principal</label>
+          <select id="sl-obj"><option value="aposentadoria">Aposentadoria</option><option value="reserva">Montar a reserva</option><option value="medio-prazo">Médio prazo</option><option value="educacao">Educação dos filhos</option><option value="viagem">Viagem ao exterior</option></select></div>
+        <div class="field"><label for="sl-pat">Patrimônio investido</label>
+          <select id="sl-pat"><option>Até R$ 100 mil</option><option>R$ 100 mil a R$ 500 mil</option><option>R$ 500 mil a R$ 1 milhão</option><option>Acima de R$ 1 milhão</option></select></div>
+        <label class="consent full"><input id="sl-lgpd" type="checkbox" required><span>Autorizo o contato pelo WhatsApp para agendar a reunião. Meus dados serão usados só para isso, conforme a LGPD e o <a href="privacidade.html" style="color:inherit;text-decoration:underline">aviso de privacidade</a>.</span></label>
+        <button class="btn full" type="submit">Quero agendar minha revisão</button>
+        <p class="full" id="sl-err" hidden style="font-size:.86rem;font-weight:600"></p>
+      </form>
+    </div>
+  </section>
 </main>
 
 <main class="wrap" id="view-indicadores" hidden>
@@ -1801,42 +1824,46 @@ window.addEventListener("scroll", () => { if (!tip.hidden) hideTip(); }, {passiv
 const LEADS_URL = "https://script.google.com/macros/s/AKfycbyFXq_oV5WSExN_JpeVkN_3th3Zhx40KRPiCKxyOeWTGYS_bvqxL1sHpFK6-Btrgr6r/exec"; // Apps Script (Implantar > App da Web)
 const WHATSAPP = "5544999844019";
 const OBJ_NOMES = {"reserva":"Montar a reserva","medio-prazo":"Médio prazo","aposentadoria":"Aposentadoria","educacao":"Educação dos filhos","viagem":"Viagem ao exterior"};
-document.getElementById("lead").addEventListener("submit", async e => {
-  e.preventDefault();
-  const err = document.getElementById("err");
-  const btn = e.target.querySelector('button[type="submit"]');
-  const nome = document.getElementById("nome").value.trim();
-  const zap = document.getElementById("zap").value.replace(/\D/g,"");
-  const email = document.getElementById("email").value.trim();
-  if (!nome){ err.hidden=false; err.textContent="Informe seu nome."; return; }
-  if (zap.length < 10 || zap.length > 13){ err.hidden=false; err.textContent="Informe um WhatsApp com DDD, por exemplo (44) 99999-9999."; return; }
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.hidden=false; err.textContent="Confira o e-mail ou deixe o campo em branco."; return; }
-  if (!document.getElementById("lgpd").checked){ err.hidden=false; err.textContent="Marque a autorização de contato para continuar."; return; }
-  err.hidden = true;
-  const objetivo = OBJ_NOMES[document.getElementById("obj").value] || document.getElementById("obj").value;
-  const dados = new URLSearchParams({
-    nome, whatsapp: zap, email, objetivo,
-    patrimonio: document.getElementById("pat").value,
-    origem: "Investir por objetivos · " + (OBJ[current] ? OBJ[current].title : current),
-    consentimento: "sim",
-    site_url: document.getElementById("site_url").value
+function ligarFormulario(px, origemFn){
+  const q = id => document.getElementById(px + id);
+  q("lead").addEventListener("submit", async e => {
+    e.preventDefault();
+    const err = q("err");
+    const btn = e.target.querySelector('button[type="submit"]');
+    const nome = q("nome").value.trim();
+    const zap = q("zap").value.replace(/\D/g,"");
+    const email = q("email").value.trim();
+    if (!nome){ err.hidden=false; err.textContent="Informe seu nome."; return; }
+    if (zap.length < 10 || zap.length > 13){ err.hidden=false; err.textContent="Informe um WhatsApp com DDD, por exemplo (44) 99999-9999."; return; }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.hidden=false; err.textContent="Confira o e-mail ou deixe o campo em branco."; return; }
+    if (!q("lgpd").checked){ err.hidden=false; err.textContent="Marque a autorização de contato para continuar."; return; }
+    err.hidden = true;
+    const objetivo = OBJ_NOMES[q("obj").value] || q("obj").value;
+    const dados = new URLSearchParams({
+      nome, whatsapp: zap, email, objetivo,
+      patrimonio: q("pat").value,
+      origem: origemFn(),
+      consentimento: "sim",
+      site_url: q("site_url").value
+    });
+    let enviado = false;
+    if (LEADS_URL){
+      btn.disabled = true; btn.textContent = "Enviando...";
+      try { await fetch(LEADS_URL, {method:"POST", mode:"no-cors", body:dados}); enviado = true; }
+      catch(_) { enviado = false; }
+    }
+    const primeiro = esc(nome.split(" ")[0]);
+    const msg = `Olá, Welton! Sou ${nome}. Pedi uma revisão do meu planejamento pelo painel. Meu objetivo principal: ${objetivo}.`;
+    const link = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+    q("cta-body").innerHTML = `<div class="ok">
+      <b>${enviado ? `Pedido recebido, ${primeiro}.` : `Falta só um passo, ${primeiro}.`}</b>
+      <p style="margin-top:6px">${enviado ? "Vou entrar em contato pelo WhatsApp para combinar o melhor horário. Se preferir adiantar, fale comigo agora:" : "Toque no botão abaixo para me enviar o pedido pelo WhatsApp:"}</p>
+      <a class="btn wa" href="${link}" target="_blank" rel="noopener">Falar agora no WhatsApp</a>
+      <p style="margin-top:12px;font-size:.84rem" class="muted">WhatsApp: (44) 99984-4019</p>
+    </div>`;
   });
-  let enviado = false;
-  if (LEADS_URL){
-    btn.disabled = true; btn.textContent = "Enviando...";
-    try { await fetch(LEADS_URL, {method:"POST", mode:"no-cors", body:dados}); enviado = true; }
-    catch(_) { enviado = false; }
-  }
-  const primeiro = esc(nome.split(" ")[0]);
-  const msg = `Olá, Welton! Sou ${nome}. Pedi uma revisão do meu planejamento pelo painel. Meu objetivo principal: ${objetivo}.`;
-  const link = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
-  document.getElementById("cta-body").innerHTML = `<div class="ok">
-    <b>${enviado ? `Pedido recebido, ${primeiro}.` : `Falta só um passo, ${primeiro}.`}</b>
-    <p style="margin-top:6px">${enviado ? "Vou entrar em contato pelo WhatsApp para combinar o melhor horário. Se preferir adiantar, fale comigo agora:" : "Toque no botão abaixo para me enviar o pedido pelo WhatsApp:"}</p>
-    <a class="btn wa" href="${link}" target="_blank" rel="noopener">Falar agora no WhatsApp</a>
-    <p style="margin-top:12px;font-size:.84rem" class="muted">WhatsApp: (44) 99984-4019</p>
-  </div>`;
-});
+}
+ligarFormulario("", () => "Investir por objetivos · " + (OBJ[current] ? OBJ[current].title : current));
 
 /* Abre o objetivo do link (#reserva ou #medio-prazo) */
 const h = (location.hash || "").slice(1);
@@ -2324,6 +2351,8 @@ document.querySelectorAll("#s-perf button").forEach(b => b.addEventListener("cli
   else document.getElementById("s-r").focus();
   calcSim();
 }));
+const MODO_NOMES = {meta:"meta de patrimônio", renda:"meta de renda", aporte:"aporte mensal"};
+ligarFormulario("sl-", () => "Simulador · " + (MODO_NOMES[simModo] || simModo));
 </script>
 
 </body>
