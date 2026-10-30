@@ -438,11 +438,12 @@ footer p + p{margin-top:8px}
 .etf-painel .etf-info .cuid b{color:var(--z-res)}
 @media (max-width:820px){ .etf-painel{padding:16px} .etf-objs{grid-template-columns:1fr 1fr} }
 @media (max-width:380px){ .etf-objs{grid-template-columns:1fr} }
+@media (max-width:400px){ header nav.tabs button{padding:12px 6px;font-size:.84rem} }
 #view-alfred iframe{display:block;width:100%;height:calc(100dvh - var(--hdr, 120px));min-height:480px;border:0;background:var(--bg)}
 nav.tabs .sm{display:none}
 @media (max-width:560px){
   nav.tabs{gap:0;margin-inline:-8px}
-  nav.tabs button{padding:12px 8px;font-size:.88rem}
+  nav.tabs button{padding:12px 7px;font-size:.86rem}
   nav.tabs .lg{display:none} nav.tabs .sm{display:inline}
   nav.tabs button small{display:none}
   nav.tabs .embreve{display:none}
@@ -586,6 +587,7 @@ nav.tabs .sm{display:none}
     <nav class="tabs" aria-label="Seções do painel">
       <button type="button" data-view="indicadores">Indicadores</button>
       <button type="button" data-view="objetivos" aria-current="page"><span class="lg">Investir por objetivos</span><span class="sm">Objetivos</span></button>
+      <button type="button" data-view="etfs">ETFs</button>
       <button type="button" data-view="simulador">Simulador</button>
       <button type="button" class="embreve" data-tip-title="Em construção" data-tip="Estudos, análises e comentários sobre o mercado.">Insights<small>em breve</small></button>
       <button type="button" data-view="alfred">Alfred<small>beta</small></button>
