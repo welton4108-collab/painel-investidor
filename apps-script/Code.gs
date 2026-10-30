@@ -38,8 +38,11 @@ function doGet(e) {
 
 function doPost(e) {
   const p = (e && e.parameter) || {};
-  if (p.site_url) return resposta({ ok: true });          // campo invisível: robô
   const tipo = p.tipo || "lead";
+  // Campo invisível anti-robô. O preenchimento automático de alguns celulares Android
+  // também preenche esse campo, então pedidos de reunião não são descartados:
+  // são gravados e marcados para conferência.
+  if (p.site_url && tipo !== "lead") return resposta({ ok: true });
   if (tipo === "comentario") return salvarComentario(p);
   if (tipo === "pdf") return salvarDownload(p);
   if (tipo === "alfred") return salvarAlfred(p);
@@ -55,19 +58,22 @@ function salvarLead(p) {
     return resposta({ ok: false, erro: "dados incompletos" });
   }
   const agora = agoraBR();
+  const suspeito = String(p.site_url || "").trim();
+  const status = suspeito ? "Conferir (campo anti-robô veio preenchido: " + limpar(suspeito, 60) + ")" : "Novo";
   gravar(ABA_LEADS, COL_LEADS, [
     agora, seguro(nome), seguro(formatarZap(zap)), seguro(limpar(p.email, 120)),
     seguro(limpar(p.objetivo, 60)), seguro(limpar(p.patrimonio, 60)), seguro(limpar(p.origem, 80)),
-    "Sim, " + agora, "Novo"
+    "Sim, " + agora, seguro(status)
   ]);
-  avisar("Novo pedido de reunião: " + nome, [
+  avisar((suspeito ? "[conferir] " : "") + "Novo pedido de reunião: " + nome, [
     "Novo pedido de reunião pelo painel.", "",
     "Nome: " + nome,
     "WhatsApp: " + formatarZap(zap) + "  (https://wa.me/55" + zap.replace(/^55/, "") + ")",
     "E-mail: " + (limpar(p.email, 120) || "não informado"),
     "Objetivo: " + limpar(p.objetivo, 60),
     "Patrimônio: " + limpar(p.patrimonio, 60),
-    "Página de origem: " + limpar(p.origem, 80)
+    "Página de origem: " + limpar(p.origem, 80),
+    suspeito ? "\nAtenção: o campo anti-robô veio preenchido (" + limpar(suspeito, 60) + "). Pode ser preenchimento automático do celular; confira antes de chamar." : ""
   ]);
   return resposta({ ok: true });
 }
