@@ -249,6 +249,23 @@ def cotacoes(anos):
 
 # ------------------------------------------------------------------ principal
 
+SIGLAS = {"SA", "S.A.", "S/A", "BB", "BR", "CPFL", "SLC", "WEG", "JBS", "BRF", "TIM", "CSN", "B3", "MRV", "CVC",
+          "IRB", "PDG", "GPA", "EDP", "AES", "CTEEP", "3R", "TOTVS", "BTG", "XP", "CCR", "RNI", "JHSF", "TPI", "BRB", "SPE",
+          "ISA", "CEMIG", "COPEL", "CELESC", "COELCE", "CEEE", "EMAE", "CESP", "MRS", "PRIO", "LWSA", "IGUA", "GOL", "BRK"}
+
+
+def nome_bonito(n):
+    pal = []
+    for w in n.strip().split():
+        if w.upper() in SIGLAS:
+            pal.append("S.A." if w.upper() in ("SA", "S.A.", "S/A") else w.upper())
+        elif w.lower() in ("de", "da", "do", "das", "dos", "e"):
+            pal.append(w.lower())
+        else:
+            pal.append(w.capitalize())
+    return " ".join(pal)[:40]
+
+
 FINANCEIRO = re.compile(r"banco|intermedia[çc][ãa]o financeira|seguradora|securitiza|arrendamento|cr[ée]dito", re.I)
 
 
@@ -387,7 +404,7 @@ def main():
         ev = vm + div_liq if (vm is not None and div_liq is not None) else None
         reg = {
             "tk": principal, "outros": sorted(t for t in mk if t != principal),
-            "nome": (cad_r["DENOM_COMERC"] or cad_r["DENOM_SOCIAL"]).title()[:40],
+            "nome": nome_bonito(cad_r["DENOM_COMERC"] or cad_r["DENOM_SOCIAL"]),
             "setor": setor, "fin": fin,
             "preco": round(mk[principal]["preco"], 2), "liq": round(mk[principal]["liq"]),
             "vm": round(vm) if vm else None,
@@ -420,6 +437,16 @@ def main():
             for cd, ds, v, o, ini, fim in dm.linhas(cnpj, ult, "DRE"):
                 if o == "ÚLTIMO" and nivel(cd) <= 3:
                     log(f"DRE {r['tk']} {ini}..{fim} {cd} {ds} {v:,.0f}")
+    for r in linhas:
+        if r["tk"] in ("B3SA3", "AXIA3", "PLPL3", "SMFT3"):
+            cnpj = next(c for c, t in tickers.items() if r["tk"] in t)
+            ult = sorted(x for x in dm.dados[cnpj] if "DFC_MI" in dm.dados[cnpj][x])[-1]
+            for cd, ds, v, o, ini, fim in dm.linhas(cnpj, ult, "DFC_MI"):
+                if o == "ÚLTIMO" and cd.startswith("6.03"):
+                    log(f"DFC {r['tk']} {ini}..{fim} {cd} {ds} {v:,.0f}")
+    for c, t in tickers.items():
+        if "KLBN11" in t:
+            log(f"KLBN {t} units={units.get('KLBN11')} cap={dm.cap.get(c)}")
     os.makedirs(os.path.dirname(SAIDA), exist_ok=True)
     with open(SAIDA, "w", encoding="utf-8") as f:
         json.dump({"gerado_em": datetime.now().strftime("%Y-%m-%dT%H:%M"), "pregao": ultimo_pregao,
