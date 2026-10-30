@@ -2533,6 +2533,8 @@ function renderETFs(){
   const g = ETF.grupos.find(x => x.id === etfGrupo) || ETF.grupos[0];
   const ord = g.etfs.slice().sort((a, b) => b.estrelas - a.estrelas || a.taxa - b.taxa);
   const top = ord[0];
+  const temRet = g.etfs.some(x => x.retencao);
+  const retTip = 'data-tip-title="Retenção nos dividendos" data-tip="Imposto cobrado lá fora sobre os dividendos das empresas, antes de chegarem ao ETF. Fundos americanos perdem 30%; fundos irlandeses (UCITS) perdem 15% nos dividendos americanos. Não aparece na taxa, mas reduz o retorno todo ano."';
   const mapa = ETF.grupos.map(x => {
     const t = x.etfs.slice().sort((a, b) => b.estrelas - a.estrelas || a.taxa - b.taxa)[0];
     return `<button type="button" class="etf-mini" data-etfg="${x.id}" aria-pressed="${x.id === g.id}"><small>${etfEsc(x.titulo)}</small><b>${t.ticker}</b><span>${etfPct(t.taxa)} ao ano</span></button>`;
@@ -2542,16 +2544,16 @@ function renderETFs(){
       <td>${etfEsc(x.replica)}</td>
       <td class="num">${etfPct(x.taxa)}</td>
       <td class="num">${etfCusto(x.taxa)}</td>
-      <td class="num">${etfEsc(x.ir)}</td>
+      <td class="num">${etfEsc(x.ir)}</td>${temRet ? `<td>${etfEsc(x.retencao || "")}</td>` : ""}
       <td class="num">${etfPL(x.pl_bi)}</td>
       <td><span class="liq ${x.liquidez}">${x.liquidez}</span></td>
       <td>${etfStars(x.estrelas)}</td>
-    </tr><tr class="l2"><td></td><td colspan="7">${etfEsc(x.nota)} <span class="gs" style="display:inline">· na B3 desde ${etfDesde(x.desde)}</span></td></tr>`).join("");
+    </tr><tr class="l2"><td></td><td colspan="${temRet ? 8 : 7}">${etfEsc(x.nota)} <span class="gs" style="display:inline">· na B3 desde ${etfDesde(x.desde)}</span></td></tr>`).join("");
   const cards = ord.map(x => `<article class="etf-card${x === top ? " pick" : ""}">
       <div class="r1"><span class="tk">${x.ticker}</span>${etfStars(x.estrelas)}</div>
       <div>${etfEsc(x.replica)} <span class="muted" style="font-size:.82rem">· ${etfEsc(x.gestora)}</span></div>
       <dl><div><dt>Taxa ao ano</dt><dd>${etfPct(x.taxa)}</dd></div><div><dt>Custo em R$ 100 mil</dt><dd>${etfCusto(x.taxa)}/ano</dd></div>
-      <div><dt>Imposto</dt><dd>${etfEsc(x.ir)}</dd></div><div><dt>Tamanho · liquidez</dt><dd>${etfPL(x.pl_bi)} · <span class="liq ${x.liquidez}">${x.liquidez}</span></dd></div></dl>
+      <div><dt>Imposto</dt><dd>${etfEsc(x.ir)}</dd></div>${x.retencao ? `<div><dt>Retenção nos dividendos lá fora</dt><dd>${etfEsc(x.retencao)}</dd></div>` : ""}<div><dt>Tamanho · liquidez</dt><dd>${etfPL(x.pl_bi)} · <span class="liq ${x.liquidez}">${x.liquidez}</span></dd></div></dl>
       <p>${etfEsc(x.nota)}</p>
     </article>`).join("");
   app.innerHTML = `
@@ -2568,10 +2570,10 @@ function renderETFs(){
       <div><div class="lab">Escolha do painel</div><div class="tk">${top.ticker}</div></div>
       <div class="nm">${etfEsc(top.nome)} <span class="muted">· ${etfEsc(top.gestora)}</span></div>
       ${etfStars(top.estrelas)}
-      <div class="etf-kpis"><span>Taxa <b>${etfPct(top.taxa)}</b> ao ano</span><span>Custo <b>${etfCusto(top.taxa)}</b> por ano a cada R$ 100 mil</span><span>IR <b>${etfEsc(top.ir)}</b></span><span>Liquidez <span class="liq ${top.liquidez}">${top.liquidez}</span></span></div>
+      <div class="etf-kpis"><span>Taxa <b>${etfPct(top.taxa)}</b> ao ano</span><span>Custo <b>${etfCusto(top.taxa)}</b> por ano a cada R$ 100 mil</span><span>IR <b>${etfEsc(top.ir)}</b></span>${top.retencao ? `<span ${retTip}>Retenção lá fora <b>${etfEsc(top.retencao)}</b> ⓘ</span>` : ""}<span>Liquidez <span class="liq ${top.liquidez}">${top.liquidez}</span></span></div>
       <div class="nt">${etfEsc(top.nota)}</div>
     </div>
-    <table class="etf-tab"><thead><tr><th>ETF</th><th>O que compra</th><th class="num">Taxa a.a.</th><th class="num" data-tip-title="Custo em R$ 100 mil" data-tip="Quanto a taxa de administração consome por ano de um investimento de R$ 100 mil.">Custo/ano ⓘ</th><th class="num">IR</th><th class="num">Tamanho</th><th>Liquidez</th><th>Nota</th></tr></thead><tbody>${linhas}</tbody></table>
+    <table class="etf-tab"><thead><tr><th>ETF</th><th>O que compra</th><th class="num">Taxa a.a.</th><th class="num" data-tip-title="Custo em R$ 100 mil" data-tip="Quanto a taxa de administração consome por ano de um investimento de R$ 100 mil.">Custo/ano ⓘ</th><th class="num">IR</th>${temRet ? `<th ${retTip}>Retenção lá fora ⓘ</th>` : ""}<th class="num">Tamanho</th><th>Liquidez</th><th>Nota</th></tr></thead><tbody>${linhas}</tbody></table>
     <div class="etf-cards">${cards}</div>
     <div class="etf-sat"><h3>Fora do núcleo</h3><ul>${ETF.satelites.map(([a, b]) => `<li><b>${etfEsc(a)}:</b> ${etfEsc(b)}</li>`).join("")}</ul></div>
     <details class="etf-crit" style="margin-top:16px"><summary>Como as notas são dadas</summary><ul>${ETF.criterios.map(([a, b]) => `<li><b>${etfEsc(a)}:</b> ${etfEsc(b)}</li>`).join("")}</ul></details>

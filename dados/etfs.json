@@ -459,8 +459,8 @@
    "prazo": "10 anos ou mais",
    "para": "Diversificar fora do Brasil, em moeda forte e nas maiores empresas do mundo.",
    "estrategia": "Um ETF global (dezenas de países, milhares de empresas) como núcleo. O S&P 500 é a alternativa concentrada nos Estados Unidos.",
-   "imposto": "15% sobre o ganho na venda, via DARF, sem a isenção de R$ 20 mil. Comprando na B3 não há IOF de câmbio nem declaração de bens no exterior.",
-   "cuidado": "Oscila com as bolsas e com o dólar. O S&P 500 concentra boa parte do índice em poucas empresas de tecnologia.",
+   "imposto": "15% sobre o ganho na venda, via DARF, sem a isenção de R$ 20 mil. Comprando na B3 não há IOF de câmbio nem declaração de bens no exterior. Atenção ao imposto “invisível” sobre dividendos: ETFs que compram fundos americanos perdem 30% dos dividendos na fonte; os que compram fundos irlandeses (UCITS) perdem 15%.",
+   "cuidado": "Oscila com as bolsas e com o dólar. O S&P 500 concentra boa parte do índice em poucas empresas de tecnologia. Compare o custo efetivo (taxa + perda nos dividendos), não só a taxa.",
    "etfs": [
     {
      "ticker": "WRLD11",
@@ -472,8 +472,9 @@
      "liquidez": "média",
      "ir": "15%",
      "desde": "2021-10",
-     "estrelas": 5,
-     "nota": "Carteira global completa, com a menor taxa entre os globais e histórico desde 2021."
+     "estrelas": 3,
+     "nota": "Menor taxa entre os globais, mas compra o VT, fundo americano: 30% dos dividendos ficam retidos lá fora, o que custa cerca de 0,3 a 0,4 ponto ao ano a mais que a estrutura irlandesa.",
+     "retencao": "30% (fundo dos EUA)"
     },
     {
      "ticker": "VWRA11",
@@ -485,8 +486,9 @@
      "liquidez": "média",
      "ir": "15%",
      "desde": "2025-09",
-     "estrelas": 4,
-     "nota": "Escolha atual do painel. Estrutura sólida, mas custa 0,16 ponto a mais que o WRLD11 e é novo."
+     "estrelas": 5,
+     "nota": "Escolha do painel. Compra o ETF global da Vanguard domiciliado na Irlanda: perde 15% dos dividendos americanos, e não 30%. Com isso, o custo efetivo fica abaixo do WRLD11 mesmo com taxa maior. Ainda é novo e pequeno.",
+     "retencao": "15% (UCITS)"
     },
     {
      "ticker": "IVVB11",
@@ -498,8 +500,9 @@
      "liquidez": "alta",
      "ir": "15%",
      "desde": "2014-04",
-     "estrelas": 4,
-     "nota": "O mais negociado para ações americanas. Concentrado nos EUA."
+     "estrelas": 3,
+     "nota": "O mais negociado para ações americanas, mas compra o IVV, fundo americano: perde 30% dos dividendos na fonte, cerca de 0,2 ponto ao ano a mais que o GPUS11.",
+     "retencao": "30% (fundo dos EUA)"
     },
     {
      "ticker": "SPXI11",
@@ -512,7 +515,8 @@
      "ir": "15%",
      "desde": "2015-01",
      "estrelas": 3,
-     "nota": "Alternativa ao IVVB11, com taxa um pouco menor e menos liquidez."
+     "nota": "Alternativa ao IVVB11, com taxa um pouco menor e menos liquidez.",
+     "retencao": "a confirmar"
     },
     {
      "ticker": "GPUS11",
@@ -524,8 +528,9 @@
      "liquidez": "média",
      "ir": "15%",
      "desde": "2025-06",
-     "estrelas": 3,
-     "nota": "Boa estrutura, ainda pequeno e novo."
+     "estrelas": 4,
+     "nota": "S&P 500 via ETF irlandês da Vanguard: retenção de 15% nos dividendos. Custo efetivo menor que o do IVVB11; ainda pequeno e novo.",
+     "retencao": "15% (UCITS)"
     },
     {
      "ticker": "ACWI11",
@@ -538,7 +543,8 @@
      "ir": "15%",
      "desde": "2021-01",
      "estrelas": 2,
-     "nota": "Global, mas com a maior taxa do grupo."
+     "nota": "Global, mas com a maior taxa do grupo.",
+     "retencao": "a confirmar"
     },
     {
      "ticker": "NASD11",
@@ -551,7 +557,8 @@
      "ir": "15%",
      "desde": "2021-05",
      "estrelas": 1,
-     "nota": "Concentrado em tecnologia. Satélite, não núcleo."
+     "nota": "Concentrado em tecnologia. Satélite, não núcleo.",
+     "retencao": "a confirmar"
     }
    ]
   },
