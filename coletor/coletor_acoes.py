@@ -8,7 +8,7 @@ Coletor de indicadores de ações da B3 a partir de fontes oficiais e gratuitas.
 
 Gera dados/acoes.json. Só usa a biblioteca padrão do Python.
 """
-import csv, io, json, os, re, sys, time, zipfile, urllib.request
+import csv, io, json, math, os, re, sys, time, zipfile, urllib.request
 from collections import defaultdict
 from datetime import date, datetime, timedelta
 
@@ -266,6 +266,7 @@ def main():
 
     # códigos de negociação (FCA do ano; o do ano anterior completa quem ainda não entregou)
     tickers = defaultdict(dict)  # cnpj -> ticker -> classe
+    units = {}  # ticker da unit -> ações por unit
     for a in (ano - 1, ano):
         b = baixar(f"{CVM}/DOC/FCA/DADOS/fca_cia_aberta_{a}.zip")
         if not b:
@@ -282,6 +283,11 @@ def main():
                 tickers[r["CNPJ_Companhia"]][tk] = "PN"
             elif vm.startswith("Units") or vm.startswith("Certificado"):
                 tickers[r["CNPJ_Companhia"]][tk] = "UNT"
+                comp = r.get("Composicao_BDR_Unit") or ""
+                n_on = sum(int(x) for x in re.findall(r"(\d+)\s*(?:a[çc](?:[ãa]o|[õo]es)\s*)?(?:ordin[áa]ria|ON\b)", comp, re.I))
+                n_pn = sum(int(x) for x in re.findall(r"(\d+)\s*(?:a[çc](?:[ãa]o|[õo]es)\s*)?(?:preferenciais|preferencial|PN\b)", comp, re.I))
+                if n_on + n_pn:
+                    units[tk] = n_on + n_pn
 
     dm = Demos(set(tickers))
     for tipo, a in (("dfp", ano - 6), ("dfp", ano - 5), ("dfp", ano - 2), ("dfp", ano - 1), ("itr", ano - 1), ("itr", ano)):
@@ -304,7 +310,7 @@ def main():
         jan = h[-42:]  # cerca de 2 meses de pregões
         return {"preco": h[-1][1], "data": h[-1][0], "liq": sum(x[2] for x in jan) / len(jan)}
 
-    linhas, sem_dados = [], 0
+    linhas, sem_dados, escala_mil = [], 0, []
     for cnpj, tks in tickers.items():
         cad_r = empresas.get(cnpj)
         if not cad_r:
@@ -327,7 +333,8 @@ def main():
                 c = [t for t in mk if tks[t] == cl]
                 return mk[max(c, key=lambda t: mk[t]["liq"])]["preco"] if c else None
             p_on, p_pn = preco_classe("ON"), preco_classe("PN")
-            p_ref = mk[principal]["preco"] if tks[principal] != "UNT" else None
+            p_ref = mk[principal]["preco"] if tks[principal] != "UNT" else (
+                mk[principal]["preco"] / units[principal] if principal in units else None)
             p_on = p_on or p_pn or p_ref
             p_pn = p_pn or p_on or p_ref
             if p_on or p_pn:
@@ -366,6 +373,17 @@ def main():
                 return None
             return a / b
 
+        # Parte das empresas informa a quantidade de ações em milhares na CVM, sem indicar a unidade.
+        # Escolhe a escala (x1 ou x1000) que deixa giro diário e P/VP mais próximos do usual.
+        if vm:
+            def nota(v):
+                n = abs(math.log10(max(mk[principal]["liq"], 1) / v) + 2.5)
+                if pl and pl > 0:
+                    n += 2 * abs(math.log10(v / pl))
+                return n
+            if nota(vm * 1000) < nota(vm):
+                vm *= 1000
+                escala_mil.append(principal)
         ev = vm + div_liq if (vm is not None and div_liq is not None) else None
         reg = {
             "tk": principal, "outros": sorted(t for t in mk if t != principal),
@@ -407,6 +425,7 @@ def main():
         json.dump({"gerado_em": datetime.now().strftime("%Y-%m-%dT%H:%M"), "pregao": ultimo_pregao,
                    "fonte": "Demonstrações: CVM Dados Abertos (ITR e DFP). Preço e liquidez: B3, cotações históricas.",
                    "acoes": linhas}, f, ensure_ascii=False, separators=(",", ":"))
+    log(f"ações em milhares ({len(escala_mil)}): {' '.join(escala_mil)}")
     log(f"{len(linhas)} empresas; {sem_dados} sem lucro calculado; pregão {ultimo_pregao}")
     with open(os.path.join(os.path.dirname(SAIDA), "acoes_log.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(LOG))

@@ -439,6 +439,36 @@ footer p + p{margin-top:8px}
 @media (max-width:820px){ .etf-painel{padding:16px} .etf-objs{grid-template-columns:1fr 1fr} }
 @media (max-width:380px){ .etf-objs{grid-template-columns:1fr} }
 @media (max-width:400px){ header nav.tabs button{padding:12px 6px;font-size:.84rem} }
+/* Ações da B3 (página interna, fora do menu) */
+#view-acoes.wrap{max-width:1400px}
+.ac-ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 12px}
+.ac-ctl input,.ac-ctl select{font:inherit;font-size:.95rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 12px;min-width:0}
+.ac-ctl input{flex:1 1 220px}
+.ac-ctl label{display:flex;gap:6px;align-items:center;font-size:.88rem;color:var(--muted)}
+.ac-meta{font-size:.84rem;color:var(--muted);margin:0 0 10px}
+.ac-scroll{overflow:auto;max-height:calc(100dvh - 120px);border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.ac-tab{border-collapse:separate;border-spacing:0;font-size:.86rem;width:100%;min-width:1500px}
+.ac-tab th{position:sticky;top:0;z-index:2;background:var(--bg);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700;text-align:right;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+.ac-tab th[aria-sort] {color:var(--accent)}
+.ac-tab th[aria-sort="ascending"]::after{content:" ▲"} .ac-tab th[aria-sort="descending"]::after{content:" ▼"}
+.ac-tab td{padding:7px 10px;border-top:1px solid var(--line);text-align:right;font-family:var(--f-data);font-size:.82rem;white-space:nowrap}
+.ac-tab th:first-child,.ac-tab td:first-child{position:sticky;left:0;z-index:1;text-align:left;background:var(--surface);box-shadow:inset -1px 0 0 var(--line)}
+.ac-tab th:first-child{z-index:3;background:var(--bg)}
+.ac-tab th.tx,.ac-tab td.tx{text-align:left;font-family:var(--f-body)}
+.ac-tab td.tx{font-size:.84rem;color:var(--muted);max-width:190px;overflow:hidden;text-overflow:ellipsis}
+.ac-tab .tk{font-family:var(--f-data);font-weight:700;color:var(--ink);font-size:.9rem}
+.ac-tab .nm{display:block;font-family:var(--f-body);font-size:.76rem;color:var(--muted);max-width:170px;overflow:hidden;text-overflow:ellipsis}
+.ac-tab td.na{color:var(--muted);opacity:.6}
+.ac-tab td.neg{color:var(--z-nao)}
+.ac-tab tbody tr:hover td{background:var(--accent-soft)}
+.ac-tab th.grp{border-left:1px solid var(--line)}
+.ac-tab td.grp{border-left:1px solid var(--line)}
+.ac-glos{margin:18px 0 8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 16px}
+.ac-glos summary{cursor:pointer;font-weight:700;padding:10px 0}
+.ac-glos dl{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px 22px;margin:4px 0 14px}
+.ac-glos dt{font-weight:700}
+.ac-glos dd{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+.ac-aviso{font-size:.82rem;color:var(--muted);margin:10px 0 30px}
 #view-alfred iframe{display:block;width:100%;height:calc(100dvh - var(--hdr, 120px));min-height:480px;border:0;background:var(--bg)}
 nav.tabs .sm{display:none}
 @media (max-width:560px){
@@ -1035,6 +1065,17 @@ nav.tabs .sm{display:none}
     </div>
   </section>
   <div id="etf-app"><p class="muted">Carregando a seleção…</p></div>
+</main>
+
+<main class="wrap" id="view-acoes" hidden>
+  <section class="ind-hero">
+    <div>
+      <div class="eyebrow">Ações da B3 · uso interno</div>
+      <h1>Indicadores de valuation</h1>
+      <p class="lede">Empresas listadas com preço, múltiplos, rentabilidade e endividamento calculados a partir das demonstrações entregues à CVM e das cotações da B3. Clique no título de uma coluna para ordenar.</p>
+    </div>
+  </section>
+  <div id="ac-app"><p class="muted">Carregando as ações…</p></div>
 </main>
 
 <main class="wrap" id="view-insights" hidden>
@@ -2285,7 +2326,7 @@ function renderIndicadores(){
 
 /* Navegação entre abas */
 function showView(v){
-  const views = {objetivos:"view-objetivos", indicadores:"view-indicadores", simulador:"view-simulador", insights:"view-insights", alfred:"view-alfred", etfs:"view-etfs"};
+  const views = {objetivos:"view-objetivos", indicadores:"view-indicadores", simulador:"view-simulador", insights:"view-insights", alfred:"view-alfred", etfs:"view-etfs", acoes:"view-acoes"};
   if (!views[v]) v = "objetivos";
   Object.entries(views).forEach(([k, id]) => { document.getElementById(id).hidden = k !== v; });
   document.querySelectorAll("nav.tabs [data-view]").forEach(b => { if (b.dataset.view === v) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
@@ -2293,6 +2334,7 @@ function showView(v){
   if (v === "indicadores") requestAnimationFrame(drawAllCharts);
   if (v === "simulador") requestAnimationFrame(calcSim);
   if (v === "etfs" && typeof renderETFs === "function") renderETFs();
+  if (v === "acoes" && typeof renderAcoes === "function") renderAcoes();
   if (v === "alfred") {
     const f = document.getElementById("alfred-frame");
     document.documentElement.style.setProperty("--hdr", document.querySelector("header.site").offsetHeight + "px");
@@ -2305,7 +2347,7 @@ document.querySelectorAll("nav.tabs [data-view]").forEach(b => b.addEventListene
   window.scrollTo({top:0});
 }));
 renderIndicadores();
-{ const hv = (location.hash || "").slice(1); if (hv === "indicadores" || hv === "simulador" || hv === "alfred" || hv === "etfs") showView(hv); }
+{ const hv = (location.hash || "").slice(1); if (hv === "indicadores" || hv === "simulador" || hv === "alfred" || hv === "etfs" || hv === "acoes") showView(hv); }
 /* No site publicado, busca os dados mais recentes gravados pelo coletor diário */
 if (location.protocol.startsWith("http")){
   fetch("dados/indicadores.json?v=" + Date.now(), {cache:"no-store"})
@@ -2671,6 +2713,110 @@ function renderETFs(){
   }));
 }
 if (!document.getElementById("view-etfs").hidden) renderETFs();
+</script>
+<script>
+/* ===== Ações da B3: tabela de indicadores (página #acoes) ===== */
+let AC = null, acCarregando = false;
+const acEst = {q:"", setor:"", liq:1e6, ord:"vm", dir:-1};
+const AC_COLS = [
+  {k:"tk", t:"Ação", f:"tk"},
+  {k:"setor", t:"Setor", f:"tx"},
+  {k:"preco", t:"Cotação", f:"rs"},
+  {k:"p_l", t:"P/L", f:"x", g:1, d:"Preço dividido pelo lucro por ação dos últimos 12 meses. Quantos anos de lucro atual o preço paga."},
+  {k:"p_vp", t:"P/VP", f:"x", d:"Preço dividido pelo patrimônio líquido por ação. Abaixo de 1, a bolsa paga menos que o valor contábil."},
+  {k:"ev_ebitda", t:"EV/EBITDA", f:"x", d:"Valor da firma (valor de mercado + dívida líquida) dividido pelo EBITDA de 12 meses. Compara empresas com endividamentos diferentes."},
+  {k:"ev_ebit", t:"EV/EBIT", f:"x", d:"Como o EV/EBITDA, mas desconta a depreciação. Mais justo com empresas que precisam reinvestir muito em ativos."},
+  {k:"dy", t:"DY", f:"pct", g:1, d:"Dividend yield: dividendos e JCP pagos nos últimos 12 meses (fluxo de caixa) divididos pelo valor de mercado."},
+  {k:"roe", t:"ROE", f:"pct", d:"Lucro de 12 meses dividido pelo patrimônio líquido. Mede quanto a empresa gera sobre o capital dos sócios."},
+  {k:"m_ebitda", t:"Mg. EBITDA", f:"pct", d:"EBITDA dividido pela receita. Eficiência operacional antes de juros, impostos e depreciação."},
+  {k:"m_liq", t:"Mg. líquida", f:"pct", d:"Lucro líquido dividido pela receita."},
+  {k:"dl_ebitda", t:"Dív. líq./EBITDA", f:"x", g:1, d:"Quantos anos de EBITDA pagariam a dívida líquida. Negativo indica caixa maior que a dívida."},
+  {k:"cagr5", t:"CAGR lucro 5a", f:"pct", d:"Crescimento médio anual do lucro entre o exercício de 5 anos atrás e o último exercício fechado. Só aparece se os dois lucros forem positivos."},
+  {k:"liq", t:"Liquidez/dia", f:"bi", g:1, d:"Volume financeiro médio negociado por dia nos últimos 2 meses, no código mais líquido."},
+  {k:"vm", t:"Valor de mercado", f:"bi"},
+  {k:"lucro", t:"Lucro 12m", f:"bi"},
+  {k:"ebitda", t:"EBITDA 12m", f:"bi"},
+  {k:"div_liq", t:"Dívida líquida", f:"bi"},
+];
+function acEsc(s){ return String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function acFmt(v, f){
+  if (v === null || v === undefined) return "—";
+  const n = (x, d) => x.toLocaleString("pt-BR", {minimumFractionDigits:d, maximumFractionDigits:d});
+  if (f === "x") return n(v, 1) + "x";
+  if (f === "pct") return n(v * 100, 1) + "%";
+  if (f === "rs") return n(v, 2);
+  if (f === "bi"){
+    const a = Math.abs(v);
+    if (a >= 1e9) return n(v / 1e9, 1) + " bi";
+    if (a >= 1e6) return n(v / 1e6, 1) + " mi";
+    if (a >= 1e3) return n(v / 1e3, 0) + " mil";
+    return n(v, 0);
+  }
+  return acEsc(v);
+}
+function acData(s){ return s && s.length >= 8 ? (s.includes("-") ? s.split("-").reverse().join("/") : s.slice(6,8) + "/" + s.slice(4,6) + "/" + s.slice(0,4)) : ""; }
+function renderAcoes(){
+  const app = document.getElementById("ac-app");
+  if (!AC){
+    if (acCarregando) return;
+    acCarregando = true;
+    fetch("dados/acoes.json?v=" + Date.now(), {cache:"no-store"})
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(d => { AC = d; acCarregando = false; renderAcoes(); })
+      .catch(() => { acCarregando = false; app.innerHTML = '<p class="muted">Não foi possível carregar as ações agora. Tente de novo em instantes.</p>'; });
+    return;
+  }
+  if (!app.querySelector(".ac-ctl")){
+    const setores = [...new Set(AC.acoes.map(a => a.setor))].sort((a, b) => a.localeCompare(b, "pt-BR"));
+    const glos = AC_COLS.filter(c => c.d).map(c => `<div><dt>${c.t}</dt><dd>${c.d}</dd></div>`).join("");
+    app.innerHTML = `
+      <div class="ac-ctl">
+        <input type="search" id="ac-q" placeholder="Buscar código ou empresa" aria-label="Buscar código ou empresa">
+        <label>Setor <select id="ac-setor"><option value="">Todos</option>${setores.map(x => `<option>${acEsc(x)}</option>`).join("")}</select></label>
+        <label>Liquidez mínima <select id="ac-liq">
+          <option value="0">Qualquer</option><option value="1000000" selected>R$ 1 mi/dia</option><option value="10000000">R$ 10 mi/dia</option><option value="50000000">R$ 50 mi/dia</option></select></label>
+      </div>
+      <p class="ac-meta" id="ac-meta"></p>
+      <div class="ac-scroll"><table class="ac-tab"><thead><tr>${AC_COLS.map(c => `<th scope="col" data-ack="${c.k}" class="${c.f === "tx" || c.f === "tk" ? "tx" : ""}${c.g ? " grp" : ""}" ${c.d ? `title="${acEsc(c.d)}"` : ""}>${c.t}</th>`).join("")}</tr></thead><tbody id="ac-body"></tbody></table></div>
+      <details class="ac-glos"><summary>Os 10 indicadores de valuation, a liquidez e como foram calculados</summary><dl>${glos}</dl>
+        <p class="muted" style="font-size:.86rem;margin:0 0 14px">Valores de 12 meses somam o último exercício anual com o acumulado do ano e descontam o mesmo período do ano anterior. EBITDA = resultado antes do resultado financeiro e dos tributos + depreciação e amortização da demonstração de fluxo de caixa. Dívida líquida = empréstimos e financiamentos (curto e longo prazo) − caixa e aplicações financeiras. Para bancos, seguradoras e financeiras, EBITDA, margens e dívida não se aplicam e aparecem como "—".</p></details>
+      <p class="ac-aviso">Fontes: demonstrações financeiras da CVM (Dados Abertos, ITR e DFP) e cotações históricas da B3, com atraso de um pregão. Os números são calculados automaticamente, podem conter erros ou ajustes contábeis não captados e não constituem recomendação de compra ou venda.</p>`;
+    app.querySelector("#ac-q").addEventListener("input", e => { acEst.q = e.target.value.trim().toUpperCase(); acLinhas(); });
+    app.querySelector("#ac-setor").addEventListener("change", e => { acEst.setor = e.target.value; acLinhas(); });
+    app.querySelector("#ac-liq").addEventListener("change", e => { acEst.liq = +e.target.value; acLinhas(); });
+    app.querySelectorAll("th[data-ack]").forEach(th => th.addEventListener("click", () => {
+      const k = th.dataset.ack;
+      if (acEst.ord === k) acEst.dir = -acEst.dir;
+      else { acEst.ord = k; acEst.dir = (k === "tk" || k === "setor" || ["p_l","p_vp","ev_ebitda","ev_ebit","dl_ebitda"].includes(k)) ? 1 : -1; }
+      acLinhas();
+    }));
+  }
+  acLinhas();
+}
+function acLinhas(){
+  const {q, setor, liq, ord, dir} = acEst;
+  let L = AC.acoes.filter(a => (a.liq || 0) >= liq && (!setor || a.setor === setor)
+    && (!q || a.tk.includes(q) || a.nome.toUpperCase().includes(q) || (a.outros || []).some(t => t.includes(q))));
+  const txt = ord === "tk" || ord === "setor";
+  L.sort((a, b) => {
+    const x = a[ord], y = b[ord];
+    if (x === null || x === undefined) return (y === null || y === undefined) ? 0 : 1;
+    if (y === null || y === undefined) return -1;
+    return txt ? dir * String(x).localeCompare(String(y), "pt-BR") : dir * (x - y);
+  });
+  document.querySelectorAll("#view-acoes th[data-ack]").forEach(th => {
+    if (th.dataset.ack === ord) th.setAttribute("aria-sort", dir > 0 ? "ascending" : "descending"); else th.removeAttribute("aria-sort");
+  });
+  document.getElementById("ac-body").innerHTML = L.map(a => "<tr>" + AC_COLS.map(c => {
+    const v = a[c.k];
+    if (c.f === "tk") return `<td><span class="tk">${acEsc(a.tk)}</span><span class="nm" title="${acEsc(a.nome)}">${acEsc(a.nome)}${a.outros && a.outros.length ? " · " + a.outros.map(acEsc).join(", ") : ""}</span></td>`;
+    if (c.f === "tx") return `<td class="tx" title="${acEsc(v)}">${acEsc(v)}</td>`;
+    const cls = [c.g ? "grp" : "", v === null || v === undefined ? "na" : "", typeof v === "number" && v < 0 && c.k !== "dl_ebitda" && c.k !== "div_liq" ? "neg" : ""].join(" ").trim();
+    return `<td${cls ? ` class="${cls}"` : ""}>${acFmt(v, c.f)}</td>`;
+  }).join("") + "</tr>").join("");
+  document.getElementById("ac-meta").textContent = `${L.length} de ${AC.acoes.length} empresas · cotações do pregão de ${acData(AC.pregao)} · dados gerados em ${acData((AC.gerado_em || "").slice(0,10))}`;
+}
+if (!document.getElementById("view-acoes").hidden) renderAcoes();
 </script>
 </body>
 </html>
