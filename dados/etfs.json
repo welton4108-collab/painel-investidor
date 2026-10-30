@@ -35,7 +35,7 @@
   {
    "id": "caixa",
    "titulo": "Caixa e liquidez",
-   "prazo": "Uso a qualquer momento",
+   "prazo": "Qualquer momento",
    "para": "Caixa de oportunidade, segunda camada da reserva e dinheiro de curto prazo para quem prefere manter tudo na corretora.",
    "estrategia": "Tesouro Selic, que rende perto do CDI. Os ETFs “Selic 15%” somam ao Tesouro Selic uma fatia pequena de NTN-B longa, o que leva o IR para 15% desde o primeiro dia.",
    "imposto": "15% nos ETFs híbridos (Tesouro Selic + NTN-B longa) e 25% nos ETFs só de Tesouro Selic. Retido na fonte, sem come-cotas e sem IOF.",
@@ -580,7 +580,7 @@
   {
    "id": "dolar",
    "titulo": "Dólar e viagens",
-   "prazo": "Até 2 anos, em dólar",
+   "prazo": "Até 2 anos",
    "para": "Juntar dinheiro para viagem ou gasto em dólar, comprando aos poucos para fazer preço médio.",
    "estrategia": "Contratos futuros de dólar na B3 com o caixa aplicado em Tesouro Selic. O resultado fica próximo da variação do dólar somada ao juro em dólar de curto prazo.",
    "imposto": "15% sobre o ganho na venda, via DARF, sem a isenção de R$ 20 mil. Sem IOF na compra.",
@@ -642,16 +642,117 @@
    "quero": "Quero dólar para viagens",
    "sub": "Juntar aos poucos para gastar em dólar",
    "cor": "#C4553F"
+  },
+  {
+   "id": "cripto",
+   "titulo": "Criptomoedas",
+   "quero": "Quero investir em cripto",
+   "sub": "Fatia pequena, com dinheiro que aceito ver oscilar muito",
+   "prazo": "Fatia pequena",
+   "cor": "#D9730D",
+   "para": "Para quem quer exposição a bitcoin pela bolsa, sem corretora de cripto nem carteira digital.",
+   "estrategia": "Bitcoin pelo ETF mais barato. As cestas de várias moedas custam mais e, na prática, concentram em bitcoin e ethereum.",
+   "imposto": "15% sobre o ganho na venda, via DARF, sem a isenção de R$ 20 mil. Sem IOF e sem declarar cripto no exterior.",
+   "cuidado": "O bitcoin já caiu mais de 70% em ciclos anteriores. Fica fora do núcleo: se entrar, em fatia pequena, que você aceite ver cair mais da metade, e nunca com dinheiro de objetivos com data.",
+   "etfs": [
+    {
+     "ticker": "HODL11",
+     "nome": "Investo Bitcoin",
+     "gestora": "Investo",
+     "replica": "Bitcoin",
+     "taxa": 0.4,
+     "pl_bi": 0.3,
+     "liquidez": "baixa",
+     "ir": "15%",
+     "desde": "2025-02",
+     "estrelas": 5,
+     "nota": "A menor taxa entre os ETFs de bitcoin com tamanho razoável. Negocia cerca de R$ 2 milhões por dia."
+    },
+    {
+     "ticker": "BITH11",
+     "nome": "Hashdex Bitcoin",
+     "gestora": "Hashdex",
+     "replica": "Bitcoin",
+     "taxa": 0.7,
+     "pl_bi": 1.46,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2021-08",
+     "estrelas": 3,
+     "nota": "Grande e com histórico desde 2021, mas a taxa é quase o dobro da do HODL11."
+    },
+    {
+     "ticker": "QBTC11",
+     "nome": "QR Bitcoin",
+     "gestora": "QR Asset",
+     "replica": "Bitcoin",
+     "taxa": 0.7,
+     "pl_bi": 0.6,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2021-06",
+     "estrelas": 3,
+     "nota": "O pioneiro no Brasil. Mesma taxa do BITH11."
+    },
+    {
+     "ticker": "HASH11",
+     "nome": "Hashdex Nasdaq Crypto Index",
+     "gestora": "Hashdex",
+     "replica": "Cesta de criptomoedas (Nasdaq Crypto Index)",
+     "taxa": 1.3,
+     "pl_bi": 2.77,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2021-04",
+     "estrelas": 2,
+     "nota": "O maior e mais negociado, mas a taxa total de 1,30% é a mais alta do grupo."
+    },
+    {
+     "ticker": "EBIT11",
+     "nome": "Empiricus Bitcoin",
+     "gestora": "Empiricus",
+     "replica": "Bitcoin",
+     "taxa": 0.39,
+     "pl_bi": 0.05,
+     "liquidez": "baixa",
+     "ir": "15%",
+     "desde": "2025-07",
+     "estrelas": 2,
+     "nota": "Taxa baixa, mas muito pequeno e com pouca negociação."
+    },
+    {
+     "ticker": "BITI11",
+     "nome": "It Now Bitcoin",
+     "gestora": "Itaú",
+     "replica": "Bitcoin",
+     "taxa": 0.7,
+     "pl_bi": 0.45,
+     "liquidez": "baixa",
+     "ir": "15%",
+     "desde": "2022-11",
+     "estrelas": 2,
+     "nota": "Mesma taxa dos pares mais caros, com liquidez baixa."
+    },
+    {
+     "ticker": "BITC11",
+     "nome": "BTG Bitcoin",
+     "gestora": "BTG Pactual",
+     "replica": "Bitcoin",
+     "taxa": 0.65,
+     "pl_bi": 0.05,
+     "liquidez": "baixa",
+     "ir": "15%",
+     "desde": "2025-09",
+     "estrelas": 1,
+     "nota": "Pequeno e novo."
+    }
+   ]
   }
  ],
  "satelites": [
   [
    "Ouro (GOLD11)",
    "Proteção em crises, mas não gera renda. Se entrar, em fatia pequena."
-  ],
-  [
-   "Criptomoedas (HASH11, HODL11)",
-   "Volatilidade extrema. Fora do núcleo; no máximo uma fatia que a pessoa aceite perder."
   ],
   [
    "Setoriais (FIND11, MATB11 e outros)",
