@@ -165,7 +165,7 @@ def deprec(c):
 def proventos(c):
     tot = 0.0
     for cd, (ds, v) in c.items():
-        if cd.startswith("6.03.") and nivel(cd) == 3 and re.search(r"dividendo|juros sobre (o )?capital", ds, re.I) and not re.search(r"n[ãa]o controlador|recebid", ds, re.I) and v < 0:
+        if cd.startswith("6.03.") and nivel(cd) == 3 and re.search(r"dividendo|juros sobre (o )?capital|\bJCP\b|provento|remunera[çc][ãa]o aos acionistas", ds, re.I) and not re.search(r"n[ãa]o[ -]?controlador|minorit|recebid|dissident", ds, re.I) and v < 0:
             tot += -v
     return tot
 
@@ -332,6 +332,12 @@ def main():
         cad_r = empresas.get(cnpj)
         if not cad_r:
             continue
+        # classes negociadas que o FCA não lista (ex.: só a unit cadastrada)
+        tks = dict(tks)
+        for pre in {t[:4] for t in tks}:
+            for suf, cl in (("3", "ON"), ("4", "PN"), ("5", "PN"), ("6", "PN")):
+                if pre + suf not in tks and pre + suf in hist:
+                    tks[pre + suf] = cl
         mk = {tk: mercado(tk) for tk in tks}
         mk = {tk: m for tk, m in mk.items() if m}
         if not mk:
@@ -430,23 +436,6 @@ def main():
     for r in linhas:
         if r["tk"] in ("PETR4", "VALE3", "ITUB4", "WEGE3", "BBSE3", "BBAS3"):
             log("DIAG " + json.dumps(r, ensure_ascii=False))
-    for r in linhas:
-        if r["tk"] in ("ITUB4", "BBSE3"):
-            cnpj = next(c for c, t in tickers.items() if r["tk"] in t)
-            ult = sorted(x for x in dm.dados[cnpj] if "DRE" in dm.dados[cnpj][x])[-1]
-            for cd, ds, v, o, ini, fim in dm.linhas(cnpj, ult, "DRE"):
-                if o == "ÚLTIMO" and nivel(cd) <= 3:
-                    log(f"DRE {r['tk']} {ini}..{fim} {cd} {ds} {v:,.0f}")
-    for r in linhas:
-        if r["tk"] in ("B3SA3", "AXIA3", "PLPL3", "SMFT3"):
-            cnpj = next(c for c, t in tickers.items() if r["tk"] in t)
-            ult = sorted(x for x in dm.dados[cnpj] if "DFC_MI" in dm.dados[cnpj][x])[-1]
-            for cd, ds, v, o, ini, fim in dm.linhas(cnpj, ult, "DFC_MI"):
-                if o == "ÚLTIMO" and cd.startswith("6.03"):
-                    log(f"DFC {r['tk']} {ini}..{fim} {cd} {ds} {v:,.0f}")
-    for c, t in tickers.items():
-        if "KLBN11" in t:
-            log(f"KLBN {t} units={units.get('KLBN11')} cap={dm.cap.get(c)}")
     os.makedirs(os.path.dirname(SAIDA), exist_ok=True)
     with open(SAIDA, "w", encoding="utf-8") as f:
         json.dump({"gerado_em": datetime.now().strftime("%Y-%m-%dT%H:%M"), "pregao": ultimo_pregao,
