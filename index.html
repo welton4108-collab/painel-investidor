@@ -2357,6 +2357,11 @@ document.querySelectorAll("nav.tabs [data-view]").forEach(b => b.addEventListene
 }));
 renderIndicadores();
 { const hv = (location.hash || "").slice(1); if (hv === "indicadores" || hv === "simulador" || hv === "alfred" || hv === "etfs" || hv === "acoes") showView(hv); }
+/* Troca de aba quando só o endereço muda (ex.: digitar #acoes com o site já aberto) */
+window.addEventListener("hashchange", () => {
+  const hv = (location.hash || "").slice(1);
+  if (["indicadores","simulador","alfred","etfs","acoes"].includes(hv)) { showView(hv); window.scrollTo({top:0}); }
+});
 /* No site publicado, busca os dados mais recentes gravados pelo coletor diário */
 if (location.protocol.startsWith("http")){
   fetch("dados/indicadores.json?v=" + Date.now(), {cache:"no-store"})
