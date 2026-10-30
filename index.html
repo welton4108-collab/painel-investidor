@@ -398,8 +398,41 @@ footer p + p{margin-top:8px}
   .etf-tab{display:none}
   .etf-cards{display:grid;gap:10px}
   .etf-top{grid-template-columns:1fr auto}
-  .etf-top .nm{grid-column:1/-1;order:3}
+  .etf-top .nm{grid-column:1/-1;order:1} .etf-top .etf-kpis{order:2} .etf-top .nt{order:3}
 }
+/* ETFs: cards de objetivo e painel */
+.etf-intro{color:var(--muted);margin:4px 0 12px}
+.etf-objs{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));grid-auto-flow:row dense;gap:12px}
+.etf-obj{--c:var(--accent);font:inherit;color:inherit;text-align:left;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:16px;padding:16px 18px;display:grid;gap:6px;align-content:start;scroll-margin-top:12px;transition:background .15s,border-color .15s}
+.etf-obj:hover{border-color:var(--c)}
+.etf-obj.ab{background:color-mix(in srgb, var(--c) 10%, var(--surface));border-color:var(--c)}
+.etf-obj .etf-prazo,.etf-painel .etf-prazo{justify-self:start;background:color-mix(in srgb, var(--c) 15%, transparent);color:var(--c)}
+.etf-obj .q{font:700 1.12rem/1.25 var(--f-display)}
+.etf-obj .sb{color:var(--muted);font-size:.9rem}
+.etf-obj .ft{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px;margin-top:6px;padding-top:10px;border-top:1px dashed var(--line);font-size:.86rem}
+.etf-obj .ft b{font-family:var(--f-data);color:var(--c)}
+.etf-obj .vr{font-weight:700;color:var(--c)}
+.etf-painel{--c:var(--accent);grid-column:1/-1;background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:18px;padding:20px 22px;animation:etfAbre .2s ease-out}
+@keyframes etfAbre{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.etf-painel{animation:none}}
+.etf-ph{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:8px 14px}
+.etf-eb{font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--c)}
+.etf-painel h2{font-size:clamp(1.35rem,3.5vw,1.8rem);margin-top:2px}
+.etf-painel .etf-para{margin:6px 0 16px}
+.etf-painel .etf-top{border-color:var(--c);background:color-mix(in srgb, var(--c) 9%, var(--surface))}
+.etf-painel .etf-top .lab{color:var(--c)}
+.etf-painel .etf-top .tk{color:var(--c);font-size:2rem}
+.etf-top .rp{display:block;font-weight:400;font-size:.88rem;color:var(--muted)}
+.etf-sub{font-size:1.02rem;margin:4px 0 10px}
+.etf-tab tr.l1 td:first-child,.etf-tab tr.l2 td:first-child{box-shadow:inset 4px 0 0 var(--sc, var(--line))}
+.etf-tab .s4{--sc:var(--z-ade)} .etf-tab .s3{--sc:var(--z-res)} .etf-tab .s2,.etf-tab .s1{--sc:var(--z-nao)}
+.etf-card{border-left:5px solid var(--sc, var(--line))}
+.etf-card.s4{--sc:var(--z-ade)} .etf-card.s3{--sc:var(--z-res)} .etf-card.s2,.etf-card.s1{--sc:var(--z-nao)}
+.etf-painel .etf-info{margin:18px 0 0}
+.etf-painel .etf-info > div{background:var(--bg)}
+.etf-painel .etf-info b{color:var(--c)}
+.etf-painel .etf-info .cuid b{color:var(--z-res)}
+@media (max-width:820px){ .etf-painel{padding:16px} .etf-objs{grid-template-columns:1fr} }
 #view-alfred iframe{display:block;width:100%;height:calc(100dvh - var(--hdr, 120px));min-height:480px;border:0;background:var(--bg)}
 nav.tabs .sm{display:none}
 @media (max-width:560px){
@@ -991,7 +1024,7 @@ nav.tabs .sm{display:none}
     <div>
       <div class="eyebrow">ETFs por objetivo</div>
       <h1>Qual ETF para cada objetivo</h1>
-      <p class="lede">Uma seleção de ETFs da B3 por finalidade: o que cada um compra, quanto custa por ano, como é o imposto e qual é a escolha do painel. Toque nas estrelas para ver o que cada nota significa.</p>
+      <p class="lede">Comece pelo objetivo. Para cada um, uma seleção de ETFs da B3: o que cada um compra, quanto custa por ano, como é o imposto e qual é a escolha do painel. Toque nas estrelas para ver o que cada nota significa.</p>
     </div>
   </section>
   <div id="etf-app"><p class="muted">Carregando a seleção…</p></div>
@@ -2514,9 +2547,51 @@ const etfPct = v => v.toLocaleString("pt-BR", {minimumFractionDigits:2, maximumF
 const etfCusto = v => "R$ " + Math.round(v * 1000).toLocaleString("pt-BR");
 const etfPL = v => v >= 1 ? "R$ " + v.toLocaleString("pt-BR", {maximumFractionDigits:1}) + " bi" : "R$ " + Math.round(v * 1000).toLocaleString("pt-BR") + " mi";
 const etfDesde = s => { const [a, m] = String(s).split("-"); return ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"][+m - 1] + "/" + a; };
+const etfOrdem = g => g.etfs.slice().sort((a, b) => b.estrelas - a.estrelas || a.taxa - b.taxa);
 function etfStars(n){
-  const leg = (ETF && ETF.legenda && ETF.legenda[n]) || "";
+  const leg = (ETF.legenda && ETF.legenda[n]) || "";
   return `<span class="stars" tabindex="0" role="img" aria-label="${n} de 5 estrelas: ${etfEsc(leg)}" data-tip-title="${"★".repeat(n)} ${etfEsc(leg)}" data-tip="${etfEsc(Object.entries(ETF.legenda).reverse().map(([k, v]) => "★".repeat(+k) + " " + v).join(" · "))}">${"★".repeat(n)}<i>${"★".repeat(5 - n)}</i></span>`;
+}
+function etfPainel(g){
+  const ord = etfOrdem(g), top = ord[0], demais = ord.slice(1);
+  const temRet = g.etfs.some(x => x.retencao);
+  const retTip = 'data-tip-title="Retenção nos dividendos" data-tip="Imposto cobrado lá fora sobre os dividendos das empresas, antes de chegarem ao ETF. Fundos americanos perdem 30%; fundos irlandeses (UCITS) perdem 15% nos dividendos americanos. Não aparece na taxa, mas reduz o retorno todo ano."';
+  const linhas = demais.map(x => `<tr class="l1 s${x.estrelas}">
+      <td><span class="tk">${x.ticker}</span><span class="gs">${etfEsc(x.gestora)}</span></td>
+      <td>${etfEsc(x.replica)}</td>
+      <td class="num">${etfPct(x.taxa)}</td>
+      <td class="num">${etfCusto(x.taxa)}</td>
+      <td class="num">${etfEsc(x.ir)}</td>${temRet ? `<td>${etfEsc(x.retencao || "")}</td>` : ""}
+      <td class="num">${etfPL(x.pl_bi)}</td>
+      <td><span class="liq ${x.liquidez}">${x.liquidez}</span></td>
+      <td>${etfStars(x.estrelas)}</td>
+    </tr><tr class="l2 s${x.estrelas}"><td></td><td colspan="${temRet ? 8 : 7}">${etfEsc(x.nota)} <span class="gs" style="display:inline">· na B3 desde ${etfDesde(x.desde)}</span></td></tr>`).join("");
+  const cards = demais.map(x => `<article class="etf-card s${x.estrelas}">
+      <div class="r1"><span class="tk">${x.ticker}</span>${etfStars(x.estrelas)}</div>
+      <div>${etfEsc(x.replica)} <span class="muted" style="font-size:.82rem">· ${etfEsc(x.gestora)}</span></div>
+      <dl><div><dt>Taxa ao ano</dt><dd>${etfPct(x.taxa)}</dd></div><div><dt>Custo em R$ 100 mil</dt><dd>${etfCusto(x.taxa)}/ano</dd></div>
+      <div><dt>Imposto</dt><dd>${etfEsc(x.ir)}</dd></div>${x.retencao ? `<div><dt>Retenção lá fora</dt><dd>${etfEsc(x.retencao)}</dd></div>` : ""}<div><dt>Tamanho · liquidez</dt><dd>${etfPL(x.pl_bi)} · <span class="liq ${x.liquidez}">${x.liquidez}</span></dd></div></dl>
+      <p>${etfEsc(x.nota)}</p>
+    </article>`).join("");
+  return `<section class="etf-painel" id="etf-painel" style="--c:${g.cor}" aria-label="${etfEsc(g.titulo)}">
+    <div class="etf-ph"><div><div class="etf-eb">${etfEsc(g.quero)}</div><h2>${etfEsc(g.titulo)}</h2></div><span class="etf-prazo">${etfEsc(g.prazo)}</span></div>
+    <p class="etf-para">${etfEsc(g.para)}</p>
+    <div class="etf-top">
+      <div><div class="lab">Escolha do painel</div><div class="tk">${top.ticker}</div></div>
+      <div class="nm">${etfEsc(top.nome)} <span class="muted">· ${etfEsc(top.gestora)}</span><span class="rp">${etfEsc(top.replica)}</span></div>
+      ${etfStars(top.estrelas)}
+      <div class="etf-kpis"><span>Taxa <b>${etfPct(top.taxa)}</b> ao ano</span><span>Custo <b>${etfCusto(top.taxa)}</b> por ano a cada R$ 100 mil</span><span>IR <b>${etfEsc(top.ir)}</b></span>${top.retencao ? `<span ${retTip}>Retenção lá fora <b>${etfEsc(top.retencao)}</b> ⓘ</span>` : ""}<span>Tamanho <b>${etfPL(top.pl_bi)}</b></span><span>Liquidez <span class="liq ${top.liquidez}">${top.liquidez}</span></span></div>
+      <div class="nt">${etfEsc(top.nota)}</div>
+    </div>
+    <h3 class="etf-sub">As outras opções</h3>
+    <table class="etf-tab"><thead><tr><th>ETF</th><th>O que compra</th><th class="num">Taxa a.a.</th><th class="num" data-tip-title="Custo em R$ 100 mil" data-tip="Quanto a taxa de administração consome por ano de um investimento de R$ 100 mil.">Custo/ano ⓘ</th><th class="num">IR</th>${temRet ? `<th ${retTip}>Retenção lá fora ⓘ</th>` : ""}<th class="num">Tamanho</th><th>Liquidez</th><th>Nota</th></tr></thead><tbody>${linhas}</tbody></table>
+    <div class="etf-cards">${cards}</div>
+    <div class="etf-info">
+      <div><b>Estratégia</b>${etfEsc(g.estrategia)}</div>
+      <div><b>Imposto</b>${etfEsc(g.imposto)}</div>
+      <div class="cuid"><b>Cuidado</b>${etfEsc(g.cuidado)}</div>
+    </div>
+  </section>`;
 }
 function renderETFs(){
   const app = document.getElementById("etf-app");
@@ -2529,56 +2604,30 @@ function renderETFs(){
       .catch(() => { etfCarregando = false; app.innerHTML = '<p class="muted">Não foi possível carregar a lista de ETFs agora. Tente de novo em instantes.</p>'; });
     return;
   }
-  if (!etfGrupo) etfGrupo = ETF.grupos[0].id;
-  const g = ETF.grupos.find(x => x.id === etfGrupo) || ETF.grupos[0];
-  const ord = g.etfs.slice().sort((a, b) => b.estrelas - a.estrelas || a.taxa - b.taxa);
-  const top = ord[0];
-  const temRet = g.etfs.some(x => x.retencao);
-  const retTip = 'data-tip-title="Retenção nos dividendos" data-tip="Imposto cobrado lá fora sobre os dividendos das empresas, antes de chegarem ao ETF. Fundos americanos perdem 30%; fundos irlandeses (UCITS) perdem 15% nos dividendos americanos. Não aparece na taxa, mas reduz o retorno todo ano."';
-  const mapa = ETF.grupos.map(x => {
-    const t = x.etfs.slice().sort((a, b) => b.estrelas - a.estrelas || a.taxa - b.taxa)[0];
-    return `<button type="button" class="etf-mini" data-etfg="${x.id}" aria-pressed="${x.id === g.id}"><small>${etfEsc(x.titulo)}</small><b>${t.ticker}</b><span>${etfPct(t.taxa)} ao ano</span></button>`;
+  const objs = ETF.grupos.map(g => {
+    const t = etfOrdem(g)[0], ab = g.id === etfGrupo;
+    return `<button type="button" class="etf-obj${ab ? " ab" : ""}" data-etfg="${g.id}" aria-expanded="${ab}" aria-controls="etf-painel" style="--c:${g.cor}">
+        <span class="etf-prazo">${etfEsc(g.prazo)}</span>
+        <span class="q">${etfEsc(g.quero)}</span>
+        <span class="sb">${etfEsc(g.sub)}</span>
+        <span class="ft"><span>Escolha: <b>${t.ticker}</b> · ${etfPct(t.taxa)} ao ano</span><span class="vr">${ab ? "Fechar" : "Ver ETFs"} <i aria-hidden="true">${ab ? "▴" : "▾"}</i></span></span>
+      </button>${ab ? etfPainel(g) : ""}`;
   }).join("");
-  const linhas = ord.map(x => `<tr class="l1${x === top ? " pick" : ""}">
-      <td><span class="tk">${x.ticker}</span><span class="gs">${etfEsc(x.gestora)}</span></td>
-      <td>${etfEsc(x.replica)}</td>
-      <td class="num">${etfPct(x.taxa)}</td>
-      <td class="num">${etfCusto(x.taxa)}</td>
-      <td class="num">${etfEsc(x.ir)}</td>${temRet ? `<td>${etfEsc(x.retencao || "")}</td>` : ""}
-      <td class="num">${etfPL(x.pl_bi)}</td>
-      <td><span class="liq ${x.liquidez}">${x.liquidez}</span></td>
-      <td>${etfStars(x.estrelas)}</td>
-    </tr><tr class="l2"><td></td><td colspan="${temRet ? 8 : 7}">${etfEsc(x.nota)} <span class="gs" style="display:inline">· na B3 desde ${etfDesde(x.desde)}</span></td></tr>`).join("");
-  const cards = ord.map(x => `<article class="etf-card${x === top ? " pick" : ""}">
-      <div class="r1"><span class="tk">${x.ticker}</span>${etfStars(x.estrelas)}</div>
-      <div>${etfEsc(x.replica)} <span class="muted" style="font-size:.82rem">· ${etfEsc(x.gestora)}</span></div>
-      <dl><div><dt>Taxa ao ano</dt><dd>${etfPct(x.taxa)}</dd></div><div><dt>Custo em R$ 100 mil</dt><dd>${etfCusto(x.taxa)}/ano</dd></div>
-      <div><dt>Imposto</dt><dd>${etfEsc(x.ir)}</dd></div>${x.retencao ? `<div><dt>Retenção nos dividendos lá fora</dt><dd>${etfEsc(x.retencao)}</dd></div>` : ""}<div><dt>Tamanho · liquidez</dt><dd>${etfPL(x.pl_bi)} · <span class="liq ${x.liquidez}">${x.liquidez}</span></dd></div></dl>
-      <p>${etfEsc(x.nota)}</p>
-    </article>`).join("");
   app.innerHTML = `
     ${ETF.status === "proposta" ? '<p class="etf-alerta"><b>Seleção em revisão.</b> As notas ainda estão sendo discutidas e podem mudar.</p>' : ""}
-    <div class="etf-mapa" role="group" aria-label="Objetivos">${mapa}</div>
-    <div class="etf-head"><h2>${etfEsc(g.titulo)}</h2><span class="etf-prazo">${etfEsc(g.prazo)}</span></div>
-    <p class="etf-para">${etfEsc(g.para)}</p>
-    <div class="etf-info">
-      <div><b>Estratégia</b>${etfEsc(g.estrategia)}</div>
-      <div><b>Imposto</b>${etfEsc(g.imposto)}</div>
-      <div class="cuid"><b>Cuidado</b>${etfEsc(g.cuidado)}</div>
-    </div>
-    <div class="etf-top">
-      <div><div class="lab">Escolha do painel</div><div class="tk">${top.ticker}</div></div>
-      <div class="nm">${etfEsc(top.nome)} <span class="muted">· ${etfEsc(top.gestora)}</span></div>
-      ${etfStars(top.estrelas)}
-      <div class="etf-kpis"><span>Taxa <b>${etfPct(top.taxa)}</b> ao ano</span><span>Custo <b>${etfCusto(top.taxa)}</b> por ano a cada R$ 100 mil</span><span>IR <b>${etfEsc(top.ir)}</b></span>${top.retencao ? `<span ${retTip}>Retenção lá fora <b>${etfEsc(top.retencao)}</b> ⓘ</span>` : ""}<span>Liquidez <span class="liq ${top.liquidez}">${top.liquidez}</span></span></div>
-      <div class="nt">${etfEsc(top.nota)}</div>
-    </div>
-    <table class="etf-tab"><thead><tr><th>ETF</th><th>O que compra</th><th class="num">Taxa a.a.</th><th class="num" data-tip-title="Custo em R$ 100 mil" data-tip="Quanto a taxa de administração consome por ano de um investimento de R$ 100 mil.">Custo/ano ⓘ</th><th class="num">IR</th>${temRet ? `<th ${retTip}>Retenção lá fora ⓘ</th>` : ""}<th class="num">Tamanho</th><th>Liquidez</th><th>Nota</th></tr></thead><tbody>${linhas}</tbody></table>
-    <div class="etf-cards">${cards}</div>
+    <p class="etf-intro">Para que é o dinheiro? Escolha um objetivo para ver o ETF escolhido e as alternativas.</p>
+    <div class="etf-objs">${objs}</div>
     <div class="etf-sat"><h3>Fora do núcleo</h3><ul>${ETF.satelites.map(([a, b]) => `<li><b>${etfEsc(a)}:</b> ${etfEsc(b)}</li>`).join("")}</ul></div>
     <details class="etf-crit" style="margin-top:16px"><summary>Como as notas são dadas</summary><ul>${ETF.criterios.map(([a, b]) => `<li><b>${etfEsc(a)}:</b> ${etfEsc(b)}</li>`).join("")}</ul></details>
     <p class="etf-fonte">${etfEsc(ETF.fonte)} Atualizado em ${ETF.atualizado.split("-").reverse().join("/")}. Avaliação pessoal com critérios públicos; não é recomendação individual de investimento. Confira a lâmina do fundo antes de investir.</p>`;
-  app.querySelectorAll("[data-etfg]").forEach(b => b.addEventListener("click", () => { etfGrupo = b.dataset.etfg; renderETFs(); }));
+  app.querySelectorAll("[data-etfg]").forEach(b => b.addEventListener("click", () => {
+    etfGrupo = etfGrupo === b.dataset.etfg ? null : b.dataset.etfg;
+    renderETFs();
+    if (etfGrupo){
+      const btn = document.querySelector(`[data-etfg="${etfGrupo}"]`);
+      requestAnimationFrame(() => btn.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start"}));
+    }
+  }));
 }
 if (!document.getElementById("view-etfs").hidden) renderETFs();
 </script>

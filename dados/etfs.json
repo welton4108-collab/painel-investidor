@@ -145,7 +145,10 @@
      "estrelas": 2,
      "nota": "Sem vantagem sobre o LLFT11."
     }
-   ]
+   ],
+   "quero": "Quero aplicar no curto prazo, com liquidez",
+   "sub": "Dinheiro que posso precisar a qualquer momento",
+   "cor": "#0E8A74"
   },
   {
    "id": "medio",
@@ -273,7 +276,10 @@
      "estrelas": 1,
      "nota": "Crédito privado com a taxa mais alta do grupo. Fica fora do núcleo."
     }
-   ]
+   ],
+   "quero": "Quero usar o dinheiro em até 5 anos",
+   "sub": "Carro, entrada de imóvel, curso, casamento",
+   "cor": "#2E6FB0"
   },
   {
    "id": "inflacao",
@@ -323,7 +329,10 @@
      "estrelas": 2,
      "nota": "Ultralongo: oscila como ação. É mais aposta em queda de juros do que proteção."
     }
-   ]
+   ],
+   "quero": "Quero proteger da inflação no longo prazo",
+   "sub": "Renda fixa da aposentadoria e objetivos longos",
+   "cor": "#B7841A"
   },
   {
    "id": "acoes-br",
@@ -451,7 +460,10 @@
      "estrelas": 1,
      "nota": "Mais risco e mais oscilação. Satélite, não núcleo."
     }
-   ]
+   ],
+   "quero": "Quero ações no Brasil",
+   "sub": "Crescimento em 10 anos ou mais",
+   "cor": "#1F8A4D"
   },
   {
    "id": "acoes-ext",
@@ -560,7 +572,10 @@
      "nota": "Concentrado em tecnologia. Satélite, não núcleo.",
      "retencao": "a confirmar"
     }
-   ]
+   ],
+   "quero": "Quero ações no exterior",
+   "sub": "Diversificar em moeda forte, 10 anos ou mais",
+   "cor": "#6E56CF"
   },
   {
    "id": "dolar",
@@ -623,7 +638,10 @@
      "estrelas": 1,
      "nota": "Ideia interessante, mas muito pequeno e com estratégia de opções."
     }
-   ]
+   ],
+   "quero": "Quero dólar para viagens",
+   "sub": "Juntar aos poucos para gastar em dólar",
+   "cor": "#C4553F"
   }
  ],
  "satelites": [
