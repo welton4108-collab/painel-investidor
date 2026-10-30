@@ -1,0 +1,640 @@
+{
+ "atualizado": "2026-10-30",
+ "status": "proposta",
+ "fonte": "Taxas, patrimônio e liquidez: páginas das gestoras e do ETFs Brasil (out/2026). Liquidez alta: mais de R$ 20 milhões por dia; média: R$ 2 a 20 milhões; baixa: menos de R$ 2 milhões.",
+ "legenda": {
+  "5": "Escolha do painel",
+  "4": "Ótima alternativa",
+  "3": "Funciona, com ressalvas",
+  "2": "Existe opção melhor",
+  "1": "Fora do núcleo"
+ },
+ "criterios": [
+  [
+   "Custo total",
+   "Taxa de administração anual. Em ETF, é quase todo o custo, e ela é cobrada todo ano, em qualquer cenário."
+  ],
+  [
+   "Aderência ao objetivo",
+   "O que o ETF compra precisa combinar com o prazo e o risco do objetivo."
+  ],
+  [
+   "Tamanho e liquidez",
+   "Patrimônio grande e negociação diária alta reduzem o risco de encerramento e o custo para comprar e vender."
+  ],
+  [
+   "Imposto",
+   "Alíquota de IR e forma de cobrança. Nenhum ETF tem come-cotas."
+  ],
+  [
+   "Estrutura e histórico",
+   "Índice transparente, gestora sólida e tempo de mercado para avaliar o desempenho."
+  ]
+ ],
+ "grupos": [
+  {
+   "id": "caixa",
+   "titulo": "Caixa e liquidez",
+   "prazo": "Uso a qualquer momento",
+   "para": "Caixa de oportunidade, segunda camada da reserva e dinheiro de curto prazo para quem prefere manter tudo na corretora.",
+   "estrategia": "Tesouro Selic, que rende perto do CDI. Os ETFs “Selic 15%” somam ao Tesouro Selic uma fatia pequena de NTN-B longa, o que leva o IR para 15% desde o primeiro dia.",
+   "imposto": "15% nos ETFs híbridos (Tesouro Selic + NTN-B longa) e 25% nos ETFs só de Tesouro Selic. Retido na fonte, sem come-cotas e sem IOF.",
+   "cuidado": "A fatia de NTN-B longa (de 8% a 17%, conforme o ETF) faz a cota oscilar quando os juros sobem. Para a reserva de emergência principal, Tesouro Selic direto ou CDB a 100% do CDI continuam na frente. Resgate em 2 dias úteis.",
+   "etfs": [
+    {
+     "ticker": "LFTB11",
+     "nome": "Investo Tesouro Selic 760 dias",
+     "gestora": "Investo",
+     "replica": "Tesouro Selic + cerca de 9% em NTN-B 2060",
+     "taxa": 0.19,
+     "pl_bi": 6.8,
+     "liquidez": "alta",
+     "ir": "15%",
+     "desde": "2024-11",
+     "estrelas": 5,
+     "nota": "O maior e mais negociado da categoria, com histórico desde 2024. Aceito como garantia na B3."
+    },
+    {
+     "ticker": "LTBX11",
+     "nome": "Trend Selic Target 760",
+     "gestora": "XP (Trend)",
+     "replica": "Tesouro Selic + cerca de 8% em NTN-B longa",
+     "taxa": 0.14,
+     "pl_bi": 0.48,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2026-03",
+     "estrelas": 4,
+     "nota": "Mesma receita do LFTB11 com taxa menor. Ainda tem pouco histórico."
+    },
+    {
+     "ticker": "CDIB11",
+     "nome": "It Now Selic Target 800",
+     "gestora": "Itaú",
+     "replica": "Tesouro Selic + NTN-B longa, prazo-alvo de 800 dias",
+     "taxa": 0.15,
+     "pl_bi": 0.41,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2026-06",
+     "estrelas": 4,
+     "nota": "Taxa baixa e mais folga sobre a regra dos 720 dias. Muito novo."
+    },
+    {
+     "ticker": "GPOS11",
+     "nome": "Grão Selic Inteligente",
+     "gestora": "Grão",
+     "replica": "5 Tesouros Selic curtos + a NTN-B mais longa, pesos iguais",
+     "taxa": 0.1,
+     "pl_bi": 0.35,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2026-09",
+     "estrelas": 3,
+     "nota": "O mais barato, mas cerca de 1/6 da carteira fica na NTN-B mais longa: oscila mais que os pares."
+    },
+    {
+     "ticker": "POSB11",
+     "nome": "Galápagos Selic & IPCA+",
+     "gestora": "Galápagos",
+     "replica": "Tesouro Selic + Tesouro IPCA+",
+     "taxa": 0.19,
+     "pl_bi": 0.67,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2026-05",
+     "estrelas": 3,
+     "nota": "Mesma taxa do LFTB11, com menos liquidez e menos histórico."
+    },
+    {
+     "ticker": "LLFT11",
+     "nome": "BTG Tesouro Selic Longo Prazo",
+     "gestora": "BTG Pactual",
+     "replica": "Só Tesouro Selic",
+     "taxa": 0.15,
+     "pl_bi": 4.2,
+     "liquidez": "alta",
+     "ir": "25%",
+     "desde": "2025-06",
+     "estrelas": 3,
+     "nota": "Quase não oscila, mas o IR de 25% pesa. Faz sentido para prazos curtos."
+    },
+    {
+     "ticker": "LFTS11",
+     "nome": "Investo Tesouro Selic",
+     "gestora": "Investo",
+     "replica": "Só Tesouro Selic",
+     "taxa": 0.19,
+     "pl_bi": 2.0,
+     "liquidez": "alta",
+     "ir": "25%",
+     "desde": "2022-11",
+     "estrelas": 2,
+     "nota": "Perdeu o IR de 15% em 2024. Mesma ideia do LLFT11, com taxa maior."
+    },
+    {
+     "ticker": "GLFT11",
+     "nome": "Galápagos Tesouro Selic",
+     "gestora": "Galápagos",
+     "replica": "Só Tesouro Selic (curtos e longos)",
+     "taxa": 0.19,
+     "pl_bi": 0.24,
+     "liquidez": "média",
+     "ir": "25%",
+     "desde": "2025-10",
+     "estrelas": 2,
+     "nota": "Sem vantagem sobre o LLFT11."
+    }
+   ]
+  },
+  {
+   "id": "medio",
+   "titulo": "Objetivos de 1 a 5 anos",
+   "prazo": "1 a 5 anos",
+   "para": "Metas com data e valor: troca de carro, entrada de imóvel, curso, casamento.",
+   "estrategia": "Títulos públicos de prazo curto e médio: NTN-B (IPCA + juro) para proteger o poder de compra, ou prefixados quando a meta é um valor fixo em reais.",
+   "imposto": "15% para carteiras com prazo médio acima de 720 dias, retido na fonte, sem come-cotas.",
+   "cuidado": "ETF não tem vencimento: o preço na saída depende dos juros do dia. Para uma data exata, o título comprado direto, com vencimento casado, protege melhor. Os ETFs “Selic 15%” da seção Caixa também servem aqui.",
+   "etfs": [
+    {
+     "ticker": "B5P211",
+     "nome": "It Now IMA-B 5 P2",
+     "gestora": "Itaú",
+     "replica": "IMA-B 5: NTN-Bs com até 5 anos",
+     "taxa": 0.2,
+     "pl_bi": 4.5,
+     "liquidez": "alta",
+     "ir": "15%",
+     "desde": "2020-11",
+     "estrelas": 5,
+     "nota": "Grande, líquido e com seis anos de histórico. Prazo médio perto de 2 anos."
+    },
+    {
+     "ticker": "PACC11",
+     "nome": "BTG IMA-B 5 P2",
+     "gestora": "BTG Pactual",
+     "replica": "IMA-B 5: NTN-Bs com até 5 anos",
+     "taxa": 0.19,
+     "pl_bi": 2.8,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2024-11",
+     "estrelas": 4,
+     "nota": "Mesmo índice do B5P211, com taxa um pouco menor e menos liquidez."
+    },
+    {
+     "ticker": "GPCA11",
+     "nome": "Grão Tesouro IPCA 2 Anos",
+     "gestora": "Grão",
+     "replica": "Tesouro IPCA+ com prazo médio de 2 anos",
+     "taxa": 0.1,
+     "pl_bi": 0.47,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2026-05",
+     "estrelas": 4,
+     "nota": "O mais barato da categoria. É novo, e o prazo-alvo fica perto do limite de 720 dias do IR de 15%."
+    },
+    {
+     "ticker": "NTNS11",
+     "nome": "Investo Tesouro IPCA+ 0 a 4 anos",
+     "gestora": "Investo",
+     "replica": "Tesouro IPCA+ com vencimento em até 4 anos",
+     "taxa": 0.19,
+     "pl_bi": 0.23,
+     "liquidez": "baixa",
+     "ir": "15%",
+     "desde": "2023-06",
+     "estrelas": 3,
+     "nota": "Boa estrutura, mas negocia cerca de R$ 1 milhão por dia."
+    },
+    {
+     "ticker": "BOL511",
+     "nome": "B-Index IMA-B 5 P2",
+     "gestora": "Bradesco",
+     "replica": "IMA-B 5: NTN-Bs com até 5 anos",
+     "taxa": 0.2,
+     "pl_bi": 0.48,
+     "liquidez": "baixa",
+     "ir": "15%",
+     "desde": "2025-10",
+     "estrelas": 2,
+     "nota": "Igual aos pares, com liquidez baixa."
+    },
+    {
+     "ticker": "IRFM11",
+     "nome": "It Now IRF-M P2",
+     "gestora": "Itaú",
+     "replica": "IRF-M: títulos prefixados",
+     "taxa": 0.2,
+     "pl_bi": 1.2,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2019-09",
+     "estrelas": 3,
+     "nota": "Para metas em valor fixo. Ganha quando os juros caem, perde quando sobem e não protege da inflação."
+    },
+    {
+     "ticker": "5PRE11",
+     "nome": "It Now Pré 5 Anos",
+     "gestora": "Itaú",
+     "replica": "Prefixados com prazo de 5 anos",
+     "taxa": 0.25,
+     "pl_bi": 0.16,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2026-02",
+     "estrelas": 2,
+     "nota": "Mais sensível aos juros que o IRFM11 e mais caro."
+    },
+    {
+     "ticker": "LFIN11",
+     "nome": "BTG Letras Financeiras DI",
+     "gestora": "BTG Pactual",
+     "replica": "Letras financeiras de bancos grandes, pós-fixadas",
+     "taxa": 0.3,
+     "pl_bi": 1.0,
+     "liquidez": "média",
+     "ir": "15%*",
+     "desde": "2025-09",
+     "estrelas": 2,
+     "nota": "Rende acima do CDI, mas tem risco de banco e não tem FGC. *O IR de 15% depende da interpretação do prazo."
+    },
+    {
+     "ticker": "DEBB11",
+     "nome": "BTG Debêntures DI",
+     "gestora": "BTG Pactual",
+     "replica": "Debêntures pós-fixadas",
+     "taxa": 0.6,
+     "pl_bi": 1.4,
+     "liquidez": "média",
+     "ir": "15%*",
+     "desde": "2022-06",
+     "estrelas": 1,
+     "nota": "Crédito privado com a taxa mais alta do grupo. Fica fora do núcleo."
+    }
+   ]
+  },
+  {
+   "id": "inflacao",
+   "titulo": "Proteção da inflação no longo prazo",
+   "prazo": "Mais de 5 anos",
+   "para": "O bloco de renda fixa da aposentadoria e de objetivos longos, como a faculdade dos filhos daqui a 10 anos.",
+   "estrategia": "NTN-Bs de vários vencimentos: IPCA mais juro real. É o “chão” da carteira de longo prazo.",
+   "imposto": "15%, retido na fonte, sem come-cotas.",
+   "cuidado": "Quanto mais longo o título, mais o ETF oscila: em anos de alta de juros, o IMA-B já teve quedas de dois dígitos. Só para dinheiro que pode esperar.",
+   "etfs": [
+    {
+     "ticker": "IMAB11",
+     "nome": "It Now IMA-B",
+     "gestora": "Itaú",
+     "replica": "IMA-B: todas as NTN-Bs do mercado",
+     "taxa": 0.25,
+     "pl_bi": 4.5,
+     "liquidez": "alta",
+     "ir": "15%",
+     "desde": "2019-05",
+     "estrelas": 5,
+     "nota": "O ETF de referência para inflação: diversificado entre vencimentos, grande e líquido."
+    },
+    {
+     "ticker": "IB5M11",
+     "nome": "It Now IMA-B 5+",
+     "gestora": "Itaú",
+     "replica": "IMA-B 5+: NTN-Bs com mais de 5 anos",
+     "taxa": 0.25,
+     "pl_bi": 0.93,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2019-09",
+     "estrelas": 3,
+     "nota": "Mais juro real e mais oscilação. Faz sentido para prazos bem longos."
+    },
+    {
+     "ticker": "PACB11",
+     "nome": "BTG Tesouro IPCA Ultra Longo",
+     "gestora": "BTG Pactual",
+     "replica": "NTN-Bs 2050, 2055 e 2060",
+     "taxa": 0.19,
+     "pl_bi": 1.4,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2024-07",
+     "estrelas": 2,
+     "nota": "Ultralongo: oscila como ação. É mais aposta em queda de juros do que proteção."
+    }
+   ]
+  },
+  {
+   "id": "acoes-br",
+   "titulo": "Ações no Brasil",
+   "prazo": "10 anos ou mais",
+   "para": "Crescimento do patrimônio no longo prazo, ao lado das ações globais.",
+   "estrategia": "Comprar a bolsa brasileira inteira de forma barata: Ibovespa (as maiores empresas) ou IDIV (as que mais pagam dividendos).",
+   "imposto": "15% sobre o ganho na venda, recolhido pelo investidor via DARF. ETF de ações não tem a isenção de R$ 20 mil por mês. Os dividendos são reinvestidos dentro do fundo.",
+   "cuidado": "Pode cair de 30% a 50% numa crise e levar anos para voltar. Só com prazo longo e aportes constantes.",
+   "etfs": [
+    {
+     "ticker": "DIVO11",
+     "nome": "It Now IDIV",
+     "gestora": "Itaú",
+     "replica": "IDIV: empresas que mais pagam dividendos",
+     "taxa": 0.5,
+     "pl_bi": 2.6,
+     "liquidez": "alta",
+     "ir": "15%",
+     "desde": "2012-01",
+     "estrelas": 5,
+     "nota": "Escolha atual do painel para ações Brasil. Custa até 25 vezes mais que os ETFs de Ibovespa mais baratos."
+    },
+    {
+     "ticker": "BBOV11",
+     "nome": "BB ETF Ibovespa",
+     "gestora": "BB DTVM",
+     "replica": "Ibovespa",
+     "taxa": 0.02,
+     "pl_bi": 3.1,
+     "liquidez": "alta",
+     "ir": "15%",
+     "desde": "2020-10",
+     "estrelas": 4,
+     "nota": "O Ibovespa mais barato do mercado, com boa liquidez."
+    },
+    {
+     "ticker": "BOVA11",
+     "nome": "iShares Ibovespa",
+     "gestora": "BlackRock",
+     "replica": "Ibovespa",
+     "taxa": 0.1,
+     "pl_bi": 17.6,
+     "liquidez": "alta",
+     "ir": "15%",
+     "desde": "2008-11",
+     "estrelas": 4,
+     "nota": "O maior e mais negociado ETF do Brasil."
+    },
+    {
+     "ticker": "IBOB11",
+     "nome": "BTG Ibovespa",
+     "gestora": "BTG Pactual",
+     "replica": "Ibovespa",
+     "taxa": 0.03,
+     "pl_bi": 1.7,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2021-07",
+     "estrelas": 3,
+     "nota": "Quase tão barato quanto o BBOV11, com menos liquidez."
+    },
+    {
+     "ticker": "BOVV11",
+     "nome": "It Now Ibovespa",
+     "gestora": "Itaú",
+     "replica": "Ibovespa",
+     "taxa": 0.1,
+     "pl_bi": 8.1,
+     "liquidez": "alta",
+     "ir": "15%",
+     "desde": "2016-07",
+     "estrelas": 3,
+     "nota": "Alternativa ao BOVA11, com a mesma taxa."
+    },
+    {
+     "ticker": "BOVX11",
+     "nome": "Trend Ibovespa",
+     "gestora": "XP (Trend)",
+     "replica": "Ibovespa",
+     "taxa": 0.15,
+     "pl_bi": 1.6,
+     "liquidez": "alta",
+     "ir": "15%",
+     "desde": "2021-06",
+     "estrelas": 2,
+     "nota": "Sem vantagem sobre BBOV11 ou BOVA11."
+    },
+    {
+     "ticker": "BOVB11",
+     "nome": "Bradesco Ibovespa",
+     "gestora": "Bradesco",
+     "replica": "Ibovespa",
+     "taxa": 0.2,
+     "pl_bi": 2.4,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2019-12",
+     "estrelas": 2,
+     "nota": "Taxa dez vezes maior que a do BBOV11."
+    },
+    {
+     "ticker": "BRAX11",
+     "nome": "iShares IBrX-100",
+     "gestora": "BlackRock",
+     "replica": "IBrX-100: as 100 maiores empresas",
+     "taxa": 0.2,
+     "pl_bi": 0.29,
+     "liquidez": "baixa",
+     "ir": "15%",
+     "desde": "2009-12",
+     "estrelas": 2,
+     "nota": "Mais diversificado que o Ibovespa, mas negocia pouco."
+    },
+    {
+     "ticker": "SMAL11",
+     "nome": "iShares Small Cap",
+     "gestora": "BlackRock",
+     "replica": "Empresas menores da bolsa",
+     "taxa": 0.5,
+     "pl_bi": 8.1,
+     "liquidez": "alta",
+     "ir": "15%",
+     "desde": "2008-11",
+     "estrelas": 1,
+     "nota": "Mais risco e mais oscilação. Satélite, não núcleo."
+    }
+   ]
+  },
+  {
+   "id": "acoes-ext",
+   "titulo": "Ações no exterior",
+   "prazo": "10 anos ou mais",
+   "para": "Diversificar fora do Brasil, em moeda forte e nas maiores empresas do mundo.",
+   "estrategia": "Um ETF global (dezenas de países, milhares de empresas) como núcleo. O S&P 500 é a alternativa concentrada nos Estados Unidos.",
+   "imposto": "15% sobre o ganho na venda, via DARF, sem a isenção de R$ 20 mil. Comprando na B3 não há IOF de câmbio nem declaração de bens no exterior.",
+   "cuidado": "Oscila com as bolsas e com o dólar. O S&P 500 concentra boa parte do índice em poucas empresas de tecnologia.",
+   "etfs": [
+    {
+     "ticker": "WRLD11",
+     "nome": "Investo FTSE Global All Cap",
+     "gestora": "Investo",
+     "replica": "Ações do mundo todo, inclusive empresas menores",
+     "taxa": 0.36,
+     "pl_bi": 1.45,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2021-10",
+     "estrelas": 5,
+     "nota": "Carteira global completa, com a menor taxa entre os globais e histórico desde 2021."
+    },
+    {
+     "ticker": "VWRA11",
+     "nome": "Investo FTSE All-World",
+     "gestora": "Investo",
+     "replica": "Ações do mundo todo, via ETF da Vanguard",
+     "taxa": 0.52,
+     "pl_bi": 0.18,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2025-09",
+     "estrelas": 4,
+     "nota": "Escolha atual do painel. Estrutura sólida, mas custa 0,16 ponto a mais que o WRLD11 e é novo."
+    },
+    {
+     "ticker": "IVVB11",
+     "nome": "iShares S&P 500",
+     "gestora": "BlackRock",
+     "replica": "S&P 500: as 500 maiores dos EUA",
+     "taxa": 0.23,
+     "pl_bi": 8.1,
+     "liquidez": "alta",
+     "ir": "15%",
+     "desde": "2014-04",
+     "estrelas": 4,
+     "nota": "O mais negociado para ações americanas. Concentrado nos EUA."
+    },
+    {
+     "ticker": "SPXI11",
+     "nome": "It Now S&P 500",
+     "gestora": "Itaú",
+     "replica": "S&P 500",
+     "taxa": 0.21,
+     "pl_bi": 1.9,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2015-01",
+     "estrelas": 3,
+     "nota": "Alternativa ao IVVB11, com taxa um pouco menor e menos liquidez."
+    },
+    {
+     "ticker": "GPUS11",
+     "nome": "Investo S&P 500",
+     "gestora": "Investo",
+     "replica": "S&P 500, via ETF da Vanguard",
+     "taxa": 0.25,
+     "pl_bi": 0.37,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2025-06",
+     "estrelas": 3,
+     "nota": "Boa estrutura, ainda pequeno e novo."
+    },
+    {
+     "ticker": "ACWI11",
+     "nome": "Trend MSCI ACWI",
+     "gestora": "XP (Trend)",
+     "replica": "Ações do mundo todo (MSCI ACWI)",
+     "taxa": 0.62,
+     "pl_bi": 0.4,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2021-01",
+     "estrelas": 2,
+     "nota": "Global, mas com a maior taxa do grupo."
+    },
+    {
+     "ticker": "NASD11",
+     "nome": "Trend Nasdaq-100",
+     "gestora": "XP (Trend)",
+     "replica": "Nasdaq-100: tecnologia americana",
+     "taxa": 0.5,
+     "pl_bi": 1.07,
+     "liquidez": "alta",
+     "ir": "15%",
+     "desde": "2021-05",
+     "estrelas": 1,
+     "nota": "Concentrado em tecnologia. Satélite, não núcleo."
+    }
+   ]
+  },
+  {
+   "id": "dolar",
+   "titulo": "Dólar e viagens",
+   "prazo": "Até 2 anos, em dólar",
+   "para": "Juntar dinheiro para viagem ou gasto em dólar, comprando aos poucos para fazer preço médio.",
+   "estrategia": "Contratos futuros de dólar na B3 com o caixa aplicado em Tesouro Selic. O resultado fica próximo da variação do dólar somada ao juro em dólar de curto prazo.",
+   "imposto": "15% sobre o ganho na venda, via DARF, sem a isenção de R$ 20 mil. Sem IOF na compra.",
+   "cuidado": "Na hora de gastar, ainda é preciso vender o ETF e comprar a moeda (IOF de 1,1% na remessa ou de 3,5% no cartão). A conta em dólar no exterior pode ser mais direta: veja Viagem ao exterior, na aba Investir por objetivos.",
+   "etfs": [
+    {
+     "ticker": "DOLX11",
+     "nome": "Trend Dólar",
+     "gestora": "XP (Trend)",
+     "replica": "Mini contratos futuros de dólar",
+     "taxa": 0.2,
+     "pl_bi": 0.34,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2025-12",
+     "estrelas": 4,
+     "nota": "Metade da taxa dos concorrentes."
+    },
+    {
+     "ticker": "DOLA11",
+     "nome": "BB ETF Dólar",
+     "gestora": "BB DTVM",
+     "replica": "Contratos futuros de dólar",
+     "taxa": 0.4,
+     "pl_bi": 0.16,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2024-07",
+     "estrelas": 3,
+     "nota": "O mais negociado e com mais histórico do grupo, mas com taxa maior."
+    },
+    {
+     "ticker": "DOLB11",
+     "nome": "BTG Dólar",
+     "gestora": "BTG Pactual",
+     "replica": "Mini contratos futuros de dólar",
+     "taxa": 0.4,
+     "pl_bi": 0.4,
+     "liquidez": "média",
+     "ir": "15%",
+     "desde": "2025-04",
+     "estrelas": 2,
+     "nota": "Mesma taxa do DOLA11, com menos liquidez."
+    },
+    {
+     "ticker": "FIXX11",
+     "nome": "Buena Vista T-Bill",
+     "gestora": "Buena Vista",
+     "replica": "T-Bills americanos de 1 a 3 meses, com estratégia de opções",
+     "taxa": 0.38,
+     "pl_bi": 0.01,
+     "liquidez": "baixa",
+     "ir": "15%",
+     "desde": "2025-06",
+     "estrelas": 1,
+     "nota": "Ideia interessante, mas muito pequeno e com estratégia de opções."
+    }
+   ]
+  }
+ ],
+ "satelites": [
+  [
+   "Ouro (GOLD11)",
+   "Proteção em crises, mas não gera renda. Se entrar, em fatia pequena."
+  ],
+  [
+   "Criptomoedas (HASH11, HODL11)",
+   "Volatilidade extrema. Fora do núcleo; no máximo uma fatia que a pessoa aceite perder."
+  ],
+  [
+   "Setoriais (FIND11, MATB11 e outros)",
+   "Concentram risco em um setor. Não substituem o índice amplo."
+  ],
+  [
+   "Renda fixa global (USDB11, BNDX11)",
+   "Diversificação extra para patrimônios maiores, com câmbio e taxa adicional."
+  ]
+ ]
+}
