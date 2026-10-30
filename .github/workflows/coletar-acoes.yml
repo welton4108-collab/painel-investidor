@@ -1,0 +1,29 @@
+name: Coletar ações (CVM + B3)
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "17 10 * * 2-6"   # 07h17 de Brasília, após o fechamento do pregão anterior
+permissions:
+  contents: write
+concurrency:
+  group: coletar-acoes
+  cancel-in-progress: false
+jobs:
+  coletar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Coletar
+        run: python coletor/coletor_acoes.py
+      - name: Publicar
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dados/acoes.json dados/acoes_log.txt 2>/dev/null || true
+          git commit -m "Ações: atualização automática" || exit 0
+          git pull --rebase -q && git push -q
