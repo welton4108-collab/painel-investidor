@@ -58,7 +58,13 @@ function salvarLead(p) {
     return resposta({ ok: false, erro: "dados incompletos" });
   }
   const agora = agoraBR();
-  const suspeito = String(p.site_url || "").trim();
+  // Se o celular repetiu no campo invisível um dado que a pessoa mesma digitou
+  // (e-mail, nome ou telefone), é preenchimento automático, não robô.
+  let suspeito = String(p.site_url || "").trim();
+  const iguais = [p.email, p.nome, p.whatsapp].map(v => String(v || "").trim().toLowerCase());
+  const soDigitos = v => String(v || "").replace(/\D/g, "");
+  if (suspeito && (iguais.indexOf(suspeito.toLowerCase()) >= 0 ||
+      (soDigitos(suspeito).length >= 10 && soDigitos(suspeito).slice(-9) === zap.slice(-9)))) suspeito = "";
   const status = suspeito ? "Conferir (campo anti-robô veio preenchido: " + limpar(suspeito, 60) + ")" : "Novo";
   gravar(ABA_LEADS, COL_LEADS, [
     agora, seguro(nome), seguro(formatarZap(zap)), seguro(limpar(p.email, 120)),
