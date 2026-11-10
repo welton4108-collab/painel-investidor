@@ -292,6 +292,8 @@ def cotacoes(anos):
                 _ler_cotahist(b, hist, vistos)
                 diarios += 1
         dia += timedelta(days=1)
+    for v in hist.values():
+        v.sort()
     log(f"COTAHIST anual até {base or 'sem dados'}; {diarios} arquivo(s) diário(s) acrescentado(s) desde {inicio:%Y%m%d}")
     return hist
 
@@ -369,10 +371,9 @@ def main():
     limite = (datetime.strptime(ultimo_pregao, "%Y%m%d").date() - timedelta(days=20)).strftime("%Y%m%d") if ultimo_pregao else ""
 
     def mercado(tk):
-        h = hist.get(tk)
+        h = hist.get(tk)  # já ordenado por data em cotacoes(): o arquivo da B3 não vem mais em ordem
         if not h or h[-1][0] < limite:
             return None
-        h = sorted(h)
         jan = h[-42:]  # cerca de 2 meses de pregões
         return {"preco": h[-1][1], "data": h[-1][0], "liq": sum(x[2] for x in jan) / len(jan)}
 
