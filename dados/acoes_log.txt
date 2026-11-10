@@ -1,18 +1,12 @@
 ok   cad_cia_aberta.csv (1.5 MB, 0s)
 ok   fca_cia_aberta_2025.zip (0.4 MB, 0s)
 ok   fca_cia_aberta_2026.zip (0.4 MB, 0s)
-ok   dfp_cia_aberta_2020.zip (12.6 MB, 0s)
+ok   dfp_cia_aberta_2020.zip (12.6 MB, 1s)
 ok   dfp_cia_aberta_2021.zip (13.3 MB, 0s)
 ok   dfp_cia_aberta_2024.zip (13.4 MB, 0s)
-ok   dfp_cia_aberta_2025.zip (12.8 MB, 0s)
+ok   dfp_cia_aberta_2025.zip (12.9 MB, 0s)
 ok   itr_cia_aberta_2025.zip (31.7 MB, 0s)
-ok   itr_cia_aberta_2026.zip (20.3 MB, 0s)
-ok   COTAHIST_A2026.ZIP (102.3 MB, 138s)
-DIAG {"tk": "PETR4", "outros": ["PETR3"], "nome": "Petrobras", "setor": "Petróleo e Gás", "fin": false, "preco": 45.36, "liq": 2669642082, "vm": 628169971624, "lucro": 133376000000, "ebitda": 273323000000, "div_liq": 312769000000, "pl": 480950000000, "p_l": 4.7098, "p_vp": 1.3061, "ev_ebitda": 3.4426, "ev_ebit": 5.0657, "dy": 0.061, "roe": 0.2773, "m_ebitda": 0.4983, "m_liq": 0.2432, "dl_ebitda": 1.1443, "cagr5": 0.7299, "balanco": "2026-06-30"}
-DIAG {"tk": "ITUB4", "outros": ["ITUB3"], "nome": "Itaú Unibanco", "setor": "Bancos", "fin": true, "preco": 40.53, "liq": 1645178530, "vm": 470591879910, "lucro": 46828000000, "ebitda": null, "div_liq": null, "pl": 217779000000, "p_l": 10.0494, "p_vp": 2.1609, "ev_ebitda": null, "ev_ebit": null, "dy": 0.0677, "roe": 0.215, "m_ebitda": null, "m_liq": null, "dl_ebitda": null, "cagr5": 0.1888, "balanco": "2026-06-30"}
-DIAG {"tk": "VALE3", "outros": [], "nome": "Vale", "setor": "Extração Mineral", "fin": false, "preco": 64.04, "liq": 1911156717, "vm": 260794318640, "lucro": 2188000000, "ebitda": 43646000000, "div_liq": 67850000000, "pl": 194758000000, "p_l": 119.193, "p_vp": 1.3391, "ev_ebitda": 7.5298, "ev_ebit": 13.0399, "dy": 0.0905, "roe": 0.0112, "m_ebitda": 0.2022, "m_liq": 0.0101, "dl_ebitda": 1.5546, "cagr5": -0.1236, "balanco": "2026-09-30"}
-DIAG {"tk": "WEGE3", "outros": [], "nome": "WEG S.A.", "setor": "Máqs., Equip., Veíc. e Peças", "fin": false, "preco": 48.19, "liq": 635649293, "vm": 202197032809, "lucro": 6268804000, "ebitda": 8952604000, "div_liq": -2585002000, "pl": 19956834000, "p_l": 32.2545, "p_vp": 10.1317, "ev_ebitda": 22.2965, "ev_ebit": 25.3171, "dy": 0.0196, "roe": 0.3141, "m_ebitda": 0.2199, "m_liq": 0.154, "dl_ebitda": -0.2887, "cagr5": 0.2219, "balanco": "2026-09-30"}
-DIAG {"tk": "BBAS3", "outros": [], "nome": "Banco do Brasil S.A.", "setor": "Bancos", "fin": true, "preco": 17.13, "liq": 1132083859, "vm": 97794681418, "lucro": 12272045000, "ebitda": null, "div_liq": null, "pl": 186079471000, "p_l": 7.9689, "p_vp": 0.5256, "ev_ebitda": null, "ev_ebit": null, "dy": 0.0271, "roe": 0.066, "m_ebitda": null, "m_liq": null, "dl_ebitda": null, "cagr5": 0.0294, "balanco": "2026-06-30"}
-DIAG {"tk": "BBSE3", "outros": [], "nome": "BB Seguridade Participações S.A.", "setor": "Seguradoras e Corretoras", "fin": true, "preco": 38.24, "liq": 315629487, "vm": 74233344323, "lucro": 9189317000, "ebitda": null, "div_liq": null, "pl": 10890345000, "p_l": 8.0782, "p_vp": 6.8164, "ev_ebitda": null, "ev_ebit": null, "dy": 0.119, "roe": 0.8438, "m_ebitda": null, "m_liq": null, "dl_ebitda": null, "cagr5": 0.1855, "balanco": "2026-06-30"}
-ações em milhares (82): AXIA3 GFSA3 FIGE3 CSUD3 EMAE4 PDGR3 TPIS3 BRAP4 ECOR3 ENEV3 ASAI3 BNBR3 ABEV3 EMBJ3 TAEE11 TCSA3 LPSB3 MRVE3 SYNE3 YDUQ3 TRIS3 LOGG3 AFLT3 ORVR3 DMVF3 HBSA3 CEEB3 ENJU3 CMIG4 BMEB4 CSMG3 ALLD3 CXSE3 ATED3 ECOM3 MILS3 AURE3 SCAR3 CBEE3 SOND5 VALE3 BMIN4 VBBR3 LAND3 PFRM3 PCAR3 HBOR3 VSTE3 VULC3 EUCA4 WHRL4 MSPA4 ITUB4 ETER3 MYPK3 CBAV3 ITSA4 TEND3 NATU3 CYRE3 INEP3 POSI3 CTKA4 EALT4 PTBL3 CLSC4 TUPY3 MWET4 JOPA4 FRAS3 RAPT4 GRND3 MNPR3 SANB11 RCSL4 KEPL3 PATI3 BRSR6 LREN3 RANI3 LJQQ3 DXCO3
-263 empresas; 4 sem lucro calculado; pregão 20261103
+ok   itr_cia_aberta_2026.zip (22.2 MB, 0s)
+ok   COTAHIST_A2026.ZIP (90.4 MB, 111s)
+COTAHIST anual até 20261109; 0 arquivo(s) diário(s) acrescentado(s) desde 20261110
+TRAVA: 3 empresas nesta coleta contra 263 publicadas; dados anteriores mantidos
