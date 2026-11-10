@@ -1,6 +1,11 @@
 name: Coletar ações (CVM + B3)
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      diag:
+        description: "Registrar diagnóstico do COTAHIST no log (1 = sim)"
+        required: false
+        default: "0"
   schedule:
     - cron: "17 10 * * 2-6"   # 07h17 de Brasília, após o fechamento do pregão anterior
 permissions:
@@ -18,6 +23,8 @@ jobs:
         with:
           python-version: "3.12"
       - name: Coletar
+        env:
+          DIAG_COTA: ${{ github.event.inputs.diag }}
         run: python coletor/coletor_acoes.py
       - name: Publicar
         if: always()

@@ -229,9 +229,24 @@ def anual(dm, cnpj, fim, fn, tipo="DRE"):
 
 # ------------------------------------------------------------------ B3
 
+DIAG_COTA = os.environ.get("DIAG_COTA") == "1"
+
+
 def _ler_cotahist(b, hist, vistos):
     """Acrescenta ao histórico as linhas de ações do mercado à vista (lote padrão) de um arquivo COTAHIST."""
     z = zipfile.ZipFile(io.BytesIO(b))
+    if DIAG_COTA:
+        from collections import Counter
+        tot, tipos, merc, tam, amostra, datas = 0, Counter(), Counter(), Counter(), [], Counter()
+        with z.open(z.namelist()[0]) as f:
+            for linha in io.TextIOWrapper(f, encoding="latin-1"):
+                tot += 1; tipos[linha[:2]] += 1; tam[len(linha.rstrip("\r\n"))] += 1
+                if linha.startswith("01"):
+                    merc[(linha[10:12], linha[24:27])] += 1; datas[linha[2:6]] += 1
+                    if len(amostra) < 3 and "PETR4" in linha: amostra.append(linha.rstrip())
+        log(f"DIAGCOTA arquivos={z.namelist()} linhas={tot} tipos={dict(tipos)} tamanhos={tam.most_common(3)}")
+        log(f"DIAGCOTA (codbdi,tpmerc) mais comuns={merc.most_common(8)} anos={dict(datas)}")
+        for a in amostra: log("DIAGCOTA PETR4: " + a)
     with z.open(z.namelist()[0]) as f:
         for linha in io.TextIOWrapper(f, encoding="latin-1"):
             if not linha.startswith("01") or linha[10:12] != "02" or linha[24:27] != "010":
