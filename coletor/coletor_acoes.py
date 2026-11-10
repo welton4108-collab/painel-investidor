@@ -4,7 +4,8 @@ Coletor de indicadores de ações da B3 a partir de fontes oficiais e gratuitas.
 
 - Demonstrações financeiras: CVM Dados Abertos (ITR trimestral e DFP anual), licença ODbL.
 - Cadastro e setor: CVM (cad_cia_aberta) e códigos de negociação: CVM FCA (valor mobiliário).
-- Preço e liquidez: B3, arquivo anual de cotações históricas (COTAHIST), atraso de 1 dia útil.
+- Preço e liquidez: B3, arquivo anual de cotações históricas (COTAHIST), completado pelos arquivos diários
+  quando o anual vem atrasado ou incompleto; atraso de 1 dia útil.
 
 Gera dados/acoes.json. Só usa a biblioteca padrão do Python.
 """
@@ -24,7 +25,7 @@ def log(msg):
     print(msg, flush=True); LOG.append(msg)
 
 
-def baixar(url, tentativas=3):
+def baixar(url, tentativas=3, silencioso=False):
     for i in range(tentativas):
         try:
             t = time.time()
@@ -34,7 +35,8 @@ def baixar(url, tentativas=3):
             return b
         except Exception as e:
             if i == tentativas - 1:
-                log(f"erro {url}: {e}")
+                if not silencioso:
+                    log(f"erro {url}: {e}")
                 return None
             time.sleep(5 * (i + 1))
 
@@ -227,23 +229,55 @@ def anual(dm, cnpj, fim, fn, tipo="DRE"):
 
 # ------------------------------------------------------------------ B3
 
+def _ler_cotahist(b, hist, vistos):
+    """Acrescenta ao histórico as linhas de ações do mercado à vista (lote padrão) de um arquivo COTAHIST."""
+    z = zipfile.ZipFile(io.BytesIO(b))
+    with z.open(z.namelist()[0]) as f:
+        for linha in io.TextIOWrapper(f, encoding="latin-1"):
+            if not linha.startswith("01") or linha[10:12] != "02" or linha[24:27] != "010":
+                continue
+            tk, dt = linha[12:24].strip(), linha[2:10]
+            if (tk, dt) in vistos:
+                continue
+            vistos.add((tk, dt))
+            fat = int(linha[210:217] or 1) or 1
+            hist[tk].append((dt, int(linha[108:121]) / 100 / fat, int(linha[170:188]) / 100))
+
+
+def pregao_amplo(hist):
+    """Último pregão com cobertura normal: ignora datas com poucos papéis (arquivo da B3 incompleto)."""
+    por_dia = defaultdict(int)
+    for v in hist.values():
+        for dt, _, _ in v:
+            por_dia[dt] += 1
+    if not por_dia:
+        return ""
+    cont = sorted(por_dia.values())
+    mediana = cont[len(cont) // 2]
+    amplos = [dt for dt, n in por_dia.items() if n >= 0.5 * mediana]
+    return max(amplos) if amplos else ""
+
+
 def cotacoes(anos):
-    """Lê o COTAHIST: último preço e volume diário de ações do mercado à vista (lote padrão)."""
-    hist = defaultdict(list)  # ticker -> [(data, preço, volume)]
+    """Lê o COTAHIST anual e completa com os arquivos diários quando o anual vem atrasado ou incompleto."""
+    hist, vistos = defaultdict(list), set()  # ticker -> [(data, preço, volume)]
     for ano in anos:
         b = baixar(f"https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A{ano}.ZIP")
-        if not b:
-            continue
-        z = zipfile.ZipFile(io.BytesIO(b))
-        with z.open(z.namelist()[0]) as f:
-            for linha in io.TextIOWrapper(f, encoding="latin-1"):
-                if not linha.startswith("01") or linha[10:12] != "02" or linha[24:27] != "010":
-                    continue
-                tk = linha[12:24].strip()
-                fat = int(linha[210:217] or 1) or 1
-                preco = int(linha[108:121]) / 100 / fat
-                vol = int(linha[170:188]) / 100
-                hist[tk].append((linha[2:10], preco, vol))
+        if b:
+            _ler_cotahist(b, hist, vistos)
+            del b
+    base = pregao_amplo(hist)
+    inicio = datetime.strptime(base, "%Y%m%d").date() + timedelta(days=1) if base else HOJE - timedelta(days=60)
+    inicio = max(inicio, HOJE - timedelta(days=60))
+    dia, diarios = inicio, 0
+    while dia < HOJE:
+        if dia.weekday() < 5:
+            b = baixar(f"https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_D{dia:%d%m%Y}.ZIP", tentativas=1, silencioso=True)
+            if b:
+                _ler_cotahist(b, hist, vistos)
+                diarios += 1
+        dia += timedelta(days=1)
+    log(f"COTAHIST anual até {base or 'sem dados'}; {diarios} arquivo(s) diário(s) acrescentado(s) desde {inicio:%Y%m%d}")
     return hist
 
 
@@ -316,7 +350,7 @@ def main():
             del b
 
     hist = cotacoes([ano - 1, ano] if HOJE.month <= 3 else [ano])
-    ultimo_pregao = max((v[-1][0] for v in hist.values() if v), default="")
+    ultimo_pregao = pregao_amplo(hist)
     limite = (datetime.strptime(ultimo_pregao, "%Y%m%d").date() - timedelta(days=20)).strftime("%Y%m%d") if ultimo_pregao else ""
 
     def mercado(tk):
@@ -436,6 +470,18 @@ def main():
     for r in linhas:
         if r["tk"] in ("PETR4", "VALE3", "ITUB4", "WEGE3", "BBSE3", "BBAS3"):
             log("DIAG " + json.dumps(r, ensure_ascii=False))
+    # trava: não substitui os dados publicados por uma coleta muito menor que a anterior (fonte incompleta)
+    anterior = 0
+    try:
+        with open(SAIDA, encoding="utf-8") as f:
+            anterior = len(json.load(f).get("acoes", []))
+    except Exception:
+        pass
+    if len(linhas) < 100 or (anterior and len(linhas) < 0.7 * anterior):
+        log(f"TRAVA: {len(linhas)} empresas nesta coleta contra {anterior} publicadas; dados anteriores mantidos")
+        with open(os.path.join(os.path.dirname(SAIDA), "acoes_log.txt"), "w", encoding="utf-8") as f:
+            f.write("\n".join(LOG))
+        sys.exit(1)
     os.makedirs(os.path.dirname(SAIDA), exist_ok=True)
     with open(SAIDA, "w", encoding="utf-8") as f:
         json.dump({"gerado_em": datetime.now().strftime("%Y-%m-%dT%H:%M"), "pregao": ultimo_pregao,
@@ -445,8 +491,6 @@ def main():
     log(f"{len(linhas)} empresas; {sem_dados} sem lucro calculado; pregão {ultimo_pregao}")
     with open(os.path.join(os.path.dirname(SAIDA), "acoes_log.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(LOG))
-    if len(linhas) < 100:
-        sys.exit(1)
 
 
 if __name__ == "__main__":
