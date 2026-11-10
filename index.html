@@ -615,6 +615,64 @@ nav.tabs .sm{display:none}
 .postvazio b{font-family:var(--f-display);font-size:1.15rem}
 .postvazio p{margin:6px 0 0;color:var(--muted)}
 @media (max-width:720px){ .postlist{grid-template-columns:1fr} }
+/* ===== PGBL ===== */
+.pg-prazo{font:700 .86rem var(--f-body);background:var(--accent-soft);color:var(--ink);border-radius:999px;padding:8px 14px;white-space:nowrap}
+.pg-prazo b{font-family:var(--f-data)}
+.pg-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding-bottom:34px;align-items:start}
+.pg-grid > *{min-width:0}
+.pg-res{position:sticky;top:12px}
+.pg-oficial{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.pg-more summary{cursor:pointer;font-weight:700;font-size:.9rem;color:var(--accent)}
+.pg-step{display:flex;align-items:center;gap:10px}
+.pg-step button{width:36px;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:700 1.1rem var(--f-body);cursor:pointer}
+.pg-step output{min-width:22px;text-align:center;font:700 1.05rem var(--f-data)}
+.pg-kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pg-kpis > div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.pg-kpis b{display:block;font-size:1.1rem}
+.pg-kpis span{font-size:.8rem;color:var(--muted)}
+#pg-aporte{width:100%;accent-color:var(--accent);padding:0;border:0;background:none}
+.pg-bars{display:grid;gap:10px}
+.pg-bar > div:first-child{display:flex;justify-content:space-between;font-size:.86rem;color:var(--muted)}
+.pg-bar i{font-style:normal}
+.pg-bar .t,.pg-hb .t{height:12px;border-radius:999px;background:var(--cell-off);overflow:hidden;margin-top:4px}
+.pg-bar .f,.pg-hb .f{height:100%;border-radius:999px;transition:width .35s}
+.f.a{background:var(--muted);opacity:.55}.f.b{background:var(--accent)}.f.c{background:var(--muted)}
+.pg-al{font-size:.88rem;border-radius:8px;padding:10px 12px;margin-top:8px;background:var(--accent-soft)}
+.pg-al.warn{background:var(--cell-off)}
+.pg-conta{width:100%;border-collapse:collapse;font-size:.84rem;margin-top:8px}
+.pg-conta td{padding:6px 2px;border-bottom:1px solid var(--line)}
+.pg-conta td:last-child{text-align:right;font-family:var(--f-data);white-space:nowrap}
+.pg-ins{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.pg-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pg-card h3{font-size:1.12rem}
+.pg-card > p{font-size:.94rem;color:var(--muted)}
+.pg-k{font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.pg-mini{margin-top:auto;background:var(--bg);border-radius:10px;padding:12px;display:grid;gap:6px}
+.pg-mini-t{font-size:.78rem;font-weight:700;color:var(--muted)}
+.pg-hb{display:grid;grid-template-columns:110px 1fr auto;gap:8px;align-items:center;font-size:.8rem}
+.pg-hb .t{margin-top:0}
+.pg-hb b{font-size:.8rem}
+.pg-foot{font-size:.78rem;color:var(--muted);margin-top:2px}
+.pg-reg{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;align-items:end;height:118px}
+.pg-reg > div{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:.7rem;color:var(--muted);text-align:center}
+.pg-reg i{display:block;width:100%;background:var(--cell-off);border-radius:4px 4px 0 0}
+.pg-reg b{font:700 .78rem var(--f-data);color:var(--ink);margin-top:3px}
+.pg-reg .on i{background:var(--accent)}
+.pg-reg .on b{color:var(--accent)}
+.pg-vs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pg-vs > div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:grid}
+.pg-vs > div.on{border-color:var(--accent)}
+.pg-vs span{font-size:.74rem;color:var(--muted);font-weight:700}
+.pg-vs b{font-size:1.05rem}
+.pg-vs .on b{color:var(--accent)}
+.pg-vs small{font-size:.72rem;color:var(--muted)}
+.pg-dec{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding-bottom:30px}
+.pg-dec > div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:6px;align-content:start}
+.pg-dec b{font-family:var(--f-display);font-size:1.15rem}
+.pg-dec p{font-size:.92rem;color:var(--muted)}
+.pg-tag{justify-self:start;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--ink)}
+@media (max-width:900px){ .pg-ins,.pg-dec{grid-template-columns:1fr 1fr} }
+@media (max-width:720px){ .pg-grid,.pg-ins,.pg-dec{grid-template-columns:1fr} .pg-res{position:static} .pg-prazo{white-space:normal} }
 </style>
 </head>
 <body>
@@ -629,6 +687,7 @@ nav.tabs .sm{display:none}
       <button type="button" data-view="etfs">ETFs</button>
       <button type="button" data-view="acoes">Ações</button>
       <button type="button" data-view="simulador">Simulador</button>
+      <button type="button" data-view="pgbl">PGBL</button>
       <button type="button" class="embreve" data-tip-title="Em construção" data-tip="Estudos, análises e comentários sobre o mercado.">Insights<small>em breve</small></button>
       <button type="button" data-view="alfred">Alfred<small>beta</small></button>
     </nav>
@@ -1099,6 +1158,200 @@ nav.tabs .sm{display:none}
   <div class="postlist" id="postlist">
     <div class="postvazio"><b>Os primeiros estudos chegam em breve.</b><p>Enquanto isso, acompanhe os termômetros na aba Indicadores.</p></div>
   </div>
+</main>
+
+<main class="wrap" id="view-pgbl" hidden>
+  <section class="ind-hero">
+    <div>
+      <div class="eyebrow">Previdência privada · regras de 2026</div>
+      <h1>PGBL: quanto você recupera no Imposto de Renda?</h1>
+      <p class="lede">Simule em um minuto quanto um aporte no PGBL até o fim do ano reduz o seu IR na declaração de 2027. A conta compara o modelo simplificado e o completo, já com a nova isenção até R$ 5 mil. Mais abaixo: por que a previdência é um dos veículos mais eficientes para o longo prazo.</p>
+    </div>
+    <div class="pg-prazo" id="pg-prazo" aria-live="polite"></div>
+  </section>
+
+  <div class="pg-grid">
+    <section class="calc" aria-labelledby="pg-dados-t">
+      <h2 id="pg-dados-t">Seus dados de 2026</h2>
+      <div class="field">
+        <label for="pg-renda" data-tip-title="Renda tributável" data-tip="Salários, pró-labore, aluguéis e outros rendimentos que entram no ajuste anual. 13º e PLR ficam de fora: têm tributação exclusiva. Para CLT, uma estimativa simples é o salário bruto × 12." tabindex="0">Renda tributável no ano ⓘ</label>
+        <input id="pg-renda" type="text" inputmode="numeric" placeholder="R$ 0">
+      </div>
+      <div class="field">
+        <label for="pg-inss" data-tip-title="Previdência oficial" data-tip="INSS ou regime próprio pago no ano. Está no informe de rendimentos. Se não souber, deixe 0: o resultado fica conservador." tabindex="0">INSS pago no ano ⓘ</label>
+        <input id="pg-inss" type="text" inputmode="numeric" placeholder="R$ 0">
+      </div>
+      <label class="consent pg-oficial"><input id="pg-oficial" type="checkbox" checked><span><b>Contribuo para o INSS ou regime próprio</b> (ou já sou aposentado). Sem isso, o PGBL não é dedutível.</span></label>
+      <div class="field">
+        <label for="pg-ja">PGBL já aportado em 2026</label>
+        <input id="pg-ja" type="text" inputmode="numeric" placeholder="R$ 0">
+      </div>
+      <details class="pg-more">
+        <summary>Outras deduções (deixam a conta mais precisa)</summary>
+        <div class="field" style="margin-top:12px">
+          <label id="pg-dep-l">Dependentes</label>
+          <div class="pg-step" role="group" aria-labelledby="pg-dep-l"><button type="button" id="pg-dm" aria-label="Menos um dependente">−</button><output id="pg-dep">0</output><button type="button" id="pg-dp" aria-label="Mais um dependente">+</button></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="pg-med">Despesas médicas</label><input id="pg-med" type="text" inputmode="numeric" placeholder="R$ 0"></div>
+          <div class="field"><label for="pg-edu" data-tip-title="Educação" data-tip="Limite de R$ 3.561,50 por pessoa (você e cada dependente). A calculadora aplica o limite." tabindex="0">Educação ⓘ</label><input id="pg-edu" type="text" inputmode="numeric" placeholder="R$ 0"></div>
+        </div>
+      </details>
+      <button type="button" class="linkbtn" id="pg-exemplo">Ver um exemplo preenchido</button>
+    </section>
+
+    <section class="calc pg-res" aria-labelledby="pg-res-t" aria-live="polite">
+      <h2 id="pg-res-t">Seu resultado</h2>
+      <p class="muted" id="pg-vazio">Informe sua renda tributável para ver quanto o PGBL pode reduzir o seu imposto.</p>
+      <div id="pg-out" hidden>
+        <div class="result" style="border-top:0;padding-top:0">
+          <div class="how">Você pode economizar</div>
+          <div class="big" id="pg-eco">R$ 0</div>
+          <div class="how" id="pg-ecos"></div>
+        </div>
+        <div class="pg-kpis">
+          <div><b class="mono" id="pg-kmax">—</b><span>ainda cabe no limite de 12%</span></div>
+          <div><b class="mono" id="pg-kpct">—</b><span>do aporte volta como economia de IR</span></div>
+        </div>
+        <div class="field">
+          <label for="pg-aporte" style="display:flex;justify-content:space-between"><span>Simular aporte até 30/12</span><span class="mono" id="pg-aportev">R$ 0</span></label>
+          <input id="pg-aporte" type="range" min="0" max="1000" step="100" value="0">
+        </div>
+        <div class="pg-bars">
+          <div class="pg-bar"><div><span>IR sem o aporte <i id="pg-msem"></i></span><b class="mono" id="pg-vsem"></b></div><div class="t"><div class="f a" id="pg-bsem"></div></div></div>
+          <div class="pg-bar"><div><span>IR com o aporte <i id="pg-mcom"></i></span><b class="mono" id="pg-vcom"></b></div><div class="t"><div class="f b" id="pg-bcom"></div></div></div>
+        </div>
+        <div id="pg-alertas"></div>
+        <details class="pg-more"><summary>Ver a conta completa</summary><table class="pg-conta" id="pg-conta"></table></details>
+      </div>
+    </section>
+  </div>
+
+  <section class="block">
+    <div class="sechead">
+      <h2>Por que a previdência é um veículo de longo prazo</h2>
+      <p class="muted">Bem estruturada (tipo certo, regime certo e custo baixo), a previdência reúne vantagens que nenhum outro investimento tributável tem juntas. Exemplos com 10% ao ano bruto, só para ilustrar.</p>
+    </div>
+
+    <div class="pg-ins">
+      <article class="pg-card">
+        <div class="pg-k">01 · Sem come-cotas</div>
+        <h3>O imposto fica investido, rendendo para você</h3>
+        <p>Fundos comuns antecipam IR a cada seis meses (o come-cotas). Na previdência, não: o imposto só é cobrado no resgate, e até lá ele trabalha a seu favor.</p>
+        <div class="pg-mini">
+          <div class="pg-mini-t">R$ 100 mil por 20 anos, valor líquido</div>
+          <div class="pg-hb"><span>Fundo comum</span><div class="t"><div class="f a" style="width:82.6%"></div></div><b class="mono">R$ 508 mil</b></div>
+          <div class="pg-hb"><span>Sem come-cotas, 15%</span><div class="t"><div class="f c" style="width:95.3%"></div></div><b class="mono">R$ 587 mil</b></div>
+          <div class="pg-hb"><span>Previdência, 10%</span><div class="t"><div class="f b" style="width:100%"></div></div><b class="mono">R$ 615 mil</b></div>
+          <p class="pg-foot">+R$ 107 mil (21%) com o mesmo dinheiro e a mesma rentabilidade bruta.</p>
+        </div>
+      </article>
+
+      <article class="pg-card">
+        <div class="pg-k">02 · Menor alíquota do mercado</div>
+        <h3>10% de IR: menos que qualquer fundo ou CDB</h3>
+        <p>Na tabela regressiva, cada aporte paga menos imposto quanto mais tempo fica no plano. Depois de 10 anos, a alíquota é de 10%. Fora da previdência, o mínimo para investimentos tributáveis é 15%.</p>
+        <div class="pg-mini">
+          <div class="pg-mini-t">IR por tempo de cada aporte (regressiva)</div>
+          <div class="pg-reg">
+            <div><i style="height:70px"></i><b>35%</b><span>até 2 anos</span></div>
+            <div><i style="height:60px"></i><b>30%</b><span>2 a 4</span></div>
+            <div><i style="height:50px"></i><b>25%</b><span>4 a 6</span></div>
+            <div><i style="height:40px"></i><b>20%</b><span>6 a 8</span></div>
+            <div><i style="height:30px"></i><b>15%</b><span>8 a 10</span></div>
+            <div class="on"><i style="height:20px"></i><b>10%</b><span>10+ anos</span></div>
+          </div>
+          <p class="pg-foot">Desde a Lei 14.803/2024, você escolhe entre progressiva e regressiva só no primeiro resgate ou na conversão em renda.</p>
+        </div>
+      </article>
+
+      <article class="pg-card">
+        <div class="pg-k">03 · Portabilidade sem IR</div>
+        <h3>Troque de fundo ou de seguradora quando quiser</h3>
+        <p>Não gostou do gestor ou achou a taxa cara? A portabilidade leva o saldo para outro plano sem pagar imposto e sem perder o tempo acumulado. Num fundo comum, trocar significa resgatar e pagar IR.</p>
+        <div class="pg-mini">
+          <div class="pg-mini-t">Trocar um investimento de R$ 500 mil com R$ 200 mil de rendimento</div>
+          <div class="pg-vs">
+            <div><span>Fundo comum</span><b class="mono">R$ 30.000</b><small>de IR para trocar (15%)</small></div>
+            <div class="on"><span>Previdência</span><b class="mono">R$ 0</b><small>portabilidade entre planos</small></div>
+          </div>
+          <p class="pg-foot">Vale entre planos do mesmo tipo (PGBL para PGBL, VGBL para VGBL).</p>
+        </div>
+      </article>
+
+      <article class="pg-card">
+        <div class="pg-k">04 · Efeito sucessório</div>
+        <h3>Vai direto aos beneficiários, sem inventário</h3>
+        <p>O saldo é pago aos beneficiários que você indicar, em poucos dias, fora do inventário. E a Lei Complementar 227/2026 manteve a não incidência de ITCMD sobre PGBL e VGBL, enquanto tornou o imposto obrigatoriamente progressivo para os demais bens, com teto de 8%.</p>
+        <div class="pg-mini">
+          <div class="pg-mini-t">R$ 2 milhões transmitidos (ITCMD ilustrativo de 4%)</div>
+          <div class="pg-vs">
+            <div><span>Aplicações comuns</span><b class="mono">R$ 80.000</b><small>de ITCMD, mais o prazo do inventário</small></div>
+            <div class="on"><span>Previdência</span><b class="mono">R$ 0</b><small>de ITCMD, liquidez em dias</small></div>
+          </div>
+          <p class="pg-foot">Aportes vultosos às vésperas do falecimento, para fugir do imposto, podem ser questionados pelo fisco.</p>
+        </div>
+      </article>
+
+      <article class="pg-card">
+        <div class="pg-k">05 · Dedução de até 12% no PGBL</div>
+        <h3>Uma parte do salário que só é tributada lá na frente</h3>
+        <p>Quem declara no modelo completo pode abater do IR até 12% da renda tributável. É um adiamento, não uma isenção: no resgate, o IR incide sobre o total. O ganho vem de investir hoje o imposto e pagar depois a 10%.</p>
+        <div class="pg-mini">
+          <div class="pg-mini-t">Executiva com renda de R$ 360 mil e 2 filhos</div>
+          <div class="pg-vs">
+            <div><span>Aporte no limite</span><b class="mono">R$ 43.200</b><small>12% da renda</small></div>
+            <div class="on"><span>IR a menos em 2027</span><b class="mono">R$ 11.880</b><small>27,5% do aporte</small></div>
+          </div>
+          <p class="pg-foot">A economia depende das suas deduções: use a calculadora acima.</p>
+        </div>
+      </article>
+
+      <article class="pg-card pg-alert">
+        <div class="pg-k">06 · O que pode estragar tudo</div>
+        <h3>Taxa alta e resgate cedo</h3>
+        <p>Taxa de administração alta corrói a vantagem fiscal, e sair antes de 2 anos na regressiva custa 35% de IR. Carregamento deveria ser zero.</p>
+        <div class="pg-mini">
+          <div class="pg-mini-t">R$ 24 mil por ano durante 25 anos</div>
+          <div class="pg-hb"><span>Taxa de 0,6% a.a.</span><div class="t"><div class="f b" style="width:100%"></div></div><b class="mono">R$ 2,36 mi</b></div>
+          <div class="pg-hb"><span>Taxa de 1,8% a.a.</span><div class="t"><div class="f a" style="width:82.8%"></div></div><b class="mono">R$ 1,95 mi</b></div>
+          <p class="pg-foot">R$ 405 mil de diferença. Plano antigo e caro? A portabilidade resolve sem IR.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="sechead"><h2>PGBL ou VGBL: qual é o seu?</h2></div>
+    <div class="pg-dec">
+      <div><span class="pg-tag">Declara no completo e contribui ao INSS</span><b>PGBL até 12% da renda</b><p>O que passar disso vai para um VGBL.</p></div>
+      <div><span class="pg-tag">Declara no simplificado ou é isento</span><b>VGBL</b><p>O IR no resgate incide só sobre o rendimento. Com renda até R$ 60 mil por ano, o IR já é zero e o PGBL não traz ganho fiscal.</p></div>
+      <div><span class="pg-tag">Aportes grandes no ano</span><b>Atenção ao IOF do VGBL</b><p>5% sobre o que passar de R$ 600 mil por ano, por CPF, somando todas as seguradoras. Dividir entre cônjuges ou entre anos evita o imposto. O PGBL não tem IOF.</p></div>
+    </div>
+  </section>
+
+  <section class="cta" aria-labelledby="pg-cta-t" style="margin-block:0 22px">
+    <div>
+      <h2 id="pg-cta-t">Quer que eu confira a sua conta?</h2>
+      <p>Analiso a sua declaração, as taxas e o fundo do seu plano atual, e se faz mais sentido PGBL, VGBL ou nenhum dos dois. Se o seu plano for caro, vemos a portabilidade.</p>
+    </div>
+    <div id="pg-cta-body">
+      <form id="pg-lead" novalidate>
+        <div class="field"><label for="pg-nome">Nome</label><input id="pg-nome" required autocomplete="name"></div>
+        <div class="field"><label for="pg-zap">WhatsApp</label><input id="pg-zap" required inputmode="tel" autocomplete="tel" placeholder="(44) 99999-9999"></div>
+        <div class="field full"><label for="pg-email">E-mail <span style="font-weight:400;opacity:.8">(opcional)</span></label><input id="pg-email" type="email" autocomplete="email" placeholder="voce@exemplo.com"></div>
+        <div class="hp" aria-hidden="true"><label for="pg-site_url">Não preencha este campo</label><input id="pg-site_url" tabindex="-1" autocomplete="off"></div>
+        <div class="field"><label for="pg-obj">Objetivo principal</label>
+          <select id="pg-obj"><option value="Previdência / PGBL">Revisar previdência / PGBL</option><option value="aposentadoria">Aposentadoria</option><option value="reserva">Montar a reserva</option><option value="medio-prazo">Médio prazo</option><option value="educacao">Educação dos filhos</option><option value="viagem">Viagem ao exterior</option></select></div>
+        <div class="field"><label for="pg-pat">Patrimônio investido</label>
+          <select id="pg-pat"><option>Até R$ 100 mil</option><option>R$ 100 mil a R$ 500 mil</option><option>R$ 500 mil a R$ 1 milhão</option><option>Acima de R$ 1 milhão</option></select></div>
+        <label class="consent full"><input id="pg-lgpd" type="checkbox" required><span>Autorizo o contato pelo WhatsApp para agendar a reunião. Meus dados serão usados só para isso, conforme a LGPD e o <a href="privacidade.html" style="color:inherit;text-decoration:underline">aviso de privacidade</a>.</span></label>
+        <button class="btn full" type="submit">Quero revisar minha previdência</button>
+        <p class="full" id="pg-err" hidden style="font-size:.86rem;font-weight:600"></p>
+      </form>
+    </div>
+  </section>
+  <p class="ind-foot muted" style="padding-bottom:34px">Simulação educativa, não é recomendação de investimento. Considera a tabela progressiva anual do ano-calendário 2026, o desconto simplificado de 20% limitado a R$ 17.640,00, o redutor da Lei 15.270/2025 e o limite de dedução do PGBL de 12% da renda tributável. Não considera a tributação mínima para rendas acima de R$ 600 mil por ano, pensão alimentícia nem livro-caixa. Exemplos de rentabilidade com 10% ao ano bruto, constante, mesma taxa nas comparações; fundos de previdência não têm garantia do FGC. O prazo final de aporte varia por seguradora e costuma ser anterior ao último dia útil do ano.</p>
 </main>
 
 <main class="wrap" id="view-indicadores" hidden>
@@ -2336,7 +2589,7 @@ function renderIndicadores(){
 
 /* Navegação entre abas */
 function showView(v){
-  const views = {objetivos:"view-objetivos", indicadores:"view-indicadores", simulador:"view-simulador", insights:"view-insights", alfred:"view-alfred", etfs:"view-etfs", acoes:"view-acoes"};
+  const views = {objetivos:"view-objetivos", indicadores:"view-indicadores", simulador:"view-simulador", insights:"view-insights", alfred:"view-alfred", etfs:"view-etfs", acoes:"view-acoes", pgbl:"view-pgbl"};
   if (!views[v]) v = "objetivos";
   Object.entries(views).forEach(([k, id]) => { document.getElementById(id).hidden = k !== v; });
   document.querySelectorAll("nav.tabs [data-view]").forEach(b => { if (b.dataset.view === v) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
@@ -2357,11 +2610,11 @@ document.querySelectorAll("nav.tabs [data-view]").forEach(b => b.addEventListene
   window.scrollTo({top:0});
 }));
 renderIndicadores();
-{ const hv = (location.hash || "").slice(1); if (hv === "indicadores" || hv === "simulador" || hv === "alfred" || hv === "etfs" || hv === "acoes") showView(hv); }
+{ const hv = (location.hash || "").slice(1); if (hv === "indicadores" || hv === "simulador" || hv === "alfred" || hv === "etfs" || hv === "acoes" || hv === "pgbl") showView(hv); }
 /* Troca de aba quando só o endereço muda (ex.: digitar #acoes com o site já aberto) */
 window.addEventListener("hashchange", () => {
   const hv = (location.hash || "").slice(1);
-  if (["indicadores","simulador","alfred","etfs","acoes"].includes(hv)) { showView(hv); window.scrollTo({top:0}); }
+  if (["indicadores","simulador","alfred","etfs","acoes","pgbl"].includes(hv)) { showView(hv); window.scrollTo({top:0}); }
 });
 /* No site publicado, busca os dados mais recentes gravados pelo coletor diário */
 if (location.protocol.startsWith("http")){
@@ -2832,6 +3085,93 @@ function acLinhas(){
   document.getElementById("ac-meta").textContent = `${L.length} de ${AC.acoes.length} empresas · cotações do pregão de ${acData(AC.pregao)} · dados gerados em ${acData((AC.gerado_em || "").slice(0,10))}`;
 }
 if (!document.getElementById("view-acoes").hidden) renderAcoes();
+</script>
+<script>
+/* ===================== PGBL ===================== */
+/* Motor: IRPF ano-calendário 2026 (declaração 2027). Lei 15.270/2025 (redutor anual), desconto simplificado de R$ 17.640,00 */
+const PG = {
+  faixas: [[29145.60,0,0],[33919.80,0.075,2185.92],[45012.60,0.15,4729.91],[55976.16,0.225,8105.85],[Infinity,0.275,10904.66]],
+  simplPct:0.20, simplTeto:17640.00, dependente:2275.08, educTeto:3561.50, pgblPct:0.12,
+  red1Lim:60000, red1Max:2694.15, red2Lim:88200, red2A:8429.73, red2B:0.095575
+};
+function pgTabela(base){ if (base <= 0) return 0; for (const [lim,a,d] of PG.faixas) if (base <= lim) return Math.max(0, base*a - d); }
+function pgRedutor(R, imp){ let r = 0; if (R <= PG.red1Lim) r = PG.red1Max; else if (R <= PG.red2Lim) r = PG.red2A - PG.red2B*R; return Math.max(0, Math.min(r, imp)); }
+function pgIR(R, base){ const b = pgTabela(base); return Math.max(0, b - pgRedutor(R, b)); }
+function pgCalcular(inp){
+  const R = Math.max(0, +inp.renda || 0), inss = Math.max(0, +inp.inss || 0), dep = Math.max(0, Math.floor(+inp.dependentes || 0));
+  const med = Math.max(0, +inp.medicas || 0), educ = Math.min(Math.max(0, +inp.educacao || 0), PG.educTeto*(1+dep));
+  const ja = Math.max(0, +inp.jaAportado || 0), oficial = inp.contribuiOficial !== false;
+  const limite = PG.pgblPct*R, jaDed = oficial ? Math.min(ja, limite) : 0, espaco = oficial ? Math.max(0, limite - ja) : 0;
+  const aporte = inp.aporte == null ? espaco : Math.max(0, +inp.aporte), aporteDed = Math.min(aporte, espaco);
+  const baseSimpl = Math.max(0, R - Math.min(PG.simplPct*R, PG.simplTeto));
+  const baseCompSem = Math.max(0, R - inss - dep*PG.dependente - med - educ - jaDed), baseCompCom = Math.max(0, baseCompSem - aporteDed);
+  const irSimpl = pgIR(R, baseSimpl), irCompSem = pgIR(R, baseCompSem), irCompCom = pgIR(R, baseCompCom);
+  const irSem = Math.min(irSimpl, irCompSem), irCom = Math.min(irSimpl, irCompCom), economia = Math.max(0, irSem - irCom);
+  return { R, limite, espaco, aporte, aporteDed, excedente:Math.max(0, aporte - aporteDed), baseSimpl, baseCompSem, baseCompCom,
+    irSimpl, irCompSem, irCompCom, irSem, irCom, economia, pct: aporte > 0 ? economia/aporte : 0,
+    modeloSem: irCompSem <= irSimpl ? "completo" : "simplificado", modeloCom: irCompCom < irSimpl ? "completo" : "simplificado",
+    faixa: R <= PG.red1Lim ? "isenta" : R <= PG.red2Lim ? "redutor" : "cheia", oficial };
+}
+(function(){
+  const $ = id => document.getElementById(id);
+  const brl = v => v.toLocaleString("pt-BR", {style:"currency", currency:"BRL", maximumFractionDigits:0});
+  const brl2 = v => v.toLocaleString("pt-BR", {style:"currency", currency:"BRL", minimumFractionDigits:2});
+  const num = s => { s = String(s || "").replace(/[^\d,]/g, "").replace(",", "."); const n = parseFloat(s); return isNaN(n) ? 0 : n; };
+  const fmtIn = el => { const n = num(el.value); el.value = n ? "R$ " + Math.round(n).toLocaleString("pt-BR") : ""; };
+  let dep = 0, aporteManual = null;
+
+  /* prazo: último dia útil bancário de 2026 = 30/12 (31/12 não tem expediente bancário) */
+  const fim = new Date(2026, 11, 30, 23, 59), dias = Math.ceil((fim - new Date())/864e5);
+  $("pg-prazo").innerHTML = dias > 0 ? `Faltam <b>${dias} dias</b> para aportar e abater no IR 2027` : "O prazo de 2026 terminou";
+
+  function ler(){ return { renda:num($("pg-renda").value), inss:num($("pg-inss").value), jaAportado:num($("pg-ja").value), dependentes:dep,
+    medicas:num($("pg-med").value), educacao:num($("pg-edu").value), contribuiOficial:$("pg-oficial").checked }; }
+
+  function render(){
+    const inp = ler();
+    if (inp.renda <= 0){ $("pg-vazio").hidden = false; $("pg-out").hidden = true; return; }
+    $("pg-vazio").hidden = true; $("pg-out").hidden = false;
+    const base = pgCalcular(inp), sl = $("pg-aporte");
+    const max = Math.max(1000, Math.ceil(base.espaco*1.5/100)*100);
+    sl.max = max; sl.value = (aporteManual == null || aporteManual > max) ? Math.round(base.espaco/100)*100 : aporteManual;
+    inp.aporte = +sl.value; const r = pgCalcular(inp);
+    $("pg-aportev").textContent = brl(r.aporte);
+    $("pg-eco").textContent = brl(r.economia);
+    $("pg-ecos").textContent = r.economia > 0 ? `de IR a menos na declaração de 2027 (restituição maior ou imposto menor), aportando ${brl(r.aporte)}.` : "Com estes dados, o aporte no PGBL não reduz o seu imposto.";
+    $("pg-kmax").textContent = brl(r.espaco);
+    $("pg-kpct").textContent = (r.pct*100).toLocaleString("pt-BR", {maximumFractionDigits:1}) + "%";
+    const mx = Math.max(r.irSem, 1);
+    $("pg-bsem").style.width = (r.irSem/mx*100) + "%"; $("pg-bcom").style.width = (r.irCom/mx*100) + "%";
+    $("pg-vsem").textContent = brl(r.irSem); $("pg-vcom").textContent = brl(r.irCom);
+    $("pg-msem").textContent = "· " + r.modeloSem; $("pg-mcom").textContent = "· " + r.modeloCom;
+    const A = [];
+    if (!r.oficial) A.push(["warn","Sem contribuição ao INSS ou a regime próprio, o PGBL não é dedutível. Para investir para a aposentadoria, o VGBL tende a fazer mais sentido."]);
+    else if (r.faixa === "isenta") A.push(["warn","Com renda tributável de até R$ 60 mil no ano, a nova regra já zera o seu IR. Não há imposto para deduzir: o PGBL não traz ganho fiscal. O VGBL costuma ser mais adequado."]);
+    else if (r.espaco <= 0) A.push(["warn","Você já usou todo o limite de 12%. Aportes adicionais em previdência fazem mais sentido no VGBL."]);
+    else if (r.economia <= 0) A.push(["warn","Mesmo com o aporte, o modelo simplificado continua mais vantajoso para você. Nesse caso o PGBL não gera economia; avalie o VGBL."]);
+    else {
+      A.push(["ok", r.modeloSem === "simplificado" && r.modeloCom === "completo" ? "Com o aporte, o modelo <b>completo</b> passa a valer mais que o simplificado. Lembre de trocar o modelo na declaração." : "Declare no modelo <b>completo</b> para aproveitar o benefício."]);
+      if (r.faixa === "redutor") A.push(["warn","Na faixa de R$ 60 mil a R$ 88,2 mil, o redutor da nova lei já diminui o imposto, então a economia com PGBL é menor do que a alíquota sugere."]);
+      if (r.pct < 0.12 && r.aporte > 0) A.push(["warn","A economia é menor que 12% do aporte. Como no resgate você paga pelo menos 10% sobre o total, a vantagem fica apertada: o custo do plano faz diferença."]);
+    }
+    if (r.excedente > 0) A.push(["warn", `<b>${brl(r.excedente)}</b> do valor simulado passa do limite de 12% e não é deduzido. Esse excedente pode ir para um VGBL.`]);
+    $("pg-alertas").innerHTML = A.map(([c,t]) => `<div class="pg-al ${c}">${t}</div>`).join("");
+    const rows = [["Renda tributável",r.R],["Limite do PGBL (12%)",r.limite],["Aporte deduzido agora",r.aporteDed],["Base · simplificado",r.baseSimpl],["IR · simplificado",r.irSimpl],
+      ["Base · completo sem aporte",r.baseCompSem],["IR · completo sem aporte",r.irCompSem],["Base · completo com aporte",r.baseCompCom],["IR · completo com aporte",r.irCompCom],["Economia",r.economia]];
+    $("pg-conta").innerHTML = rows.map(([a,b]) => `<tr><td>${a}</td><td>${brl2(b)}</td></tr>`).join("");
+  }
+  ["pg-renda","pg-inss","pg-ja","pg-med","pg-edu"].forEach(id => { const el = $(id);
+    el.addEventListener("input", () => { aporteManual = null; render(); });
+    el.addEventListener("blur", () => fmtIn(el)); });
+  $("pg-oficial").addEventListener("change", () => { aporteManual = null; render(); });
+  $("pg-aporte").addEventListener("input", e => { aporteManual = +e.target.value; render(); });
+  $("pg-dm").onclick = () => { dep = Math.max(0, dep-1); $("pg-dep").textContent = dep; aporteManual = null; render(); };
+  $("pg-dp").onclick = () => { dep = Math.min(10, dep+1); $("pg-dep").textContent = dep; aporteManual = null; render(); };
+  $("pg-exemplo").onclick = () => { $("pg-renda").value = "R$ 200.000"; $("pg-inss").value = "R$ 11.000"; $("pg-ja").value = ""; dep = 1; $("pg-dep").textContent = 1;
+    $("pg-med").value = "R$ 4.000"; $("pg-edu").value = ""; aporteManual = null; render(); };
+  render();
+  ligarFormulario("pg-", () => "PGBL · calculadora");
+})();
 </script>
 </body>
 </html>
