@@ -673,6 +673,27 @@ nav.tabs .sm{display:none}
 .pg-tag{justify-self:start;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--ink)}
 @media (max-width:900px){ .pg-ins,.pg-dec{grid-template-columns:1fr 1fr} }
 @media (max-width:720px){ .pg-grid,.pg-ins,.pg-dec{grid-template-columns:1fr} .pg-res{position:static} .pg-prazo{white-space:normal} }
+.pg-ctrl{display:flex;gap:10px;flex-wrap:wrap}
+.pg-ctrl .field{min-width:170px}
+.pg-acum-grid{display:grid;grid-template-columns:1.7fr 1fr;gap:16px;align-items:start}
+.pg-acum-grid > *{min-width:0}
+.pg-chart-box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.pg-legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--muted);margin-bottom:6px}
+.pg-legend span{display:inline-flex;align-items:center;gap:6px}
+.pg-legend i{display:inline-block;width:18px;height:0;border-top:3px solid}
+.l-r{border-color:var(--accent)!important}.l-p{border-color:var(--muted)!important;opacity:.6}.l-f{border-top-style:dashed!important;border-color:var(--muted)!important}
+.pg-chart{position:relative}
+.pg-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.pg-chart text{font:500 11px var(--f-data);fill:var(--muted)}
+.pg-tipbox{position:absolute;pointer-events:none;background:var(--tip-bg,#13231F);color:var(--tip-fg,#fff);border-radius:8px;padding:8px 10px;font-size:.78rem;line-height:1.45;white-space:nowrap;transform:translate(-50%,-110%)}
+.pg-tipbox b{font-family:var(--f-data)}
+.pg-acum-side{display:grid;gap:10px;align-content:start}
+.pg-sum{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid}
+.pg-sum.on{border:2px solid var(--accent)}
+.pg-sum span{font-size:.8rem;color:var(--muted);font-weight:600}
+.pg-sum b{font-size:1.35rem}
+.pg-sum.on b{color:var(--accent)}
+@media (max-width:820px){ .pg-acum-grid{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -1226,6 +1247,36 @@ nav.tabs .sm{display:none}
       </div>
     </section>
   </div>
+
+  <section class="block" id="pg-acum" aria-labelledby="pg-acum-t">
+    <div class="sechead">
+      <div>
+        <h2 id="pg-acum-t">Quanto isso vira com o tempo</h2>
+        <p class="muted" id="pg-acum-sub" style="margin-top:6px">Aportando todo ano o mesmo valor, nos três caminhos, com o mesmo dinheiro saindo do seu bolso.</p>
+      </div>
+      <div class="pg-ctrl">
+        <div class="field"><label for="pg-anos">Prazo</label><select id="pg-anos"><option value="10">10 anos</option><option value="15">15 anos</option><option value="20" selected>20 anos</option><option value="25">25 anos</option><option value="30">30 anos</option></select></div>
+        <div class="field"><label for="pg-perfil" data-tip-title="Rendimento real" data-tip="Quanto a carteira rende acima da inflação por ano, antes do IR: conservadora 3%, moderada 4,5%, arrojada 6%. Os valores do gráfico estão em reais de hoje." tabindex="0">Carteira ⓘ</label><select id="pg-perfil"><option value="0.03">Conservadora · 3% real</option><option value="0.045" selected>Moderada · 4,5% real</option><option value="0.06">Arrojada · 6% real</option></select></div>
+      </div>
+    </div>
+    <div class="pg-acum-grid">
+      <div class="pg-chart-box">
+        <div class="pg-legend">
+          <span><i class="l-r"></i>PGBL + restituição reinvestida</span>
+          <span><i class="l-p"></i>PGBL, gastando a restituição</span>
+          <span><i class="l-f"></i>Fundo comum</span>
+        </div>
+        <div class="pg-chart" id="pg-chart"></div>
+      </div>
+      <div class="pg-acum-side">
+        <div class="pg-sum on"><span>PGBL + restituição reinvestida</span><b class="mono" id="pg-s-r">—</b></div>
+        <div class="pg-sum"><span>PGBL, gastando a restituição</span><b class="mono" id="pg-s-p">—</b></div>
+        <div class="pg-sum"><span>Fundo comum, mesmo aporte</span><b class="mono" id="pg-s-f">—</b></div>
+        <div class="pg-al" id="pg-s-msg"></div>
+      </div>
+    </div>
+    <p class="ind-foot muted" style="margin-top:12px">Valores líquidos, como se você resgatasse tudo no ano indicado, em reais de hoje. Aporte anual corrigido pela inflação (4% ao ano), restituição recebida no ano seguinte e aplicada em VGBL. IR no resgate pela tabela regressiva, aporte por aporte (os mais recentes pagam alíquota maior). Fundo comum com come-cotas semestral de 15%. Mesma rentabilidade bruta e mesmo custo nos três caminhos. Simulação educativa: retornos reais variam e não são garantidos.</p>
+  </section>
 
   <section class="block">
     <div class="sechead">
@@ -3087,6 +3138,68 @@ function acLinhas(){
 if (!document.getElementById("view-acoes").hidden) renderAcoes();
 </script>
 <script>
+/* Acumulação: o que a economia de IR vira com o tempo */
+function pgRegAliq(a){ return a<=2?0.35:a<=4?0.30:a<=6?0.25:a<=8?0.20:a<=10?0.15:0.10; }
+function pgAcumular({aporte, economia, anos, real, inflacao=0.04}){
+  const nom=(1+real)*(1+inflacao)-1, semi=Math.sqrt(1+nom)-1, out=[], pg=[], vg=[];
+  let fundo=0;
+  for(let t=1;t<=anos;t++){
+    const inf=(1+inflacao)**(t-1);
+    pg.push({ano:t, principal:aporte*inf, saldo:aporte*inf});
+    if (t>1) vg.push({ano:t, principal:economia*inf, saldo:economia*inf});
+    fundo+=aporte*inf;
+    pg.forEach(c=>c.saldo*=1+nom); vg.forEach(c=>c.saldo*=1+nom);
+    for(let s=0;s<2;s++){ fundo+=fundo*semi*0.85; }
+    const defl=(1+inflacao)**t, idade=c=>t-c.ano+1;
+    const pgLiq=pg.reduce((s,c)=>s+c.saldo*(1-pgRegAliq(idade(c))),0);
+    const vgLiq=vg.reduce((s,c)=>s+c.saldo-(c.saldo-c.principal)*pgRegAliq(idade(c)),0);
+    out.push({ano:t, fundo:fundo/defl, pgbl:pgLiq/defl, reinv:(pgLiq+vgLiq+economia*defl)/defl});
+  }
+  return out;
+}
+const PG_ACUM = {aporte:0, economia:0};
+function pgDesenharAcum(){
+  const $=id=>document.getElementById(id);
+  const box=$("pg-chart"); if(!box) return;
+  const exemplo = !(PG_ACUM.aporte>0 && PG_ACUM.economia>0);
+  const aporte = exemplo ? 24000 : PG_ACUM.aporte, economia = exemplo ? 6500 : PG_ACUM.economia;
+  const anos=+$("pg-anos").value, real=+$("pg-perfil").value;
+  const d=pgAcumular({aporte, economia, anos, real});
+  const brl=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
+  const mil=v=>v>=1e6?(v/1e6).toLocaleString("pt-BR",{maximumFractionDigits:1})+" mi":Math.round(v/1e3)+" mil";
+  $("pg-acum-sub").innerHTML = (exemplo ? "Exemplo: " : "Com os seus números: ") + `aporte de <b>${brl(aporte)}</b> por ano no PGBL e economia de IR de <b>${brl(economia)}</b> por ano. ` + (exemplo ? "Preencha a calculadora acima para ver o seu." : "Mesmo dinheiro saindo do bolso nos três caminhos.");
+  const W=box.clientWidth && box.clientWidth<520 ? 400 : 720, H=300, L=54, R=14, T=12, B=28, maxY=Math.max(...d.map(p=>p.reinv))*1.06;
+  const x=i=>L+(W-L-R)*(i/(anos-1||1)), y=v=>T+(H-T-B)*(1-v/maxY);
+  const path=k=>d.map((p,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(p[k]).toFixed(1)).join(" ");
+  const ticks=[0,.25,.5,.75,1].map(f=>maxY*f);
+  const passo = W<500 ? (anos>20?10:5) : 5, xt=d.filter(p=>p.ano===1||p.ano%passo===0);
+  box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Patrimônio líquido acumulado em ${anos} anos nos três caminhos">
+    ${ticks.map(v=>`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L-8}" y="${y(v)+4}" text-anchor="end">${v?mil(v):"0"}</text>`).join("")}
+    ${xt.map(p=>`<text x="${x(p.ano-1)}" y="${H-8}" text-anchor="middle">${p.ano===1?"1º ano":p.ano+" anos"}</text>`).join("")}
+    <path d="${path("fundo")}" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 5"/>
+    <path d="${path("pgbl")}" fill="none" stroke="var(--muted)" stroke-opacity=".6" stroke-width="2.2"/>
+    <path d="${path("reinv")}" fill="none" stroke="var(--accent)" stroke-width="3.4"/>
+    <circle cx="${x(anos-1)}" cy="${y(d[anos-1].reinv)}" r="5" fill="var(--accent)"/>
+    <line id="pg-hl" x1="0" x2="0" y1="${T}" y2="${H-B}" stroke="var(--ink)" stroke-opacity=".25" visibility="hidden"/>
+    <rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" id="pg-hit"/>
+  </svg><div class="pg-tipbox" id="pg-tb" hidden></div>`;
+  const svg=box.querySelector("svg"), hl=$("pg-hl"), tb=$("pg-tb");
+  const mover=ev=>{ const pt=(ev.touches?ev.touches[0]:ev), r=svg.getBoundingClientRect();
+    const sx=(pt.clientX-r.left)*W/r.width, i=Math.max(0,Math.min(anos-1,Math.round((sx-L)/((W-L-R)/(anos-1||1))))), p=d[i];
+    hl.setAttribute("x1",x(i)); hl.setAttribute("x2",x(i)); hl.setAttribute("visibility","visible");
+    tb.hidden=false; tb.style.left=(x(i)*r.width/W)+"px"; tb.style.top=(y(p.reinv)*r.height/H)+"px";
+    tb.innerHTML=`<b>${p.ano} ${p.ano===1?"ano":"anos"}</b><br>Reinvestindo: <b>${brl(p.reinv)}</b><br>Gastando: <b>${brl(p.pgbl)}</b><br>Fundo comum: <b>${brl(p.fundo)}</b>`; };
+  const sair=()=>{ hl.setAttribute("visibility","hidden"); tb.hidden=true; };
+  const hit=$("pg-hit"); hit.addEventListener("mousemove",mover); hit.addEventListener("touchmove",mover,{passive:true}); hit.addEventListener("touchstart",mover,{passive:true}); hit.addEventListener("mouseleave",sair);
+  const fim=d[anos-1];
+  $("pg-s-r").textContent=brl(fim.reinv); $("pg-s-p").textContent=brl(fim.pgbl); $("pg-s-f").textContent=brl(fim.fundo);
+  const ganho=fim.reinv-fim.fundo, pct=ganho/fim.fundo*100;
+  $("pg-s-msg").innerHTML=`Reinvestindo a restituição, você chega a <b>${brl(ganho)} a mais</b> (${pct.toLocaleString("pt-BR",{maximumFractionDigits:0})}%) do que num fundo comum. `+
+    (fim.pgbl<fim.fundo ? "Repare: gastando a restituição, o PGBL fica <b>abaixo</b> do fundo comum. A vantagem do PGBL está em transformar a economia de IR em mais aporte." : "Gastando a restituição, a vantagem do PGBL encolhe para "+brl(fim.pgbl-fim.fundo)+". O que faz a diferença é reinvestir a economia de IR.");
+}
+document.getElementById("pg-anos").addEventListener("change",pgDesenharAcum);
+document.getElementById("pg-perfil").addEventListener("change",pgDesenharAcum);
+
 /* ===================== PGBL ===================== */
 /* Motor: IRPF ano-calendário 2026 (declaração 2027). Lei 15.270/2025 (redutor anual), desconto simplificado de R$ 17.640,00 */
 const PG = {
@@ -3129,7 +3242,7 @@ function pgCalcular(inp){
 
   function render(){
     const inp = ler();
-    if (inp.renda <= 0){ $("pg-vazio").hidden = false; $("pg-out").hidden = true; return; }
+    if (inp.renda <= 0){ $("pg-vazio").hidden = false; $("pg-out").hidden = true; PG_ACUM.aporte = 0; PG_ACUM.economia = 0; pgDesenharAcum(); return; }
     $("pg-vazio").hidden = true; $("pg-out").hidden = false;
     const base = pgCalcular(inp), sl = $("pg-aporte");
     const max = Math.max(1000, Math.ceil(base.espaco*1.5/100)*100);
@@ -3159,6 +3272,7 @@ function pgCalcular(inp){
     const rows = [["Renda tributável",r.R],["Limite do PGBL (12%)",r.limite],["Aporte deduzido agora",r.aporteDed],["Base · simplificado",r.baseSimpl],["IR · simplificado",r.irSimpl],
       ["Base · completo sem aporte",r.baseCompSem],["IR · completo sem aporte",r.irCompSem],["Base · completo com aporte",r.baseCompCom],["IR · completo com aporte",r.irCompCom],["Economia",r.economia]];
     $("pg-conta").innerHTML = rows.map(([a,b]) => `<tr><td>${a}</td><td>${brl2(b)}</td></tr>`).join("");
+    PG_ACUM.aporte = r.aporte; PG_ACUM.economia = r.economia; pgDesenharAcum();
   }
   ["pg-renda","pg-inss","pg-ja","pg-med","pg-edu"].forEach(id => { const el = $(id);
     el.addEventListener("input", () => { aporteManual = null; render(); });
