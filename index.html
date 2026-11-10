@@ -1252,30 +1252,30 @@ nav.tabs .sm{display:none}
     <div class="sechead">
       <div>
         <h2 id="pg-acum-t">Quanto isso vira com o tempo</h2>
-        <p class="muted" id="pg-acum-sub" style="margin-top:6px">Aportando todo ano o mesmo valor, nos três caminhos, com o mesmo dinheiro saindo do seu bolso.</p>
+        <p class="muted" id="pg-acum-sub" style="margin-top:6px">Aportando todo ano o mesmo valor nos dois caminhos, com o mesmo dinheiro saindo do seu bolso.</p>
       </div>
       <div class="pg-ctrl">
         <div class="field"><label for="pg-anos">Prazo</label><select id="pg-anos"><option value="10">10 anos</option><option value="15">15 anos</option><option value="20" selected>20 anos</option><option value="25">25 anos</option><option value="30">30 anos</option></select></div>
         <div class="field"><label for="pg-perfil" data-tip-title="Rendimento real" data-tip="Quanto a carteira rende acima da inflação por ano, antes do IR: conservadora 3%, moderada 4,5%, arrojada 6%. Os valores do gráfico estão em reais de hoje." tabindex="0">Carteira ⓘ</label><select id="pg-perfil"><option value="0.03">Conservadora · 3% real</option><option value="0.045" selected>Moderada · 4,5% real</option><option value="0.06">Arrojada · 6% real</option></select></div>
+        <div class="field"><label for="pg-modo" data-tip-title="Como você resgata" data-tip="Na aposentadoria, o normal é sacar aos poucos: os aportes mais antigos saem primeiro e os recentes têm tempo de chegar aos 10% da tabela regressiva. Resgatar tudo de uma vez faz os aportes dos últimos anos pagarem de 15% a 35%." tabindex="0">Resgate ⓘ</label><select id="pg-modo"><option value="gradual" selected>Aos poucos, na aposentadoria</option><option value="total">Tudo de uma vez no ano final</option></select></div>
       </div>
     </div>
     <div class="pg-acum-grid">
       <div class="pg-chart-box">
         <div class="pg-legend">
           <span><i class="l-r"></i>PGBL + restituição reinvestida</span>
-          <span><i class="l-p"></i>PGBL, gastando a restituição</span>
-          <span><i class="l-f"></i>Fundo comum</span>
+          <span><i class="l-f"></i>Fundo comum (com come-cotas)</span>
         </div>
         <div class="pg-chart" id="pg-chart"></div>
       </div>
       <div class="pg-acum-side">
         <div class="pg-sum on"><span>PGBL + restituição reinvestida</span><b class="mono" id="pg-s-r">—</b></div>
-        <div class="pg-sum"><span>PGBL, gastando a restituição</span><b class="mono" id="pg-s-p">—</b></div>
         <div class="pg-sum"><span>Fundo comum, mesmo aporte</span><b class="mono" id="pg-s-f">—</b></div>
+        <div class="pg-sum"><span>Vantagem da previdência</span><b class="mono" id="pg-s-p">—</b></div>
         <div class="pg-al" id="pg-s-msg"></div>
       </div>
     </div>
-    <p class="ind-foot muted" style="margin-top:12px">Valores líquidos, como se você resgatasse tudo no ano indicado, em reais de hoje. Aporte anual corrigido pela inflação (4% ao ano), restituição recebida no ano seguinte e aplicada em VGBL. IR no resgate pela tabela regressiva, aporte por aporte (os mais recentes pagam alíquota maior). Fundo comum com come-cotas semestral de 15%. Mesma rentabilidade bruta e mesmo custo nos três caminhos. Simulação educativa: retornos reais variam e não são garantidos.</p>
+    <p class="ind-foot muted" style="margin-top:12px">Valores líquidos de IR, em reais de hoje. Aporte anual corrigido pela inflação (4% ao ano), restituição recebida no ano seguinte e aplicada em VGBL. IR no resgate pela tabela regressiva: "aos poucos" considera 10% sobre todo o saldo, como num resgate gradual em que cada aporte já passou de 10 anos; "tudo de uma vez" aplica a alíquota de cada aporte pela idade dele. Fundo comum com come-cotas semestral de 15%, sem IR adicional no resgate. Mesma rentabilidade bruta e mesmo custo nos dois caminhos. Simulação educativa: retornos reais variam e não são garantidos.</p>
   </section>
 
   <section class="block">
@@ -3140,7 +3140,7 @@ if (!document.getElementById("view-acoes").hidden) renderAcoes();
 <script>
 /* Acumulação: o que a economia de IR vira com o tempo */
 function pgRegAliq(a){ return a<=2?0.35:a<=4?0.30:a<=6?0.25:a<=8?0.20:a<=10?0.15:0.10; }
-function pgAcumular({aporte, economia, anos, real, inflacao=0.04}){
+function pgAcumular({aporte, economia, anos, real, inflacao=0.04, modo="gradual"}){
   const nom=(1+real)*(1+inflacao)-1, semi=Math.sqrt(1+nom)-1, out=[], pg=[], vg=[];
   let fundo=0;
   for(let t=1;t<=anos;t++){
@@ -3150,9 +3150,9 @@ function pgAcumular({aporte, economia, anos, real, inflacao=0.04}){
     fundo+=aporte*inf;
     pg.forEach(c=>c.saldo*=1+nom); vg.forEach(c=>c.saldo*=1+nom);
     for(let s=0;s<2;s++){ fundo+=fundo*semi*0.85; }
-    const defl=(1+inflacao)**t, idade=c=>t-c.ano+1;
-    const pgLiq=pg.reduce((s,c)=>s+c.saldo*(1-pgRegAliq(idade(c))),0);
-    const vgLiq=vg.reduce((s,c)=>s+c.saldo-(c.saldo-c.principal)*pgRegAliq(idade(c)),0);
+    const defl=(1+inflacao)**t, al=c=>modo==="gradual" ? 0.10 : pgRegAliq(t-c.ano+1);
+    const pgLiq=pg.reduce((s,c)=>s+c.saldo*(1-al(c)),0);
+    const vgLiq=vg.reduce((s,c)=>s+c.saldo-(c.saldo-c.principal)*al(c),0);
     out.push({ano:t, fundo:fundo/defl, pgbl:pgLiq/defl, reinv:(pgLiq+vgLiq+economia*defl)/defl});
   }
   return out;
@@ -3164,20 +3164,19 @@ function pgDesenharAcum(){
   const exemplo = !(PG_ACUM.aporte>0 && PG_ACUM.economia>0);
   const aporte = exemplo ? 24000 : PG_ACUM.aporte, economia = exemplo ? 6500 : PG_ACUM.economia;
   const anos=+$("pg-anos").value, real=+$("pg-perfil").value;
-  const d=pgAcumular({aporte, economia, anos, real});
+  const modo=$("pg-modo").value, d=pgAcumular({aporte, economia, anos, real, modo});
   const brl=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
   const mil=v=>v>=1e6?(v/1e6).toLocaleString("pt-BR",{maximumFractionDigits:1})+" mi":Math.round(v/1e3)+" mil";
-  $("pg-acum-sub").innerHTML = (exemplo ? "Exemplo: " : "Com os seus números: ") + `aporte de <b>${brl(aporte)}</b> por ano no PGBL e economia de IR de <b>${brl(economia)}</b> por ano. ` + (exemplo ? "Preencha a calculadora acima para ver o seu." : "Mesmo dinheiro saindo do bolso nos três caminhos.");
+  $("pg-acum-sub").innerHTML = (exemplo ? "Exemplo: " : "Com os seus números: ") + `aporte de <b>${brl(aporte)}</b> por ano no PGBL e economia de IR de <b>${brl(economia)}</b> por ano. ` + (exemplo ? "Preencha a calculadora acima para ver o seu." : "Mesmo dinheiro saindo do bolso nos dois caminhos.");
   const W=box.clientWidth && box.clientWidth<520 ? 400 : 720, H=300, L=54, R=14, T=12, B=28, maxY=Math.max(...d.map(p=>p.reinv))*1.06;
   const x=i=>L+(W-L-R)*(i/(anos-1||1)), y=v=>T+(H-T-B)*(1-v/maxY);
   const path=k=>d.map((p,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(p[k]).toFixed(1)).join(" ");
   const ticks=[0,.25,.5,.75,1].map(f=>maxY*f);
   const passo = W<500 ? (anos>20?10:5) : 5, xt=d.filter(p=>p.ano===1||p.ano%passo===0);
-  box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Patrimônio líquido acumulado em ${anos} anos nos três caminhos">
+  box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Patrimônio líquido acumulado em ${anos} anos: PGBL com restituição reinvestida e fundo comum">
     ${ticks.map(v=>`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L-8}" y="${y(v)+4}" text-anchor="end">${v?mil(v):"0"}</text>`).join("")}
     ${xt.map(p=>`<text x="${x(p.ano-1)}" y="${H-8}" text-anchor="middle">${p.ano===1?"1º ano":p.ano+" anos"}</text>`).join("")}
     <path d="${path("fundo")}" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 5"/>
-    <path d="${path("pgbl")}" fill="none" stroke="var(--muted)" stroke-opacity=".6" stroke-width="2.2"/>
     <path d="${path("reinv")}" fill="none" stroke="var(--accent)" stroke-width="3.4"/>
     <circle cx="${x(anos-1)}" cy="${y(d[anos-1].reinv)}" r="5" fill="var(--accent)"/>
     <line id="pg-hl" x1="0" x2="0" y1="${T}" y2="${H-B}" stroke="var(--ink)" stroke-opacity=".25" visibility="hidden"/>
@@ -3188,17 +3187,19 @@ function pgDesenharAcum(){
     const sx=(pt.clientX-r.left)*W/r.width, i=Math.max(0,Math.min(anos-1,Math.round((sx-L)/((W-L-R)/(anos-1||1))))), p=d[i];
     hl.setAttribute("x1",x(i)); hl.setAttribute("x2",x(i)); hl.setAttribute("visibility","visible");
     tb.hidden=false; tb.style.left=(x(i)*r.width/W)+"px"; tb.style.top=(y(p.reinv)*r.height/H)+"px";
-    tb.innerHTML=`<b>${p.ano} ${p.ano===1?"ano":"anos"}</b><br>Reinvestindo: <b>${brl(p.reinv)}</b><br>Gastando: <b>${brl(p.pgbl)}</b><br>Fundo comum: <b>${brl(p.fundo)}</b>`; };
+    tb.innerHTML=`<b>${p.ano} ${p.ano===1?"ano":"anos"}</b><br>PGBL: <b>${brl(p.reinv)}</b><br>Fundo comum: <b>${brl(p.fundo)}</b><br>Diferença: <b>${brl(p.reinv-p.fundo)}</b>`; };
   const sair=()=>{ hl.setAttribute("visibility","hidden"); tb.hidden=true; };
   const hit=$("pg-hit"); hit.addEventListener("mousemove",mover); hit.addEventListener("touchmove",mover,{passive:true}); hit.addEventListener("touchstart",mover,{passive:true}); hit.addEventListener("mouseleave",sair);
   const fim=d[anos-1];
-  $("pg-s-r").textContent=brl(fim.reinv); $("pg-s-p").textContent=brl(fim.pgbl); $("pg-s-f").textContent=brl(fim.fundo);
   const ganho=fim.reinv-fim.fundo, pct=ganho/fim.fundo*100;
-  $("pg-s-msg").innerHTML=`Reinvestindo a restituição, você chega a <b>${brl(ganho)} a mais</b> (${pct.toLocaleString("pt-BR",{maximumFractionDigits:0})}%) do que num fundo comum. `+
-    (fim.pgbl<fim.fundo ? "Repare: gastando a restituição, o PGBL fica <b>abaixo</b> do fundo comum. A vantagem do PGBL está em transformar a economia de IR em mais aporte." : "Gastando a restituição, a vantagem do PGBL encolhe para "+brl(fim.pgbl-fim.fundo)+". O que faz a diferença é reinvestir a economia de IR.");
+  $("pg-s-r").textContent=brl(fim.reinv); $("pg-s-f").textContent=brl(fim.fundo);
+  $("pg-s-p").textContent="+"+brl(ganho)+" ("+pct.toLocaleString("pt-BR",{maximumFractionDigits:0})+"%)";
+  $("pg-s-msg").innerHTML = "A diferença vem de três lugares: sem come-cotas, o imposto fica rendendo dentro do plano; a restituição de IR vira mais aporte todo ano; e o IR do resgate cai para 10%. " +
+    (modo==="gradual" ? "Atenção: a restituição precisa ser reinvestida. Gasta, ela vira consumo, e o PGBL perde a maior parte da vantagem." : "Resgatando tudo de uma vez, os aportes dos últimos anos pagam alíquota maior: a vantagem existe, mas é menor que no resgate gradual.");
 }
 document.getElementById("pg-anos").addEventListener("change",pgDesenharAcum);
 document.getElementById("pg-perfil").addEventListener("change",pgDesenharAcum);
+document.getElementById("pg-modo").addEventListener("change",pgDesenharAcum);
 
 /* ===================== PGBL ===================== */
 /* Motor: IRPF ano-calendário 2026 (declaração 2027). Lei 15.270/2025 (redutor anual), desconto simplificado de R$ 17.640,00 */
