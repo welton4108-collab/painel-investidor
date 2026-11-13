@@ -51,6 +51,17 @@ svg text{font-family:'Plus Jakarta Sans',sans-serif}
 .foot p{margin-top:6px}
 .cta{margin-top:20px;text-align:center;font-size:15px;color:var(--navy)}
 .cta a{color:var(--gold);font-weight:700;text-decoration:none}
+section.cta{text-align:left;font-size:14px} .cta{background:var(--navy);color:#fff;border-radius:18px;padding:28px;display:grid;grid-template-columns:1fr 1.1fr;gap:28px;margin-top:18px}
+.cta>*{min-width:0} .cta h2{color:#fff;font-size:22px;margin:0} .cta p{margin-top:10px;opacity:.92;font-size:14.5px}
+.cta form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cta .field label{color:#fff} .cta .field input,.cta .field select{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:0;border-radius:8px;background:#fff;color:var(--navy)}
+.field{display:grid;gap:6px}.cta .full{grid-column:1/-1}
+.consent{display:flex;gap:8px;font-size:12.5px;align-items:flex-start;color:#fff;font-weight:400}.consent input{margin-top:3px}
+.btn{font:700 15px 'Plus Jakarta Sans',sans-serif;background:var(--gold);color:var(--navy);border:0;border-radius:10px;padding:13px 18px;cursor:pointer}
+.btn[disabled]{opacity:.6;cursor:wait}.btn.wa{display:inline-flex;text-decoration:none;background:#1F8A4D;color:#fff;margin-top:14px}
+.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.ok{background:#fff;color:var(--navy);border-radius:12px;padding:18px}
+@media(max-width:640px){.cta{grid-template-columns:1fr;padding:22px}.cta form{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -99,8 +110,29 @@ svg text{font-family:'Plus Jakarta Sans',sans-serif}
   <p style="font-size:14px">A taxa só é garantida para quem leva o título até o vencimento. Se precisar vender antes, o preço segue a marcação a mercado e pode estar abaixo do que você pagou. Por isso o título escolhido precisa ter o prazo do seu objetivo. Dinheiro que tem data e precisa manter poder de compra tende a casar melhor com o IPCA+. O prefixado pode ocupar uma parte da carteira, desde que a aposta esteja clara.</p>
 </section>
 
-<p class="cta">Quer uma revisão dos seus investimentos? <a href="https://www.instagram.com/welton.garciaz/">Fale comigo no @welton.garciaz</a></p>
-<p class="cta" style="font-size:13.5px;margin-top:8px"><a href="https://painel.objetivoprimeiro.com/">Ver o painel completo</a></p>
+<section class="cta" aria-labelledby="pf-cta-t">
+  <div>
+    <h2 id="pf-cta-t">Quer que eu revise os seus investimentos?</h2>
+    <p>Olho a sua carteira inteira, não só a renda fixa: os objetivos, os prazos, os custos e o imposto. E mostro onde o prefixado, o IPCA+ e o resto fazem sentido para a sua vida.</p>
+  </div>
+  <div id="pf-cta-body">
+    <form id="pf-lead" novalidate>
+      <div class="field"><label for="pf-nome">Nome</label><input id="pf-nome" required autocomplete="name"></div>
+      <div class="field"><label for="pf-zap">WhatsApp</label><input id="pf-zap" required inputmode="tel" autocomplete="tel" placeholder="(44) 99999-9999"></div>
+      <div class="field full"><label for="pf-email">E-mail <span style="font-weight:400;opacity:.8">(opcional)</span></label><input id="pf-email" type="email" autocomplete="email" placeholder="voce@exemplo.com"></div>
+      <div class="hp" aria-hidden="true"><label for="pf-site_url">Não preencha este campo</label><input id="pf-site_url" tabindex="-1" autocomplete="off"></div>
+      <div class="field"><label for="pf-obj">Objetivo principal</label>
+        <select id="pf-obj"><option value="Revisar investimentos / renda fixa">Revisar meus investimentos</option><option value="Aposentadoria">Aposentadoria</option><option value="Montar a reserva">Montar a reserva</option><option value="Médio prazo">Médio prazo</option><option value="Educação dos filhos">Educação dos filhos</option><option value="Viagem ao exterior">Viagem ao exterior</option></select></div>
+      <div class="field"><label for="pf-pat">Patrimônio investido</label>
+        <select id="pf-pat"><option>Até R$ 100 mil</option><option>R$ 100 mil a R$ 500 mil</option><option>R$ 500 mil a R$ 1 milhão</option><option>Acima de R$ 1 milhão</option></select></div>
+      <label class="consent full"><input id="pf-lgpd" type="checkbox" required><span>Autorizo o contato pelo WhatsApp para agendar a reunião. Meus dados serão usados só para isso, conforme a LGPD e o <a href="../privacidade.html" style="color:inherit;text-decoration:underline">aviso de privacidade</a>.</span></label>
+      <button class="btn full" type="submit">Quero revisar meus investimentos</button>
+      <p class="full" id="pf-err" hidden style="font-size:13px;font-weight:600;margin:0"></p>
+    </form>
+  </div>
+</section>
+
+<p class="cta-l" style="text-align:center;font-size:13.5px;margin-top:18px"><a href="https://painel.objetivoprimeiro.com/" style="color:var(--gold);font-weight:700;text-decoration:none">Ver o painel completo</a></p>
 
 <div class="foot">
   <p><b>Premissas.</b> Os dois títulos são levados até o vencimento, sem cupom. O IR é de 15% para prazos acima de 2 anos, seguindo a tabela regressiva para prazos menores, e incide sobre todo o rendimento nominal, inclusive a parte que só repõe a inflação. A custódia da B3 é de 0,20% a.a., cobrada pro rata e abatida da base do IR. A inflação de empate é calculada pela fórmula de Fisher, com taxas brutas. Não considera taxas cobradas pela instituição financeira. Os vencimentos reais dos títulos podem ser diferentes do prazo informado.</p>
@@ -170,8 +202,34 @@ function drawChart(V,T,rp,ri,be,piSel){
 }
 ['v','t','rp','ri','pi'].forEach(id=>$(id).addEventListener('input',render));
 $('v').addEventListener('blur',()=>{$('v').value=num($('v').value).toLocaleString('pt-BR')});
-render();
 window.addEventListener('resize',render);
+/* Lead: mesma planilha do painel */
+const LEADS_URL="https://script.google.com/macros/s/AKfycbyKDNfPPI7u0yieLIwe61DyFEZy3To4ye5m2exLEKYUnBRK3lGd3Mw-t10PjWGAGcgs/exec";
+const WHATSAPP="5544999844019";
+const escH=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+$('pf-lead').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const err=$('pf-err'),btn=e.target.querySelector('button[type="submit"]');
+  const nome=$('pf-nome').value.trim(),zap=$('pf-zap').value.replace(/\D/g,''),email=$('pf-email').value.trim();
+  if(!nome){err.hidden=false;err.textContent='Informe seu nome.';return}
+  if(zap.length<10||zap.length>13){err.hidden=false;err.textContent='Informe um WhatsApp com DDD, por exemplo (44) 99999-9999.';return}
+  if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.hidden=false;err.textContent='Confira o e-mail ou deixe o campo em branco.';return}
+  if(!$('pf-lgpd').checked){err.hidden=false;err.textContent='Marque a autorização de contato para continuar.';return}
+  err.hidden=true;
+  const objetivo=$('pf-obj').value;
+  const dados=new URLSearchParams({nome,whatsapp:zap,email,objetivo,patrimonio:$('pf-pat').value,origem:'Prefixado x IPCA+ · simulador',consentimento:'sim',site_url:$('pf-site_url').value});
+  let enviado=false;
+  btn.disabled=true;btn.textContent='Enviando...';
+  try{await fetch(LEADS_URL,{method:'POST',mode:'no-cors',body:dados});enviado=true}catch(_){enviado=false}
+  const primeiro=escH(nome.split(' ')[0]);
+  const msg=`Olá, Welton! Sou ${nome}. Pedi uma revisão dos meus investimentos pelo simulador de prefixado. Meu objetivo principal: ${objetivo}.`;
+  const link=`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  $('pf-cta-body').innerHTML=`<div class="ok"><b>${enviado?`Pedido recebido, ${primeiro}.`:`Falta só um passo, ${primeiro}.`}</b>
+    <p style="margin-top:6px;opacity:1;color:var(--ink)">${enviado?'Vou entrar em contato pelo WhatsApp para combinar o melhor horário. Se preferir adiantar, fale comigo agora:':'Toque no botão abaixo para me enviar o pedido pelo WhatsApp:'}</p>
+    <a class="btn wa" href="${link}" target="_blank" rel="noopener">Falar agora no WhatsApp</a>
+    <p style="margin-top:12px;font-size:12.5px;color:#7A808A">WhatsApp: (44) 99984-4019</p></div>`;
+});
+render();
 </script>
 </body>
 </html>
