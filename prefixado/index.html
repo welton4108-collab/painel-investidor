@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador Prefixado x IPCA+ | Welton Garcia</title>
+<meta name="description" content="Compare Tesouro Prefixado e Tesouro IPCA+ com os seus números: imposto, custódia e a inflação de empate.">
+<meta property="og:title" content="Prefixado ou IPCA+? Faça a conta com os seus números">
+<meta property="og:description" content="Simulador educativo: valor líquido, poder de compra e inflação de empate.">
+<meta property="og:image" content="https://painel.objetivoprimeiro.com/og-padrao.png">
+<meta property="og:url" content="https://painel.objetivoprimeiro.com/prefixado/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAFAF7;--navy:#0A1628;--ink:#414751;--gold:#B99A45;--line:#E8EBEF;--card:#fff;--ipca:#5B7A99}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px 48px}
+header .who{font-size:13px;letter-spacing:.04em;color:var(--gold);font-weight:700;text-transform:uppercase}
+h1{color:var(--navy);font-size:clamp(24px,5vw,34px);line-height:1.15;font-weight:800;margin:6px 0 10px}
+.lead{font-size:15px;max-width:640px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:18px}
+h2{color:var(--navy);font-size:16px;font-weight:700;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:5px}
+.hint{font-size:11.5px;color:#7A808A;margin-top:3px}
+input[type=text],input[type=number]{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--navy)}
+input:focus{outline:2px solid var(--gold);outline-offset:-1px}
+.slider{margin-top:18px;padding:16px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
+.slider .top{display:flex;justify-content:space-between;align-items:baseline}
+.slider .val{font-size:26px;font-weight:800;color:var(--gold)}
+input[type=range]{width:100%;margin-top:8px;accent-color:var(--gold)}
+.verdict{margin-top:18px;background:var(--navy);color:#fff;border-radius:14px;padding:18px 20px}
+.verdict b{color:var(--gold)}
+.verdict .big{font-size:18px;font-weight:700;line-height:1.35}
+.verdict .small{font-size:13px;opacity:.85;margin-top:6px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:560px){.cols{grid-template-columns:1fr}}
+.res{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--card)}
+.res h3{font-size:14px;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%}
+.row{display:flex;justify-content:space-between;font-size:13.5px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.row:last-child{border-bottom:0}
+.row span:last-child{font-weight:700;color:var(--navy);text-align:right}
+.row.hl span:last-child{color:var(--gold)}
+.note{font-size:13px;margin-top:12px;padding:12px 14px;border-left:3px solid var(--gold);background:#F4EFE2;border-radius:0 10px 10px 0}
+svg text{font-family:'Plus Jakarta Sans',sans-serif}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;margin-top:6px}
+.legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:6px}
+.foot{font-size:11.5px;color:#7A808A;margin-top:22px}
+.foot p{margin-top:6px}
+.cta{margin-top:20px;text-align:center;font-size:15px;color:var(--navy)}
+.cta a{color:var(--gold);font-weight:700;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="who">Welton Garcia · Especialista em Investimentos · CFP®</div>
+  <h1>Prefixado ou IPCA+?<br>Faça a conta com os seus números.</h1>
+  <p class="lead">Coloque quanto quer investir, o prazo e as taxas do dia no Tesouro Direto. Depois escolha a inflação média que você espera até o vencimento e veja quanto sobra no bolso, já descontados o imposto e a custódia.</p>
+</header>
+
+<section class="card">
+  <h2>1. Seus dados</h2>
+  <div class="grid">
+    <div><label for="v">Valor investido (R$)</label><input id="v" type="text" inputmode="numeric" value="100.000"></div>
+    <div><label for="t">Prazo até o vencimento (anos)</label><input id="t" type="number" step="0.1" min="0.5" max="40" value="5.1"><div class="hint">Prefixado 2032: cerca de 5,1 anos</div></div>
+    <div><label for="rp">Taxa do prefixado (% a.a.)</label><input id="rp" type="number" step="0.01" value="15.30"><div class="hint">Prefixado 2032 em 12/11/2026: 15,30%</div></div>
+    <div><label for="ri">Taxa real do IPCA+ (% a.a.)</label><input id="ri" type="number" step="0.01" value="7.68"><div class="hint">IPCA+ 2032 em 12/11/2026: IPCA + 7,68%</div></div>
+  </div>
+  <div class="slider">
+    <div class="top"><label for="pi" style="margin:0">Inflação média que você espera (% a.a.)</label><span class="val" id="piv">4,50%</span></div>
+    <input id="pi" type="range" min="2" max="12" step="0.1" value="4.5">
+    <div class="hint">Para comparar: o IPCA acumulado em 12 meses até outubro de 2026 estava perto de 4,6%.</div>
+  </div>
+</section>
+
+<div class="verdict" id="verdict"></div>
+
+<section class="card">
+  <h2>2. O que sobra no vencimento</h2>
+  <div class="cols">
+    <div class="res"><h3><span class="dot" style="background:var(--gold)"></span>Tesouro Prefixado</h3><div id="outP"></div></div>
+    <div class="res"><h3><span class="dot" style="background:var(--ipca)"></span>Tesouro IPCA+</h3><div id="outI"></div></div>
+  </div>
+  <div class="note" id="irnote"></div>
+</section>
+
+<section class="card">
+  <h2>3. Ganho real líquido em cada cenário de inflação</h2>
+  <div id="chart"></div>
+  <div class="legend"><span><i style="background:var(--gold)"></i>Prefixado</span><span><i style="background:var(--ipca)"></i>IPCA+</span><span><i style="background:var(--navy);height:1px;border-top:1px dashed var(--navy)"></i>Inflação de empate</span></div>
+  <p class="hint" style="margin-top:8px">Quanto o dinheiro cresce acima da inflação no prazo inteiro, depois de IR e custódia. Abaixo da inflação de empate, o prefixado rende mais. Acima dela, o IPCA+ rende mais.</p>
+</section>
+
+<section class="card">
+  <h2>Antes de decidir</h2>
+  <p style="font-size:14px">A taxa só é garantida para quem leva o título até o vencimento. Se precisar vender antes, o preço segue a marcação a mercado e pode estar abaixo do que você pagou. Por isso o título escolhido precisa ter o prazo do seu objetivo. Dinheiro que tem data e precisa manter poder de compra tende a casar melhor com o IPCA+. O prefixado pode ocupar uma parte da carteira, desde que a aposta esteja clara.</p>
+</section>
+
+<p class="cta">Quer uma revisão dos seus investimentos? <a href="https://www.instagram.com/welton.garciaz/">Fale comigo no @welton.garciaz</a></p>
+<p class="cta" style="font-size:13.5px;margin-top:8px"><a href="https://painel.objetivoprimeiro.com/">Ver o painel completo</a></p>
+
+<div class="foot">
+  <p><b>Premissas.</b> Os dois títulos são levados até o vencimento, sem cupom. O IR é de 15% para prazos acima de 2 anos, seguindo a tabela regressiva para prazos menores, e incide sobre todo o rendimento nominal, inclusive a parte que só repõe a inflação. A custódia da B3 é de 0,20% a.a., cobrada pro rata e abatida da base do IR. A inflação de empate é calculada pela fórmula de Fisher, com taxas brutas. Não considera taxas cobradas pela instituição financeira. Os vencimentos reais dos títulos podem ser diferentes do prazo informado.</p>
+  <p>Simulação ilustrativa, com premissas escolhidas por você. Conteúdo educativo, não constitui recomendação de investimento. Rentabilidade passada não garante rentabilidade futura.</p>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const brl=x=>x.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
+const pct=(x,d=1)=>(x*100).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})+'%';
+const num=s=>{const n=parseFloat(String(s).replace(/\./g,'').replace(',','.'));return isFinite(n)?n:0};
+function aliq(T){const d=T*365;return d<=180?.225:d<=360?.20:d<=720?.175:.15}
+// valor líquido final de V aplicado a taxa nominal g por T anos
+function liquido(V,g,T){
+  const F=V*Math.pow(1+g,T);
+  const cust=g>0?0.002*V*(Math.pow(1+g,T)-1)/Math.log(1+g):0.002*V*T;
+  const base=Math.max(F-cust-V,0), ir=aliq(T)*base;
+  return {F,cust,ir,L:F-cust-ir};
+}
+function calc(pi,V,T,rp,ri){
+  const P=liquido(V,rp,T), gI=(1+ri)*(1+pi)-1, I=liquido(V,gI,T);
+  const def=Math.pow(1+pi,T);
+  return {P,I,def,realP:P.L/V/def-1,realI:I.L/V/def-1};
+}
+function render(){
+  const V=Math.max(num($('v').value),0), T=Math.max(parseFloat($('t').value)||0,0.1);
+  const rp=(parseFloat($('rp').value)||0)/100, ri=(parseFloat($('ri').value)||0)/100, pi=parseFloat($('pi').value)/100;
+  $('piv').textContent=pct(pi,2);
+  const be=(1+rp)/(1+ri)-1;
+  const r=calc(pi,V,T,rp,ri);
+  const win=r.P.L>r.I.L?'prefixado':'IPCA+';
+  const diff=Math.abs(r.P.L-r.I.L);
+  $('verdict').innerHTML=`<div class="big">A inflação de empate é <b>${pct(be,2)} ao ano</b>. Com inflação média de ${pct(pi,2)}, o <b>${win}</b> termina com ${brl(diff)} a mais no bolso.</div><div class="small">Abaixo de ${pct(be,2)} ao ano, o prefixado rende mais. Acima disso, rende mais o IPCA+.</div>`;
+  const rows=(o,real)=>`
+    <div class="row"><span>Valor bruto no vencimento</span><span>${brl(o.F)}</span></div>
+    <div class="row"><span>Custódia B3</span><span>− ${brl(o.cust)}</span></div>
+    <div class="row"><span>Imposto de Renda</span><span>− ${brl(o.ir)}</span></div>
+    <div class="row"><span>Valor líquido</span><span>${brl(o.L)}</span></div>
+    <div class="row"><span>Ganho líquido no prazo</span><span>${pct(o.L/V-1)}</span></div>
+    <div class="row hl"><span>Poder de compra em reais de hoje</span><span>${brl(o.L/r.def)}</span></div>
+    <div class="row hl"><span>Ganho real líquido no prazo</span><span>${pct(real)}</span></div>`;
+  $('outP').innerHTML=rows(r.P,r.realP);
+  $('outI').innerHTML=rows(r.I,r.realI);
+  const irInfl=aliq(T)*V*(r.def-1);
+  $('irnote').innerHTML=`<b>O imposto também incide sobre a inflação.</b> O IR é cobrado sobre todo o rendimento nominal, inclusive a parte que só repõe o poder de compra. No IPCA+, neste cenário, cerca de <b>${brl(irInfl)}</b> do imposto incidem só sobre a correção pela inflação. Por isso, depois do IR, nenhum dos dois títulos protege 100% contra a inflação, e a proteção fica menor quanto mais alta ela for.`;
+  drawChart(V,T,rp,ri,be,pi);
+}
+function drawChart(V,T,rp,ri,be,piSel){
+  const W=Math.max(320,Math.min(780,$('chart').clientWidth||780)),H=W<500?240:300,m={l:44,r:10,t:16,b:40};
+  const xs=[],P=[],I=[];
+  for(let p=0.02;p<=0.1201;p+=0.0025){const r=calc(p,V,T,rp,ri);xs.push(p);P.push(r.realP);I.push(r.realI)}
+  const all=P.concat(I);let lo=Math.min(0,...all),hi=Math.max(...all);
+  const pad=(hi-lo)*0.1;lo-=pad;hi+=pad;
+  const X=p=>m.l+(p-0.02)/(0.10)*(W-m.l-m.r), Y=v=>m.t+(hi-v)/(hi-lo)*(H-m.t-m.b);
+  const path=a=>a.map((v,i)=>(i?'L':'M')+X(xs[i]).toFixed(1)+','+Y(v).toFixed(1)).join('');
+  let g='';
+  const step=(hi-lo)>0.6?0.2:0.1;
+  for(let v=Math.ceil(lo/step)*step;v<=hi;v+=step){g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="${Math.abs(v)<1e-9?'#414751':'#E8EBEF'}" stroke-width="${Math.abs(v)<1e-9?1.2:1}"/><text x="${m.l-8}" y="${Y(v)+4}" font-size="11" text-anchor="end" fill="#7A808A">${pct(Math.abs(v)<1e-9?0:v,0)}</text>`}
+  for(let p=0.02;p<=0.1201;p+=0.02){g+=`<text x="${X(p)}" y="${H-m.b+18}" font-size="11" text-anchor="middle" fill="#7A808A">${pct(p,0)}</text>`}
+  g+=`<text x="${(m.l+W-m.r)/2}" y="${H-4}" font-size="11.5" text-anchor="middle" fill="#414751">Inflação média ao ano</text>`;
+  if(be>=0.02&&be<=0.12){g+=`<line x1="${X(be)}" x2="${X(be)}" y1="${m.t}" y2="${H-m.b}" stroke="#0A1628" stroke-dasharray="4 4"/><text x="${X(be)+6}" y="${m.t+12}" font-size="11.5" fill="#0A1628" font-weight="700">empate ${pct(be,1)}</text>`}
+  g+=`<path d="${path(I)}" fill="none" stroke="#5B7A99" stroke-width="3"/><path d="${path(P)}" fill="none" stroke="#B99A45" stroke-width="3"/>`;
+  const r=calc(piSel,V,T,rp,ri);
+  g+=`<circle cx="${X(piSel)}" cy="${Y(r.realP)}" r="5" fill="#B99A45"/><circle cx="${X(piSel)}" cy="${Y(r.realI)}" r="5" fill="#5B7A99"/>`;
+  $('chart').innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Ganho real líquido por cenário de inflação">${g}</svg>`;
+}
+['v','t','rp','ri','pi'].forEach(id=>$(id).addEventListener('input',render));
+$('v').addEventListener('blur',()=>{$('v').value=num($('v').value).toLocaleString('pt-BR')});
+render();
+window.addEventListener('resize',render);
+</script>
+</body>
+</html>
