@@ -1,5 +1,5 @@
 {
- "gerado_em": "2026-11-16T13:03",
+ "gerado_em": "2026-11-16T15:22",
  "indicadores": {
   "inflacao": {
    "titulo": "Inflação: realizada × esperada",
@@ -8436,12 +8436,12 @@
   "bitcoin": {
    "titulo": "Bitcoin",
    "preco": {
-    "valor": 64464.02,
+    "valor": 64839.8,
     "data": "2026-11-16"
    },
    "mayer": {
-    "valor": 0.88,
-    "percentil": 0.248,
+    "valor": 0.89,
+    "percentil": 0.256,
     "leitura": "Barato historicamente"
    },
    "hist_mayer": [
@@ -9487,7 +9487,7 @@
     ],
     [
      "2026-11-16",
-     0.8847
+     0.8899
     ]
    ],
    "fear_greed": {
