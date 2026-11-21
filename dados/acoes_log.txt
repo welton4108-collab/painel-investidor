@@ -7,7 +7,7 @@ ok   dfp_cia_aberta_2024.zip (13.4 MB, 0s)
 ok   dfp_cia_aberta_2025.zip (12.9 MB, 0s)
 ok   itr_cia_aberta_2025.zip (31.7 MB, 0s)
 ok   itr_cia_aberta_2026.zip (28.8 MB, 0s)
-ok   COTAHIST_A2026.ZIP (105.8 MB, 154s)
+ok   COTAHIST_A2026.ZIP (105.8 MB, 114s)
 COTAHIST anual até 20261119; 0 arquivo(s) diário(s) acrescentado(s) desde 20261120
 DIAG {"tk": "PETR4", "outros": ["PETR3"], "nome": "Petrobras", "setor": "Petróleo e Gás", "fin": false, "preco": 42.67, "liq": 2611896275, "vm": 594317925949, "lucro": 140421000000, "ebitda": 289816000000, "div_liq": 299869000000, "pl": 504698000000, "p_l": 4.2324, "p_vp": 1.1776, "ev_ebitda": 3.0854, "ev_ebit": 4.4355, "dy": 0.0596, "roe": 0.2782, "m_ebitda": 0.4913, "m_liq": 0.238, "dl_ebitda": 1.0347, "cagr5": 0.7299, "balanco": "2026-09-30"}
 DIAG {"tk": "ITUB4", "outros": ["ITUB3"], "nome": "Itaú Unibanco", "setor": "Bancos", "fin": true, "preco": 40.07, "liq": 1619300910, "vm": 466089763870, "lucro": 47749000000, "ebitda": null, "div_liq": null, "pl": 229270000000, "p_l": 9.7612, "p_vp": 2.0329, "ev_ebitda": null, "ev_ebit": null, "dy": 0.0686, "roe": 0.2083, "m_ebitda": null, "m_liq": null, "dl_ebitda": null, "cagr5": 0.1888, "balanco": "2026-09-30"}
